@@ -1,6 +1,6 @@
-# 🎵 Spotify Clone (v1)
+# 🎵 Magalu Spotify 2
 
-Um clone simplificado do Spotify desenvolvido com **React + TypeScript + Vite + Tailwind CSS + PWA**, com foco em **escalabilidade**, **componentização**, e **estrutura limpa** para futuras expansões (como o módulo de player na versão 2).
+Um clone avançado do Spotify desenvolvido com **React + TypeScript + Vite + Tailwind CSS + PWA**, com foco em **escalabilidade**, **componentização**, e **estrutura limpa** para futuras expansões.
 
 ---
 
@@ -16,7 +16,94 @@ Um clone simplificado do Spotify desenvolvido com **React + TypeScript + Vite + 
 - **Vitest + React Testing Library** – testes unitários
 - **Cypress** – testes end-to-end
 - **Docker** – ambiente de execução padronizado
+- **Storybook** – documentação e desenvolvimento de componentes
 - **Sentry** – monitoramento e rastreamento de erros
+
+---
+
+## 🏃‍♂️ Como Rodar o Projeto
+
+### Pré-requisitos
+
+- **Node.js 20+** (recomendado: 20.19+ ou 22.12+)
+- **npm** ou **yarn**
+- **Docker** (opcional, para execução em containers)
+
+### 📦 Instalação Local
+
+1. **Clone o repositório:**
+```bash
+git clone <url-do-repositorio>
+cd magalu-spotify2
+```
+
+2. **Instale as dependências:**
+```bash
+npm install --legacy-peer-deps
+```
+
+3. **Configure as variáveis de ambiente:**
+```bash
+cp .env.example .env
+```
+Edite o arquivo `.env` com suas credenciais do Spotify:
+```env
+VITE_SPOTIFY_CLIENT_ID=seu_client_id_aqui
+VITE_SPOTIFY_REDIRECT_URI=http://localhost:5173/callback
+```
+
+4. **Execute o projeto em desenvolvimento:**
+```bash
+npm run dev
+```
+Acesse: http://localhost:5173
+
+### 📚 Storybook
+
+Para visualizar e desenvolver componentes:
+
+```bash
+npm run storybook
+```
+Acesse: http://localhost:6006
+
+### 🐳 Docker
+
+#### Desenvolvimento com Docker
+
+```bash
+# Executar aplicação de desenvolvimento
+docker-compose --profile dev up --build
+
+# Executar Storybook
+docker-compose --profile storybook up --build
+
+# Parar todos os containers
+docker-compose down
+```
+
+#### Build de Produção
+
+```bash
+# Build da imagem de produção
+docker build --target production -t magalu-spotify2:prod .
+
+# Executar container de produção
+docker run -d -p 8080:80 --name magalu-spotify2-prod magalu-spotify2:prod
+```
+
+### 🧪 Testes
+
+```bash
+# Testes unitários
+npm run test
+
+# Testes E2E com Cypress
+npm run cypress:open
+
+# Testes E2E headless
+npm run cypress:run
+```
 
 ---
 
@@ -199,6 +286,72 @@ cd spotify-clone
 npm install
 npm run dev
 ```
+
+---
+
+## 🔧 Troubleshooting
+
+### Problemas Comuns
+
+#### ❌ Erro de dependências peer
+```bash
+# Solução: Use --legacy-peer-deps
+npm install --legacy-peer-deps
+```
+
+#### ❌ Erro "crypto.hash is not a function"
+- **Causa:** Versão do Node.js incompatível
+- **Solução:** Use Node.js 20.19+ ou 22.12+
+```bash
+# Verificar versão do Node
+node --version
+
+# Atualizar Node.js se necessário
+nvm install 20
+nvm use 20
+```
+
+#### ❌ Erro "tailwindcss-animate" no build
+- **Causa:** Import incorreto no CSS
+- **Solução:** Verificar se `src/index.css` não tem `@import 'tailwindcss-animate'`
+- O plugin deve estar apenas no `tailwind.config.js`
+
+#### ❌ Docker build falha
+```bash
+# Limpar cache do Docker
+docker system prune -a
+
+# Rebuild sem cache
+docker build --no-cache --target development -t magalu-spotify2:dev .
+```
+
+#### ❌ Porta já em uso
+```bash
+# Verificar processos na porta
+lsof -i :5173  # ou :6006 para Storybook
+
+# Matar processo
+kill -9 <PID>
+```
+
+#### ❌ Storybook não carrega
+```bash
+# Reinstalar dependências
+rm -rf node_modules package-lock.json
+npm install --legacy-peer-deps
+
+# Verificar se não há conflito de versões
+npm ls @storybook/core
+```
+
+### 🆘 Suporte
+
+Se você encontrar problemas não listados aqui:
+
+1. Verifique se está usando Node.js 20+
+2. Certifique-se de usar `--legacy-peer-deps` na instalação
+3. Verifique se as variáveis de ambiente estão configuradas
+4. Consulte os logs do Docker/terminal para mais detalhes
 
 ---
 

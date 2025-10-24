@@ -1,0 +1,23 @@
+FROM cypress/included:13.6.0
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci --legacy-peer-deps
+
+# Copy Cypress configuration and tests
+COPY cypress.config.ts ./
+COPY cypress/ ./cypress/
+
+# Copy source code (needed for component tests if added later)
+COPY src/ ./src/
+
+# Set environment variables
+ENV CYPRESS_CACHE_FOLDER=/root/.cache/Cypress
+
+# Default command to run Cypress tests
+CMD ["npx", "cypress", "run"]

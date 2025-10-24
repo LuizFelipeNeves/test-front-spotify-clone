@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  # Development environment
+  app-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - VITE_SPOTIFY_CLIENT_ID=${VITE_SPOTIFY_CLIENT_ID}
+      - VITE_SPOTIFY_REDIRECT_URI=${VITE_SPOTIFY_REDIRECT_URI}
+    profiles:
+      - dev
+
+  # Production environment
+  app-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    ports:
+      - "80:80"
+    environment:
+      - NODE_ENV=production
+    profiles:
+      - prod
+
+  # Storybook development
+  storybook:
+    build:
+      context: .
+      dockerfile: Dockerfile.storybook
+    ports:
+      - "6006:6006"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    profiles:
+      - storybook
+
+  # Cypress E2E tests
+  cypress:
+    build:
+      context: .
+      dockerfile: Dockerfile.cypress
+    depends_on:
+      - app-dev
+    environment:
+      - CYPRESS_baseUrl=http://app-dev:5173
+    volumes:
+      - ./cypress:/app/cypress
+      - ./cypress.config.ts:/app/cypress.config.ts
+    profiles:
+      - test
+
+networks:
+  default:
+    name: magalu-spotify-network

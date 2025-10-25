@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { PageHeader } from '@/components/PageHeader';
 import { ContentList } from '@/components/ContentList';
 import { PlaylistCard } from '@/components/PlaylistCard';
+import { CreatePlaylistModal } from '@/components/CreatePlaylistModal';
 import { useSpotifyIntegration } from '@/hooks/useSpotifyIntegration';
 import type { Playlist } from '@/types';
 
@@ -9,6 +10,7 @@ export default function PlaylistsPage() {
   const [playlists, setPlaylists] = useState<Playlist[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { fetchUserPlaylists } = useSpotifyIntegration();
 
   useEffect(() => {
@@ -42,8 +44,31 @@ export default function PlaylistsPage() {
   };
 
   const handleCreatePlaylist = () => {
-    // TODO: Implementar modal de criação de playlist
-    console.log('Criar nova playlist');
+    setIsModalOpen(true);
+  };
+
+  const handleCreatePlaylistSubmit = async (name: string) => {
+    try {
+      // TODO: Implementar criação de playlist via API do Spotify
+      console.log('Criando playlist:', name);
+      
+      // Por enquanto, apenas simula a criação
+      const newPlaylist: Playlist = {
+        id: `temp-${Date.now()}`,
+        name,
+        description: '',
+        images: [],
+        tracks: { total: 0, items: [] },
+        external_urls: { spotify: '#' },
+        owner: { id: 'temp-user', display_name: 'Você' },
+        public: false,
+        collaborative: false
+      };
+      
+      setPlaylists(prev => [newPlaylist, ...prev]);
+    } catch (error) {
+      console.error('Erro ao criar playlist:', error);
+    }
   };
 
   const createPlaylistButton = (
@@ -89,6 +114,12 @@ export default function PlaylistsPage() {
             onClick={handlePlaylistClick}
           />
         )}
+      />
+
+      <CreatePlaylistModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onCreatePlaylist={handleCreatePlaylistSubmit}
       />
     </div>
   );

@@ -1,16 +1,30 @@
 import { useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useAuthStore } from '@/store/authStore'
 import Layout from '@/components/Layout'
 import LoginPage from '@/pages/LoginPage'
 import CallbackPage from '@/pages/CallbackPage'
 import HomePage from '@/pages/HomePage'
 import ArtistsPage from '@/pages/ArtistsPage'
+import { ArtistDetailPage } from '@/pages/ArtistDetailPage'
 import PlaylistsPage from '@/pages/PlaylistsPage'
 import ProfilePage from '@/pages/ProfilePage'
 import { PWAUpdateNotification } from '@/components/PWAUpdateNotification'
 import { ROUTES } from '@/utils/constants'
 import './App.css'
+
+// Configuração do QueryClient
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutos
+      gcTime: 10 * 60 * 1000, // 10 minutos (anteriormente cacheTime)
+      retry: 2,
+      refetchOnWindowFocus: false,
+    },
+  },
+})
 
 // Componente para proteger rotas autenticadas
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -53,54 +67,64 @@ function App() {
   }, [isAuthenticated, login])
 
   return (
-    <Router>
-      <Routes>
-        {/* Rotas públicas */}
-        <Route path={ROUTES.LOGIN} element={<LoginPage />} />
-        <Route path="/callback" element={<CallbackPage />} />
-        
-        {/* Rotas protegidas */}
-        <Route 
-          path={ROUTES.HOME} 
-          element={
-            <ProtectedRoute>
-              <HomePage />
-            </ProtectedRoute>
-          } 
-        />
-        <Route 
-          path={ROUTES.ARTISTS} 
-          element={
-            <ProtectedRoute>
-              <ArtistsPage />
-            </ProtectedRoute>
-          } 
-        />
-        <Route path={ROUTES.PLAYLISTS} element={
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <Routes>
+          {/* Rotas públicas */}
+          <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+          <Route path="/callback" element={<CallbackPage />} />
+          
+          {/* Rotas protegidas */}
+          <Route 
+            path={ROUTES.HOME} 
+            element={
               <ProtectedRoute>
-                <PlaylistsPage />
+                <HomePage />
               </ProtectedRoute>
-            } />
-            <Route path={ROUTES.PROFILE} element={
+            } 
+          />
+          <Route 
+            path={ROUTES.ARTISTS} 
+            element={
               <ProtectedRoute>
-                <ProfilePage />
+                <ArtistsPage />
               </ProtectedRoute>
-            } />
+            } 
+          />
+          <Route 
+            path={ROUTES.ARTIST_DETAIL} 
+            element={
+              <ProtectedRoute>
+                <ArtistDetailPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route path={ROUTES.PLAYLISTS} element={
+                <ProtectedRoute>
+                  <PlaylistsPage />
+                </ProtectedRoute>
+              } />
+              <Route path={ROUTES.PROFILE} element={
+                <ProtectedRoute>
+                  <ProfilePage />
+                </ProtectedRoute>
+              } />
+          
+          {/* Rota padrão - redireciona para home se autenticado, senão para login */}
+          <Route 
+            path="*" 
+            element={
+              isAuthenticated ? 
+                <Navigate to={ROUTES.HOME} replace /> : 
+                <Navigate to={ROUTES.LOGIN} replace />
+            } 
+          />
+        </Routes>
         
-        {/* Rota padrão - redireciona para home se autenticado, senão para login */}
-        <Route 
-          path="*" 
-          element={
-            isAuthenticated ? 
-              <Navigate to={ROUTES.HOME} replace /> : 
-              <Navigate to={ROUTES.LOGIN} replace />
-          } 
-        />
-      </Routes>
-      
-      {/* Componente de notificação de atualização PWA */}
-      <PWAUpdateNotification />
-    </Router>
+        {/* Componente de notificação de atualização PWA */}
+        <PWAUpdateNotification />
+      </Router>
+    </QueryClientProvider>
   )
 }
 

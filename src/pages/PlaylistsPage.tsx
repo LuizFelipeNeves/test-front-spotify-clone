@@ -1,58 +1,48 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { PageHeader } from '@/components/PageHeader';
 import { ContentList } from '@/components/ContentList';
 import { PlaylistCard } from '@/components/PlaylistCard';
 import { CreatePlaylistModal } from '@/components/CreatePlaylistModal';
 import { useSpotifyIntegration } from '@/hooks/useSpotifyIntegration';
+import { useInfiniteUserPlaylists, spotifyQueryKeys } from '@/hooks/useSpotifyQueries';
 import type { Playlist } from '@/types';
 
 export default function PlaylistsPage() {
-  const [playlists, setPlaylists] = useState<Playlist[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
-  const [offset, setOffset] = useState(0);
-  const { fetchUserPlaylists, createPlaylist } = useSpotifyIntegration();
+  const queryClient = useQueryClient();
+  const { createPlaylist } = useSpotifyIntegration();
+  
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteUserPlaylists(50);
 
-  useEffect(() => {
-    const fetchPlaylists = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        setOffset(0);
-        
-        // Busca playlists do Spotify
-        const response = await fetchUserPlaylists(20, 0);
-        setPlaylists(response.items);
-        setHasMore(response.next !== null);
-        setOffset(20);
-      } catch (err) {
-        console.error('Erro ao buscar playlists do Spotify:', err);
-        setError('Não foi possível carregar suas playlists. Verifique sua conexão com o Spotify.');
-        setPlaylists([]);
-        setHasMore(false);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPlaylists();
-  }, [fetchUserPlaylists]);
+  // Flatten all pages into a single array of playlists
+  const playlists = data?.pages.flatMap(page => page.items) ?? [];
 
   // Infinite scroll effect
   useEffect(() => {
     const handleScroll = () => {
-      if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 1000) {
-        loadMorePlaylists();
+      if (
+        hasNextPage &&
+        !isFetchingNextPage &&
+        window.innerHeight + document.documentElement.scrollTop >= 
+        document.documentElement.offsetHeight - 1000
+      ) {
+        fetchNextPage();
       }
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [loadingMore, hasMore, offset]);
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const handlePlaylistClick = (playlist: Playlist) => {
     // Abre a playlist no Spotify
@@ -62,22 +52,6 @@ export default function PlaylistsPage() {
   const handleRetry = () => {
     window.location.reload();
   };
-
-  const loadMorePlaylists = useCallback(async () => {
-    if (loadingMore || !hasMore) return;
-
-    try {
-      setLoadingMore(true);
-      const response = await fetchUserPlaylists(20, offset);
-      setPlaylists(prev => [...prev, ...response.items]);
-      setHasMore(response.next !== null);
-      setOffset(prev => prev + 20);
-    } catch (err) {
-      console.error('Erro ao carregar mais playlists:', err);
-    } finally {
-      setLoadingMore(false);
-    }
-  }, [loadingMore, hasMore, offset, fetchUserPlaylists]);
 
   const handleCreatePlaylist = () => {
     setIsModalOpen(true);
@@ -90,14 +64,16 @@ export default function PlaylistsPage() {
       // Cria a playlist via API do Spotify
       const newPlaylist = await createPlaylist(name, '');
       
-      // Adiciona a nova playlist ao início da lista
-      setPlaylists(prev => [newPlaylist, ...prev]);
+      // Invalida o cache para recarregar as playlists
+      queryClient.invalidateQueries({
+        queryKey: ['userPlaylists']
+      });
       
       // Fecha o modal
       setIsModalOpen(false);
     } catch (error) {
       console.error('Erro ao criar playlist:', error);
-      setError('Não foi possível criar a playlist. Tente novamente.');
+      // Aqui poderia usar um toast ou outro método de notificação
     } finally {
       setIsCreating(false);
     }
@@ -132,8 +108,8 @@ export default function PlaylistsPage() {
 
       <ContentList
         items={playlists}
-        loading={loading}
-        error={error}
+        loading={isLoading}
+        error={isError ? error?.message || 'Erro ao carregar playlists' : null}
         emptyMessage="Nenhuma playlist encontrada"
         emptyDescription="Crie sua primeira playlist para começar a organizar suas músicas!"
         loadingMessage="Carregando playlists..."
@@ -149,7 +125,7 @@ export default function PlaylistsPage() {
       />
 
       {/* Loading indicator for infinite scroll */}
-      {loadingMore && (
+      {isFetchingNextPage && (
         <div className="flex justify-center items-center py-8">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
           <span className="ml-3 text-gray-600">Carregando mais playlists...</span>

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { spotifyService } from '@/services/spotify.service';
 import { useAuthStore } from '@/store/authStore';
-import type { User, Artist, Playlist } from '@/types';
+import type { User, Artist, Playlist, Album } from '@/types';
 
 interface SpotifyIntegrationState {
   isConnected: boolean;
@@ -14,9 +14,12 @@ interface SpotifyIntegrationActions {
   connect: () => Promise<void>;
   disconnect: () => void;
   refreshData: () => Promise<void>;
-  fetchTopArtists: () => Promise<Artist[]>;
+  fetchTopArtists: (limit?: number, offset?: number) => Promise<{ items: Artist[]; total: number; next: string | null }>;
   fetchUserPlaylists: (limit?: number, offset?: number) => Promise<{ items: Playlist[]; total: number; next: string | null }>;
   createPlaylist: (name: string, description?: string) => Promise<Playlist>;
+  getPlaylist: (playlistId: string) => Promise<Playlist>;
+  getArtist: (artistId: string) => Promise<Artist>;
+  fetchArtistAlbums: (artistId: string, limit?: number, offset?: number) => Promise<{ items: Album[]; total: number; next: string | null }>;
 }
 
 export function useSpotifyIntegration(): SpotifyIntegrationState & SpotifyIntegrationActions {
@@ -27,6 +30,8 @@ export function useSpotifyIntegration(): SpotifyIntegrationState & SpotifyIntegr
     loading: false,
     error: null
   });
+
+
 
   // Sincroniza com o estado do authStore
   useEffect(() => {
@@ -135,9 +140,9 @@ export function useSpotifyIntegration(): SpotifyIntegrationState & SpotifyIntegr
     }
   }, [state.isConnected]);
 
-  const fetchTopArtists = useCallback(async (): Promise<Artist[]> => {
+  const fetchTopArtists = useCallback(async (limit = 20, offset = 0): Promise<{ items: Artist[]; total: number; next: string | null }> => {
     try {
-      return await spotifyService.getTopArtists();
+      return await spotifyService.getTopArtists(limit, offset);
     } catch (error) {
       console.warn('Erro ao buscar top artistas:', error);
       throw error;
@@ -165,6 +170,33 @@ export function useSpotifyIntegration(): SpotifyIntegrationState & SpotifyIntegr
     }
   }, [authUser?.id]);
 
+  const getPlaylist = useCallback(async (playlistId: string): Promise<Playlist> => {
+    try {
+      return await spotifyService.getPlaylist(playlistId);
+    } catch (error) {
+      console.warn('Erro ao buscar playlist:', error);
+      throw error;
+    }
+  }, []);
+
+  const getArtist = useCallback(async (artistId: string): Promise<Artist> => {
+    try {
+      return await spotifyService.getArtist(artistId);
+    } catch (error) {
+      console.warn('Erro ao buscar artista:', error);
+      throw error;
+    }
+  }, []);
+
+  const fetchArtistAlbums = useCallback(async (artistId: string, limit = 20, offset = 0): Promise<{ items: Album[]; total: number; next: string | null }> => {
+    try {
+      return await spotifyService.getArtistAlbums(artistId, limit, offset);
+    } catch (error) {
+      console.warn('Erro ao buscar álbuns do artista:', error);
+      throw error;
+    }
+  }, []);
+
   return {
     ...state,
     connect,
@@ -172,6 +204,9 @@ export function useSpotifyIntegration(): SpotifyIntegrationState & SpotifyIntegr
     refreshData,
     fetchTopArtists,
     fetchUserPlaylists,
-    createPlaylist
+    createPlaylist,
+    getPlaylist,
+    getArtist,
+    fetchArtistAlbums
   };
 }

@@ -1,50 +1,49 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { PageHeader } from '@/components/PageHeader';
 import { ContentList } from '@/components/ContentList';
 import { ArtistCard } from '@/components/ArtistCard';
-import { useSpotifyIntegration } from '@/hooks/useSpotifyIntegration';
+import { useInfiniteTopArtists } from '@/hooks/useSpotifyQueries';
 import type { Artist } from '@/types';
 
 export default function ArtistsPage() {
-  const [artists, setArtists] = useState<Artist[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const { fetchTopArtists } = useSpotifyIntegration();
+  const navigate = useNavigate();
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteTopArtists(20);
 
+  // Flatten all pages into a single array of artists
+  const artists = data?.pages.flatMap(page => page.items) ?? [];
+
+  // Infinite scroll effect
   useEffect(() => {
-    const fetchArtists = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        
-        // Busca artistas do Spotify
-        const topArtists = await fetchTopArtists();
-        setArtists(topArtists);
-      } catch (err) {
-        console.error('Erro ao buscar artistas do Spotify:', err);
-        setError('Não foi possível carregar seus artistas. Verifique sua conexão com o Spotify.');
-        setArtists([]);
-      } finally {
-        setLoading(false);
+    const handleScroll = () => {
+      if (
+        hasNextPage &&
+        !isFetchingNextPage &&
+        window.innerHeight + document.documentElement.scrollTop >= 
+        document.documentElement.offsetHeight - 1000
+      ) {
+        fetchNextPage();
       }
     };
 
-    fetchArtists();
-  }, [fetchTopArtists]);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const handleArtistClick = (artist: Artist) => {
-    // Aqui você pode implementar navegação para página do artista
-    // ou abrir o Spotify
-    console.log('Artista clicado:', artist);
-    
-    // Abre o Spotify se disponível
-    if (artist.external_urls?.spotify) {
-      window.open(artist.external_urls.spotify, '_blank');
-    }
+    // Navega para a página de detalhes do artista
+    navigate(`/artists/${artist.id}`);
   };
 
   const handleRetry = () => {
-    setError(null);
     // Recarrega a página para tentar novamente
     window.location.reload();
   };
@@ -52,14 +51,14 @@ export default function ArtistsPage() {
   return (
     <div className="p-4 sm:p-8 lg:p-12">
       <PageHeader 
-        title="Artistas" 
-        description="Aqui você encontra seus artistas preferidos ordenados por suas preferências"
+        title="Top Artistas" 
+        description="Aqui você encontra seus artistas preferidos"
       />
 
       <ContentList
         items={artists}
-        loading={loading}
-        error={error}
+        loading={isLoading}
+        error={isError ? error?.message || 'Erro ao carregar artistas' : null}
         emptyMessage="Nenhum artista encontrado"
         emptyDescription="Comece a ouvir música para ver seus artistas favoritos aqui!"
         loadingMessage="Carregando artistas..."
@@ -73,6 +72,14 @@ export default function ArtistsPage() {
           />
         )}
       />
+
+      {/* Loading indicator for infinite scroll */}
+      {isFetchingNextPage && (
+        <div className="flex justify-center items-center py-8">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
+          <span className="ml-3 text-gray-600">Carregando mais artistas...</span>
+        </div>
+      )}
     </div>
   );
 }

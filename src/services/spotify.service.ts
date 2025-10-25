@@ -1,5 +1,5 @@
 import { apiClient } from './api';
-import type { Artist, Playlist, User } from '@/types';
+import type { Artist, Playlist, User, Album } from '@/types';
 
 /**
  * Spotify API service
@@ -18,11 +18,11 @@ class SpotifyService {
   /**
    * Get user's top artists
    */
-  async getTopArtists(limit = 20): Promise<Artist[]> {
-    const response = await apiClient.get<{ items: Artist[] }>(
-      `${this.baseURL}/me/top/artists?limit=${limit}`
+  async getTopArtists(limit = 20, offset = 0): Promise<{ items: Artist[]; total: number; next: string | null }> {
+    const response = await apiClient.get<{ items: Artist[]; total: number; next: string | null }>(
+      `${this.baseURL}/me/top/artists?limit=${limit}&offset=${offset}`
     );
-    return response.data.items;
+    return response.data;
   }
 
   /**
@@ -41,6 +41,16 @@ class SpotifyService {
   async getArtist(artistId: string): Promise<Artist> {
     const response = await apiClient.get<Artist>(
       `${this.baseURL}/artists/${artistId}`
+    );
+    return response.data;
+  }
+
+  /**
+   * Get artist's albums
+   */
+  async getArtistAlbums(artistId: string, limit = 20, offset = 0): Promise<{ items: Album[]; total: number; next: string | null }> {
+    const response = await apiClient.get<{ items: Album[]; total: number; next: string | null }>(
+      `${this.baseURL}/artists/${artistId}/albums?include_groups=album,single&market=BR&limit=${limit}&offset=${offset}`
     );
     return response.data;
   }

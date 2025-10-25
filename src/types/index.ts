@@ -68,6 +68,7 @@ export interface Album {
   artists: Artist[];
   release_date: string;
   total_tracks: number;
+  album_type: 'album' | 'single' | 'compilation';
   external_urls: {
     spotify: string;
   };

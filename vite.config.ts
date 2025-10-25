@@ -29,6 +29,30 @@ export default defineConfig({
                 maxAgeSeconds: 60 * 60 * 24 // 24 horas
               }
             }
+          },
+          // Cache agressivo para imagens do Spotify
+          {
+            urlPattern: /^https:\/\/i\.scdn\.co\/.*/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'spotify-images-cache',
+              expiration: {
+                maxEntries: 500,
+                maxAgeSeconds: 60 * 60 * 24 * 30 // 30 dias
+              }
+            }
+          },
+          // Cache para outras imagens (fallbacks, etc)
+          {
+            urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp)$/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'images-cache',
+              expiration: {
+                maxEntries: 200,
+                maxAgeSeconds: 60 * 60 * 24 * 7 // 7 dias
+              }
+            }
           }
         ]
       },

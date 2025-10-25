@@ -1,10 +1,25 @@
 import { useAuthStore } from '@/store/authStore';
 import { useSpotifyIntegration } from '@/hooks/useSpotifyIntegration';
 import { PageHeader } from '@/components/PageHeader';
+import { useImageCache } from '@/hooks/useImageCache';
 
 export default function ProfilePage() {
   const { user: authUser } = useAuthStore();
   const { disconnect } = useSpotifyIntegration();
+
+  // Função para obter a URL da imagem do usuário
+  const getUserImageUrl = () => {
+    if (authUser?.images && authUser.images.length > 0) {
+      return authUser.images[0].url;
+    }
+    return null;
+  };
+
+  // Use o hook de cache de imagens
+  const { imageUrl, isLoading } = useImageCache(
+    getUserImageUrl(),
+    'user'
+  );
 
   const handleLogout = () => {
     disconnect();
@@ -22,10 +37,16 @@ export default function ProfilePage() {
         <div className="text-center">
           {/* Avatar */}
           <div className="mb-8">
-            {authUser?.images && authUser.images.length > 0 ? (
+            {isLoading ? (
+              <div className="w-32 h-32 bg-gray-700 rounded-full mx-auto animate-pulse flex items-center justify-center">
+                <svg className="w-16 h-16 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+              </div>
+            ) : imageUrl ? (
               <img
-                src={authUser.images[0].url}
-                alt={authUser.display_name}
+                src={imageUrl}
+                alt={authUser?.display_name}
                 className="w-32 h-32 rounded-full mx-auto object-cover"
               />
             ) : (

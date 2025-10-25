@@ -1,4 +1,5 @@
 import type { Playlist } from '@/types';
+import { useImageCache } from '@/hooks/useImageCache';
 
 interface PlaylistCardProps {
   playlist: Playlist;
@@ -9,8 +10,8 @@ interface PlaylistCardProps {
 export function PlaylistCard({ playlist, onClick, className = '' }: PlaylistCardProps) {
   const fallbackImage = 'https://via.placeholder.com/300x300/1f2937/9ca3af?text=Playlist';
 
-  const getBestImage = (images: { url: string; height: number | null; width: number | null }[]) => {
-    if (!images || images.length === 0) return fallbackImage;
+  const getBestImageUrl = (images: { url: string; height: number | null; width: number | null }[]) => {
+    if (!images || images.length === 0) return null;
     
     // Procura por uma imagem de tamanho médio (entre 200-400px)
     const mediumImage = images.find(img => 
@@ -20,8 +21,15 @@ export function PlaylistCard({ playlist, onClick, className = '' }: PlaylistCard
     if (mediumImage) return mediumImage.url;
     
     // Se não encontrar, pega a primeira disponível
-    return images[0]?.url || fallbackImage;
+    return images[0]?.url || null;
   };
+
+  // Use o hook de cache de imagens
+  const { imageUrl, isLoading } = useImageCache(
+    getBestImageUrl(playlist.images),
+    'playlist',
+    { fallbackUrl: fallbackImage }
+  );
 
   const formatTrackCount = (count: number) => {
     if (count === 1) return '1 música';
@@ -44,15 +52,23 @@ export function PlaylistCard({ playlist, onClick, className = '' }: PlaylistCard
       <div className="flex items-center gap-4">
         {/* Playlist Image */}
         <div className="relative flex-shrink-0">
-          <img
-            src={getBestImage(playlist.images)}
-            alt={playlist.name}
-            className="w-16 h-16 rounded-lg object-cover"
-            onError={(e) => {
-              const target = e.target as HTMLImageElement;
-              target.src = fallbackImage;
-            }}
-          />
+          {isLoading ? (
+            <div className="w-16 h-16 rounded-lg bg-gray-700 animate-pulse flex items-center justify-center">
+              <svg className="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+              </svg>
+            </div>
+          ) : (
+            <img
+              src={imageUrl || fallbackImage}
+              alt={playlist.name}
+              className="w-16 h-16 rounded-lg object-cover"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = fallbackImage;
+              }}
+            />
+          )}
           
           {/* Play Button - Visible on hover */}
           <button

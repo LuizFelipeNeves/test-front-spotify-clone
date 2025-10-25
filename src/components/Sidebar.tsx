@@ -1,4 +1,4 @@
-import { Home, Users, Play, User, Download, Check, Loader2 } from 'lucide-react';
+import { Home, Users, Play, User, Download, Loader2 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import SpotifyLogo from './SpotifyLogo';
 import { ROUTES } from '@/utils/constants';

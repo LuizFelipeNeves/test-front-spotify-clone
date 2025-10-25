@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
+import { WifiOff } from 'lucide-react';
 import { PageHeader } from '@/components/PageHeader';
 import { ContentList } from '@/components/ContentList';
 import { PlaylistCard } from '@/components/PlaylistCard';
 import { CreatePlaylistModal } from '@/components/CreatePlaylistModal';
 import { useSpotifyIntegration } from '@/hooks/useSpotifyIntegration';
-import { useInfiniteUserPlaylists, spotifyQueryKeys } from '@/hooks/useSpotifyQueries';
+import { useInfiniteUserPlaylists } from '@/hooks/useSpotifyQueries';
+import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 import type { Playlist } from '@/types';
 
 export default function PlaylistsPage() {
@@ -14,6 +16,7 @@ export default function PlaylistsPage() {
   const [isCreating, setIsCreating] = useState(false);
   const queryClient = useQueryClient();
   const { createPlaylist } = useSpotifyIntegration();
+  const isOnline = useOnlineStatus();
   
   const {
     data,
@@ -27,6 +30,44 @@ export default function PlaylistsPage() {
 
   // Flatten all pages into a single array of playlists
   const playlists = data?.pages.flatMap(page => page.items) ?? [];
+
+  // Get error message based on online status and error type
+  const getErrorMessage = () => {
+    if (!isOnline) {
+      return (
+        <div className="flex items-center gap-2">
+          <WifiOff className="w-5 h-5" />
+          <span>Você está offline. Verifique sua conexão com a internet.</span>
+        </div>
+      );
+    }
+
+    if (error) {
+      const errorData = error as any;
+      const errorMessage = errorData?.message || 'Erro desconhecido';
+
+      if (errorMessage.includes('Failed to fetch')) {
+        return (
+          <div className="flex items-center gap-2">
+            <WifiOff className="w-5 h-5" />
+            <span>Erro de conexão. Verifique sua internet e tente novamente.</span>
+          </div>
+        );
+      }
+
+      if (errorData?.status === 404) {
+        return 'Playlists não encontradas.';
+      }
+
+      if (errorData?.status === 401) {
+        return 'Sessão expirada. Faça login novamente.';
+      }
+
+      return `Erro ao carregar playlists: ${errorMessage}`;
+    }
+
+    return 'Erro ao carregar playlists';
+  };
 
   // Infinite scroll with intersection observer
   const { ref: loadMoreRef, inView } = useInView({
@@ -58,7 +99,7 @@ export default function PlaylistsPage() {
       setIsCreating(true);
       
       // Cria a playlist via API do Spotify
-      const newPlaylist = await createPlaylist(name, '');
+      await createPlaylist(name, '');
       
       // Invalida o cache para recarregar as playlists
       queryClient.invalidateQueries({
@@ -105,12 +146,10 @@ export default function PlaylistsPage() {
       <ContentList
         items={playlists}
         loading={isLoading}
-        error={isError ? error?.message || 'Erro ao carregar playlists' : null}
+        error={isError ? getErrorMessage() : null}
         emptyMessage="Nenhuma playlist encontrada"
         emptyDescription="Crie sua primeira playlist para começar a organizar suas músicas!"
-        loadingMessage="Carregando playlists..."
         onRetry={handleRetry}
-        footerMessage={`${playlists.length} playlist${playlists.length !== 1 ? 's' : ''} na sua biblioteca`}
         renderItem={(playlist) => (
           <PlaylistCard
             key={playlist.id}

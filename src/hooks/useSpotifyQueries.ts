@@ -1,6 +1,5 @@
 import { useQuery, useInfiniteQuery } from '@tanstack/react-query'
 import { spotifyService } from '@/services/spotify.service'
-import type { Artist, Playlist, Album } from '@/types'
 
 // Query keys para organização
 export const spotifyQueryKeys = {

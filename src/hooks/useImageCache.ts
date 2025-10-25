@@ -31,7 +31,6 @@ export function useImageCache(
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [retryCount, setRetryCount] = useState(0);
   
   const abortControllerRef = useRef<AbortController | null>(null);
   const timeoutRef = useRef<number | null>(null);
@@ -80,7 +79,6 @@ export function useImageCache(
         timeoutRef.current = setTimeout(() => {
           loadImage(url, attempt + 1);
         }, delay);
-        setRetryCount(attempt + 1);
       } else {
         setError(err instanceof Error ? err.message : 'Failed to load image');
         setImageUrl(fallbackUrl || url); // Fallback para URL original
@@ -91,7 +89,6 @@ export function useImageCache(
 
   const retry = useCallback(() => {
     if (originalUrl) {
-      setRetryCount(0);
       loadImage(originalUrl);
     }
   }, [originalUrl, loadImage]);

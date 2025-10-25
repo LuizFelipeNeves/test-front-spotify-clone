@@ -1,46 +1,37 @@
 import type { ReactNode } from 'react';
+import React from 'react';
 import { LoadingSpinner } from './LoadingSpinner';
-import { ErrorState } from './ErrorState';
 import { EmptyState } from './EmptyState';
+import { ErrorState } from './ErrorState';
 
 interface ContentListProps<T> {
   items: T[];
-  loading: boolean;
-  error: string | null;
+  loading?: boolean;
+  error?: string | React.ReactNode | null;
   emptyMessage?: string;
   emptyDescription?: string;
-  loadingMessage?: string;
-  renderItem: (item: T) => ReactNode;
-  onRetry?: () => void;
-  footerMessage?: string;
   className?: string;
+  onRetry?: () => void;
+  renderItem: (item: T, index: number) => ReactNode;
 }
 
-export function ContentList<T>({
+function ContentList<T>({
   items,
-  loading,
-  error,
-  emptyMessage = "Nenhum item encontrado",
-  emptyDescription = "Comece a usar o Spotify para ver conteúdo aqui!",
-  loadingMessage = "Carregando...",
-  renderItem,
+  loading = false,
+  error = null,
+  emptyMessage = 'Nenhum item encontrado',
+  emptyDescription = 'Não há itens para exibir no momento.',
+  className = '',
   onRetry,
-  footerMessage,
-  className = ''
+  renderItem
 }: ContentListProps<T>) {
   // Loading State
   if (loading) {
-    return (
-      <LoadingSpinner 
-        size="lg" 
-        message={loadingMessage} 
-        className={className} 
-      />
-    );
+    return <LoadingSpinner />;
   }
 
   // Error State
-  if (error && !loading) {
+  if (error) {
     const retryButton = onRetry ? (
       <button
         onClick={onRetry}
@@ -52,44 +43,36 @@ export function ContentList<T>({
     ) : undefined;
 
     return (
-      <ErrorState 
-        message={error} 
-        action={retryButton} 
-        className={className} 
+      <ErrorState
+        message={typeof error === 'string' ? error : 'Ocorreu um erro inesperado'}
+        action={retryButton}
       />
     );
   }
 
   // Empty State
-  if (!loading && !error && items.length === 0) {
+  if (!items || items.length === 0) {
     return (
-      <EmptyState 
-        title={emptyMessage} 
-        description={emptyDescription} 
-        className={className} 
+      <EmptyState
+        title={emptyMessage}
+        description={emptyDescription}
       />
     );
   }
 
-  // Content List
+  // For now, we'll use regular rendering instead of virtual scrolling
+  // until we can properly implement react-window
   return (
     <div className={className}>
       <div className="space-y-4">
         {items.map((item, index) => (
           <div key={index}>
-            {renderItem(item)}
+            {renderItem(item, index)}
           </div>
         ))}
       </div>
-
-      {/* Footer */}
-      {!loading && !error && items.length > 0 && footerMessage && (
-        <footer className="mt-12 pt-8 border-t border-gray-800">
-          <p className="text-gray-500 text-sm text-center" role="status" aria-live="polite">
-            {footerMessage}
-          </p>
-        </footer>
-      )}
     </div>
   );
 }
+
+export { ContentList };

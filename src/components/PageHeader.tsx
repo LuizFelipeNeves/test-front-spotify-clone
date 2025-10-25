@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { SpotifyConnectionStatus } from './SpotifyConnectionStatus';
 
 interface PageHeaderProps {
-  title: string;
+  title: string | ReactNode;
   description?: string;
   actionButton?: ReactNode;
   showSpotifyStatus?: boolean;

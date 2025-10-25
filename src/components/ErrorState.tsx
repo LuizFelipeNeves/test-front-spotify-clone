@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 interface ErrorStateProps {
   title?: string;
-  message: string;
+  message: string | ReactNode;
   action?: ReactNode;
   className?: string;
 }

@@ -50,9 +50,20 @@ class SpotifyService {
    */
   async getArtistAlbums(artistId: string, limit = 20, offset = 0): Promise<{ items: Album[]; total: number; next: string | null }> {
     const response = await apiClient.get<{ items: Album[]; total: number; next: string | null }>(
-      `${this.baseURL}/artists/${artistId}/albums?include_groups=album,single&market=BR&limit=${limit}&offset=${offset}`
+      `${this.baseURL}/artists/${artistId}/albums?include_groups=album,single,compilation&market=BR&limit=${limit}&offset=${offset}`
     );
-    return response.data;
+    
+    // Sort albums by release date (newest first)
+    const sortedItems = response.data.items.sort((a, b) => {
+      const dateA = new Date(a.release_date);
+      const dateB = new Date(b.release_date);
+      return dateB.getTime() - dateA.getTime();
+    });
+    
+    return {
+      ...response.data,
+      items: sortedItems
+    };
   }
 
   /**

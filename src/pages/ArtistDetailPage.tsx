@@ -37,13 +37,27 @@ export const ArtistDetailPage: React.FC = () => {
   // Flatten all pages into a single array of albums
   const albums = albumsData?.pages.flatMap(page => page.items) ?? [];
 
-  // Separate albums and singles
+  // Separate albums, singles, and compilations
   const albumsOnly = albums.filter(album => album.album_type === 'album');
   const singlesOnly = albums.filter(album => album.album_type === 'single');
+  const compilationsOnly = albums.filter(album => album.album_type === 'compilation');
 
-  // Simplified rendering - no virtual scrolling for now to avoid duplication bugs
-  const visibleAlbums = albumsOnly;
-  const visibleSingles = singlesOnly;
+  // Remove duplicates based on album name and release date
+  const removeDuplicates = (items: typeof albums) => {
+    const seen = new Set();
+    return items.filter(item => {
+      const key = `${item.name}-${item.release_date}`;
+      if (seen.has(key)) {
+        return false;
+      }
+      seen.add(key);
+      return true;
+    });
+  };
+
+  const visibleAlbums = removeDuplicates(albumsOnly);
+  const visibleSingles = removeDuplicates(singlesOnly);
+  const visibleCompilations = removeDuplicates(compilationsOnly);
 
   const loading = artistLoading || albumsLoading;
   const error = artistError || albumsError;
@@ -145,23 +159,23 @@ export const ArtistDetailPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Albums and Singles sections */}
+      {/* Albums, Singles and Compilations sections */}
       <div className="px-6 pb-6">
         {albums.length === 0 && !isFetchingNextPage ? (
           <div className="text-center py-12">
-            <p className="text-gray-400 text-lg">Nenhum álbum ou single encontrado</p>
+            <p className="text-gray-400 text-lg">Nenhum álbum, single ou compilação encontrado</p>
           </div>
         ) : (
           <>
             {/* Albums section */}
-            {albumsOnly.length > 0 && (
+            {visibleAlbums.length > 0 && (
               <div className="mb-12">
-                <h2 className="text-xl font-bold mb-6">Álbuns ({albumsOnly.length})</h2>
+                <h2 className="text-xl font-bold mb-6">Álbuns ({visibleAlbums.length})</h2>
                 
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4">
                   {visibleAlbums.map((album) => (
                     <AlbumCard
-                      key={album.id}
+                      key={`album-${album.id}`}
                       album={album}
                     />
                   ))}
@@ -170,15 +184,31 @@ export const ArtistDetailPage: React.FC = () => {
             )}
 
             {/* Singles section */}
-            {singlesOnly.length > 0 && (
+            {visibleSingles.length > 0 && (
               <div className="mb-12">
-                <h2 className="text-xl font-bold mb-6">Singles ({singlesOnly.length})</h2>
+                <h2 className="text-xl font-bold mb-6">Singles e EPs ({visibleSingles.length})</h2>
                 
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4">
                   {visibleSingles.map((single) => (
                     <AlbumCard
-                      key={single.id}
+                      key={`single-${single.id}`}
                       album={single}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Compilations section */}
+            {visibleCompilations.length > 0 && (
+              <div className="mb-12">
+                <h2 className="text-xl font-bold mb-6">Compilações ({visibleCompilations.length})</h2>
+                
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4">
+                  {visibleCompilations.map((compilation) => (
+                    <AlbumCard
+                      key={`compilation-${compilation.id}`}
+                      album={compilation}
                     />
                   ))}
                 </div>

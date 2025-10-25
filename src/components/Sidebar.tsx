@@ -5,9 +5,11 @@ import { ROUTES } from '@/utils/constants';
 
 interface SidebarProps {
   className?: string;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
-export function Sidebar({ className = '' }: SidebarProps) {
+export function Sidebar({ className = '', isOpen = true, onClose }: SidebarProps) {
   const location = useLocation();
 
   // Função para determinar se a rota está ativa
@@ -24,8 +26,22 @@ export function Sidebar({ className = '' }: SidebarProps) {
     return `${baseClasses} ${isActiveRoute(route) ? activeClasses : inactiveClasses}`;
   };
 
+  // Função para lidar com cliques nos links em mobile
+  const handleLinkClick = () => {
+    if (onClose) {
+      onClose();
+    }
+  };
+
   return (
-    <div className={`w-64 bg-black border-r border-gray-900 p-6 flex flex-col h-full ${className}`}>
+    <div className={`
+      w-64 bg-black border-r border-gray-900 p-6 flex flex-col h-full
+      fixed md:static top-0 left-0 
+      transform transition-transform duration-300 ease-in-out
+      ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+      md:translate-x-0
+      ${className}
+    `}>
       {/* Logo e Navigation */}
       <div className="flex-1">
         {/* Logo */}
@@ -35,22 +51,38 @@ export function Sidebar({ className = '' }: SidebarProps) {
 
         {/* Navigation */}
         <nav className="space-y-6">
-          <Link to={ROUTES.HOME} className={getNavItemClasses(ROUTES.HOME)}>
+          <Link 
+            to={ROUTES.HOME} 
+            className={getNavItemClasses(ROUTES.HOME)}
+            onClick={handleLinkClick}
+          >
             <Home size={24} />
             <span className="text-base font-medium">Home</span>
           </Link>
           
-          <Link to={ROUTES.ARTISTS} className={getNavItemClasses(ROUTES.ARTISTS)}>
+          <Link 
+            to={ROUTES.ARTISTS} 
+            className={getNavItemClasses(ROUTES.ARTISTS)}
+            onClick={handleLinkClick}
+          >
             <Users size={24} />
             <span className="text-base font-medium">Artistas</span>
           </Link>
           
-          <Link to={ROUTES.PLAYLISTS} className={getNavItemClasses(ROUTES.PLAYLISTS)}>
+          <Link 
+            to={ROUTES.PLAYLISTS} 
+            className={getNavItemClasses(ROUTES.PLAYLISTS)}
+            onClick={handleLinkClick}
+          >
             <Play size={24} />
             <span className="text-base font-medium">Playlists</span>
           </Link>
           
-          <Link to={ROUTES.PROFILE} className={getNavItemClasses(ROUTES.PROFILE)}>
+          <Link 
+            to={ROUTES.PROFILE} 
+            className={getNavItemClasses(ROUTES.PROFILE)}
+            onClick={handleLinkClick}
+          >
             <User size={24} />
             <span className="text-base font-medium">Perfil</span>
           </Link>

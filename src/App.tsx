@@ -4,7 +4,9 @@ import { useAuthStore } from '@/store/authStore'
 import LoginPage from '@/pages/LoginPage'
 import CallbackPage from '@/pages/CallbackPage'
 import HomePage from '@/pages/HomePage'
-import { ArtistsPage } from '@/pages/ArtistsPage'
+import ArtistsPage from '@/pages/ArtistsPage'
+import PlaylistsPage from '@/pages/PlaylistsPage'
+import ProfilePage from '@/pages/ProfilePage'
 import { ROUTES } from '@/utils/constants'
 import './App.css'
 
@@ -22,16 +24,31 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
 
 function App() {
-  const { isAuthenticated } = useAuthStore()
+  const { isAuthenticated, login } = useAuthStore()
 
   // Check for existing token on app load
   useEffect(() => {
-    const token = localStorage.getItem('spotify_access_token')
-    if (token && !isAuthenticated) {
-      // Token exists but user is not authenticated, try to get user data
-      // This would be handled by the auth store initialization
+    const initializeAuth = async () => {
+      const token = localStorage.getItem('spotify_access_token')
+      const refreshToken = localStorage.getItem('spotify_refresh_token')
+      
+      if (token && !isAuthenticated) {
+        try {
+          // Importar o spotifyService dinamicamente para evitar problemas de dependência circular
+          const { spotifyService } = await import('@/services/spotify.service')
+          const userData = await spotifyService.getUserProfile()
+          login(token, refreshToken || '', userData)
+        } catch (error) {
+          console.error('Failed to restore authentication:', error)
+          // Se falhar, limpar tokens inválidos
+          localStorage.removeItem('spotify_access_token')
+          localStorage.removeItem('spotify_refresh_token')
+        }
+      }
     }
-  }, [isAuthenticated])
+
+    initializeAuth()
+  }, [isAuthenticated, login])
 
   return (
     <Router>
@@ -57,6 +74,16 @@ function App() {
             </ProtectedRoute>
           } 
         />
+        <Route path={ROUTES.PLAYLISTS} element={
+              <ProtectedRoute>
+                <PlaylistsPage />
+              </ProtectedRoute>
+            } />
+            <Route path={ROUTES.PROFILE} element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            } />
         
         {/* Rota padrão - redireciona para home se autenticado, senão para login */}
         <Route 

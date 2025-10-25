@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Wifi, WifiOff } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
@@ -41,70 +41,9 @@ export const ArtistDetailPage: React.FC = () => {
   const albumsOnly = albums.filter(album => album.album_type === 'album');
   const singlesOnly = albums.filter(album => album.album_type === 'single');
 
-  // Virtual scrolling: show limited items for performance but keep all in memory
-  const [albumScrollTop, setAlbumScrollTop] = useState(0);
-  const [singleScrollTop, setSingleScrollTop] = useState(0);
-  const albumContainerRef = useRef<HTMLDivElement>(null);
-  const singleContainerRef = useRef<HTMLDivElement>(null);
-  
-  const itemHeight = 200; // Approximate height of AlbumCard
-  const containerHeight = 600;
-  
-  const visibleAlbums = useMemo(() => {
-    if (albumsOnly.length <= 50) return albumsOnly;
-    
-    const startIndex = Math.floor(albumScrollTop / itemHeight);
-    const endIndex = Math.min(
-      startIndex + Math.ceil(containerHeight / itemHeight) + 5,
-      albumsOnly.length
-    );
-    
-    return albumsOnly.slice(Math.max(0, startIndex - 5), endIndex);
-  }, [albumsOnly, albumScrollTop]);
-
-  const visibleSingles = useMemo(() => {
-    if (singlesOnly.length <= 50) return singlesOnly;
-    
-    const startIndex = Math.floor(singleScrollTop / itemHeight);
-    const endIndex = Math.min(
-      startIndex + Math.ceil(containerHeight / itemHeight) + 5,
-      singlesOnly.length
-    );
-    
-    return singlesOnly.slice(Math.max(0, startIndex - 5), endIndex);
-  }, [singlesOnly, singleScrollTop]);
-  
-  const albumStartIndex = albumsOnly.length > 50 
-    ? Math.max(0, Math.floor(albumScrollTop / itemHeight) - 5)
-    : 0;
-    
-  const singleStartIndex = singlesOnly.length > 50 
-    ? Math.max(0, Math.floor(singleScrollTop / itemHeight) - 5)
-    : 0;
-  
-  useEffect(() => {
-    const albumContainer = albumContainerRef.current;
-    if (!albumContainer) return;
-    
-    const handleAlbumScroll = () => {
-      setAlbumScrollTop(albumContainer.scrollTop);
-    };
-    
-    albumContainer.addEventListener('scroll', handleAlbumScroll);
-    return () => albumContainer.removeEventListener('scroll', handleAlbumScroll);
-  }, []);
-  
-  useEffect(() => {
-    const singleContainer = singleContainerRef.current;
-    if (!singleContainer) return;
-    
-    const handleSingleScroll = () => {
-      setSingleScrollTop(singleContainer.scrollTop);
-    };
-    
-    singleContainer.addEventListener('scroll', handleSingleScroll);
-    return () => singleContainer.removeEventListener('scroll', handleSingleScroll);
-  }, []);
+  // Simplified rendering - no virtual scrolling for now to avoid duplication bugs
+  const visibleAlbums = albumsOnly;
+  const visibleSingles = singlesOnly;
 
   const loading = artistLoading || albumsLoading;
   const error = artistError || albumsError;
@@ -219,47 +158,13 @@ export const ArtistDetailPage: React.FC = () => {
               <div className="mb-12">
                 <h2 className="text-xl font-bold mb-6">Álbuns ({albumsOnly.length})</h2>
                 
-                <div 
-                  ref={albumContainerRef}
-                  className="relative overflow-y-auto"
-                  style={{ 
-                    height: albumsOnly.length > 50 ? `${containerHeight}px` : 'auto',
-                    maxHeight: albumsOnly.length > 50 ? `${containerHeight}px` : 'none'
-                  }}
-                >
-                  {albumsOnly.length > 50 && (
-                    <div 
-                      style={{ 
-                        height: `${Math.ceil(albumsOnly.length / 6) * itemHeight}px`,
-                        position: 'relative'
-                      }}
-                    >
-                      <div 
-                        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4 absolute w-full"
-                        style={{
-                          top: `${albumStartIndex * itemHeight / Math.ceil(albumsOnly.length / 6)}px`
-                        }}
-                      >
-                        {visibleAlbums.map((album) => (
-                          <AlbumCard
-                            key={album.id}
-                            album={album}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  
-                  {albumsOnly.length <= 50 && (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4">
-                      {visibleAlbums.map((album) => (
-                        <AlbumCard
-                          key={album.id}
-                          album={album}
-                        />
-                      ))}
-                    </div>
-                  )}
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4">
+                  {visibleAlbums.map((album) => (
+                    <AlbumCard
+                      key={album.id}
+                      album={album}
+                    />
+                  ))}
                 </div>
               </div>
             )}
@@ -269,47 +174,13 @@ export const ArtistDetailPage: React.FC = () => {
               <div className="mb-12">
                 <h2 className="text-xl font-bold mb-6">Singles ({singlesOnly.length})</h2>
                 
-                <div 
-                  ref={singleContainerRef}
-                  className="relative overflow-y-auto"
-                  style={{ 
-                    height: singlesOnly.length > 50 ? `${containerHeight}px` : 'auto',
-                    maxHeight: singlesOnly.length > 50 ? `${containerHeight}px` : 'none'
-                  }}
-                >
-                  {singlesOnly.length > 50 && (
-                    <div 
-                      style={{ 
-                        height: `${Math.ceil(singlesOnly.length / 6) * itemHeight}px`,
-                        position: 'relative'
-                      }}
-                    >
-                      <div 
-                        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4 absolute w-full"
-                        style={{
-                          top: `${singleStartIndex * itemHeight / Math.ceil(singlesOnly.length / 6)}px`
-                        }}
-                      >
-                        {visibleSingles.map((single) => (
-                          <AlbumCard
-                            key={single.id}
-                            album={single}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  
-                  {singlesOnly.length <= 50 && (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4">
-                      {visibleSingles.map((single) => (
-                        <AlbumCard
-                          key={single.id}
-                          album={single}
-                        />
-                      ))}
-                    </div>
-                  )}
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4">
+                  {visibleSingles.map((single) => (
+                    <AlbumCard
+                      key={single.id}
+                      album={single}
+                    />
+                  ))}
                 </div>
               </div>
             )}

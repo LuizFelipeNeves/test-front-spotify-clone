@@ -52,7 +52,7 @@ export default function ArtistsPage() {
 
   return (
     <Layout>
-      <div className="p-12">
+      <div className="p-4 sm:p-8 lg:p-12">
         <PageHeader 
           title="Artistas" 
           description="Aqui você encontra seus artistas preferidos ordenados por suas preferências"

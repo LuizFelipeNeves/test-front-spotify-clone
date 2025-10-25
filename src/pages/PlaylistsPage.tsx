@@ -50,18 +50,25 @@ export default function PlaylistsPage() {
   const createPlaylistButton = (
     <button
       onClick={handleCreatePlaylist}
-      className="px-6 py-3 bg-green-500 text-black font-semibold rounded-full hover:bg-green-400 transition-colors flex items-center gap-2"
+      className="px-3 sm:px-6 py-3 bg-green-500 text-black font-semibold rounded-full hover:bg-green-400 focus:bg-green-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition-colors flex items-center gap-2"
+      title="Criar Playlist"
+      aria-label="Criar nova playlist"
     >
-      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+      <svg 
+        className="w-5 h-5" 
+        fill="currentColor" 
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
         <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
       </svg>
-      Criar Playlist
+      <span className="hidden sm:inline">Criar Playlist</span>
     </button>
   );
 
   return (
     <Layout>
-      <div className="p-12">
+      <div className="p-4 sm:p-8 lg:p-12">
         <PageHeader
           title="Minhas Playlists"
           description="Sua coleção pessoal de playlists"

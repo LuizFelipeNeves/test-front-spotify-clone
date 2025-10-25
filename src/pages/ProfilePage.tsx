@@ -13,7 +13,7 @@ export default function ProfilePage() {
 
   return (
     <Layout>
-      <div className="p-12">
+      <div className="p-4 sm:p-8 lg:p-12">
         <PageHeader 
           title="Perfil" 
           description="Suas informações pessoais"

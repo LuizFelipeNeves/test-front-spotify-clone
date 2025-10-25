@@ -1,4 +1,7 @@
 import type { ReactNode } from 'react';
+import { LoadingSpinner } from './LoadingSpinner';
+import { ErrorState } from './ErrorState';
+import { EmptyState } from './EmptyState';
 
 interface ContentListProps<T> {
   items: T[];
@@ -28,46 +31,43 @@ export function ContentList<T>({
   // Loading State
   if (loading) {
     return (
-      <div className={`flex items-center justify-center py-12 ${className}`}>
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 border-2 border-green-500 border-t-transparent rounded-full animate-spin"></div>
-          <span className="text-white text-lg">{loadingMessage}</span>
-        </div>
-      </div>
+      <LoadingSpinner 
+        size="lg" 
+        message={loadingMessage} 
+        className={className} 
+      />
     );
   }
 
   // Error State
   if (error && !loading) {
+    const retryButton = onRetry ? (
+      <button
+        onClick={onRetry}
+        className="px-6 py-3 bg-green-500 text-black font-semibold rounded-full hover:bg-green-400 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+        aria-label="Tentar carregar novamente"
+      >
+        Tentar Novamente
+      </button>
+    ) : undefined;
+
     return (
-      <div className={`flex flex-col items-center justify-center py-12 ${className}`}>
-        <div className="text-center mb-6">
-          <h3 className="text-white text-xl font-semibold mb-2">Ops! Algo deu errado</h3>
-          <p className="text-gray-400 mb-4">{error}</p>
-          {onRetry && (
-            <button
-              onClick={onRetry}
-              className="px-6 py-3 bg-green-500 text-black font-semibold rounded-full hover:bg-green-400 transition-colors"
-            >
-              Tentar Novamente
-            </button>
-          )}
-        </div>
-      </div>
+      <ErrorState 
+        message={error} 
+        action={retryButton} 
+        className={className} 
+      />
     );
   }
 
   // Empty State
   if (!loading && !error && items.length === 0) {
     return (
-      <div className={`text-center py-12 ${className}`}>
-        <h3 className="text-white text-xl font-semibold mb-2">
-          {emptyMessage}
-        </h3>
-        <p className="text-gray-400">
-          {emptyDescription}
-        </p>
-      </div>
+      <EmptyState 
+        title={emptyMessage} 
+        description={emptyDescription} 
+        className={className} 
+      />
     );
   }
 
@@ -84,11 +84,11 @@ export function ContentList<T>({
 
       {/* Footer */}
       {!loading && !error && items.length > 0 && footerMessage && (
-        <div className="mt-12 pt-8 border-t border-gray-800">
-          <p className="text-gray-500 text-sm text-center">
+        <footer className="mt-12 pt-8 border-t border-gray-800">
+          <p className="text-gray-500 text-sm text-center" role="status" aria-live="polite">
             {footerMessage}
           </p>
-        </div>
+        </footer>
       )}
     </div>
   );

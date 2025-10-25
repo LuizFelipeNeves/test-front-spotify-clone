@@ -3,20 +3,25 @@ import { useState } from 'react';
 interface CreatePlaylistModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onCreatePlaylist: (name: string) => void;
+  onCreatePlaylist: (name: string) => Promise<void>;
+  isCreating?: boolean;
 }
 
-export function CreatePlaylistModal({ isOpen, onClose, onCreatePlaylist }: CreatePlaylistModalProps) {
+export function CreatePlaylistModal({ isOpen, onClose, onCreatePlaylist, isCreating = false }: CreatePlaylistModalProps) {
   const [playlistName, setPlaylistName] = useState('');
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (playlistName.trim()) {
-      onCreatePlaylist(playlistName.trim());
-      setPlaylistName('');
-      onClose();
+    if (playlistName.trim() && !isCreating) {
+      try {
+        await onCreatePlaylist(playlistName.trim());
+        setPlaylistName('');
+      } catch (error) {
+        // Error handling is done in the parent component
+        console.error('Erro ao criar playlist:', error);
+      }
     }
   };
 
@@ -64,10 +69,16 @@ export function CreatePlaylistModal({ isOpen, onClose, onCreatePlaylist }: Creat
           <div className="flex justify-center">
             <button
               type="submit"
-              disabled={!playlistName.trim()}
-              className="px-8 py-3 bg-green-500 text-black font-semibold rounded-full hover:bg-green-400 focus:bg-green-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={!playlistName.trim() || isCreating}
+              className="px-8 py-3 bg-green-500 text-black font-semibold rounded-full hover:bg-green-400 focus:bg-green-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
-              Criar
+              {isCreating && (
+                <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+              )}
+              {isCreating ? 'Criando...' : 'Criar'}
             </button>
           </div>
         </form>

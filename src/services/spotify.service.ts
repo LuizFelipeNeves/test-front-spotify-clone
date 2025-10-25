@@ -26,13 +26,13 @@ class SpotifyService {
   }
 
   /**
-   * Get user's playlists
+   * Get user playlists
    */
-  async getUserPlaylists(limit = 50): Promise<Playlist[]> {
-    const response = await apiClient.get<{ items: Playlist[] }>(
-      `${this.baseURL}/me/playlists?limit=${limit}`
+  async getUserPlaylists(limit = 50, offset = 0): Promise<{ items: Playlist[]; total: number; next: string | null }> {
+    const response = await apiClient.get<{ items: Playlist[]; total: number; next: string | null }>(
+      `${this.baseURL}/me/playlists?limit=${limit}&offset=${offset}`
     );
-    return response.data.items;
+    return response.data;
   }
 
   /**

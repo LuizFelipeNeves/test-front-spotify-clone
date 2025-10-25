@@ -15,7 +15,8 @@ interface SpotifyIntegrationActions {
   disconnect: () => void;
   refreshData: () => Promise<void>;
   fetchTopArtists: () => Promise<Artist[]>;
-  fetchUserPlaylists: () => Promise<Playlist[]>;
+  fetchUserPlaylists: (limit?: number, offset?: number) => Promise<{ items: Playlist[]; total: number; next: string | null }>;
+  createPlaylist: (name: string, description?: string) => Promise<Playlist>;
 }
 
 export function useSpotifyIntegration(): SpotifyIntegrationState & SpotifyIntegrationActions {
@@ -143,14 +144,26 @@ export function useSpotifyIntegration(): SpotifyIntegrationState & SpotifyIntegr
     }
   }, []);
 
-  const fetchUserPlaylists = useCallback(async (): Promise<Playlist[]> => {
+  const fetchUserPlaylists = useCallback(async (limit = 50, offset = 0): Promise<{ items: Playlist[]; total: number; next: string | null }> => {
     try {
-      return await spotifyService.getUserPlaylists();
+      return await spotifyService.getUserPlaylists(limit, offset);
     } catch (error) {
       console.warn('Erro ao buscar playlists:', error);
       throw error;
     }
   }, []);
+
+  const createPlaylist = useCallback(async (name: string, description?: string): Promise<Playlist> => {
+    try {
+      if (!authUser?.id) {
+        throw new Error('Usuário não autenticado');
+      }
+      return await spotifyService.createPlaylist(authUser.id, name, description);
+    } catch (error) {
+      console.warn('Erro ao criar playlist:', error);
+      throw error;
+    }
+  }, [authUser?.id]);
 
   return {
     ...state,
@@ -158,6 +171,7 @@ export function useSpotifyIntegration(): SpotifyIntegrationState & SpotifyIntegr
     disconnect,
     refreshData,
     fetchTopArtists,
-    fetchUserPlaylists
+    fetchUserPlaylists,
+    createPlaylist
   };
 }

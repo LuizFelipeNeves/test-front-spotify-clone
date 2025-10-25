@@ -89,9 +89,10 @@ export const getImageUrl = (
     case 'large':
       return sortedImages[0]?.url;
     case 'medium':
-    default:
+    default: {
       const midIndex = Math.floor(sortedImages.length / 2);
       return sortedImages[midIndex]?.url || sortedImages[0]?.url;
+    }
   }
 };
 

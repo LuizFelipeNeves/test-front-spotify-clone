@@ -32,11 +32,11 @@ export function CreatePlaylistModal({ isOpen, onClose, onCreatePlaylist, isCreat
   };
 
   return (
-    <div 
-      className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50"
+    <div
+      className="fixed inset-0 bg-black/30 backdrop-blur-[2px] flex items-center justify-center z-50"
       onClick={handleOverlayClick}
     >
-      <div className="bg-gray-800 rounded-lg p-8 w-full max-w-md mx-4 relative">
+      <div className="bg-gray-800 rounded-lg p-6 w-full max-w-sm mx-4 relative">
         {/* Close button */}
         <button
           onClick={onClose}
@@ -49,12 +49,12 @@ export function CreatePlaylistModal({ isOpen, onClose, onCreatePlaylist, isCreat
         </button>
 
         {/* Modal content */}
-        <div className="text-center mb-6">
-          <h2 className="text-gray-400 text-sm mb-4">Dê um nome a sua playlist</h2>
+        <div className="text-center mb-4">
+          <h2 className="text-gray-400 text-sm mb-3">Dê um nome a sua playlist</h2>
         </div>
 
         <form onSubmit={handleSubmit}>
-          <div className="mb-8">
+          <div className="mb-6">
             <input
               type="text"
               value={playlistName}

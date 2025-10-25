@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import Layout from '@/components/Layout';
 import { PageHeader } from '@/components/PageHeader';
 import { ContentList } from '@/components/ContentList';
 import { PlaylistCard } from '@/components/PlaylistCard';
@@ -67,32 +66,30 @@ export default function PlaylistsPage() {
   );
 
   return (
-    <Layout>
-      <div className="p-4 sm:p-8 lg:p-12">
-        <PageHeader
-          title="Minhas Playlists"
-          description="Sua coleção pessoal de playlists"
-          actionButton={createPlaylistButton}
-        />
+    <div className="p-4 sm:p-8 lg:p-12">
+      <PageHeader
+        title="Minhas Playlists"
+        description="Sua coleção pessoal de playlists"
+        actionButton={createPlaylistButton}
+      />
 
-        <ContentList
-          items={playlists}
-          loading={loading}
-          error={error}
-          emptyMessage="Nenhuma playlist encontrada"
-          emptyDescription="Crie sua primeira playlist para começar a organizar suas músicas!"
-          loadingMessage="Carregando playlists..."
-          onRetry={handleRetry}
-          footerMessage={`${playlists.length} playlist${playlists.length !== 1 ? 's' : ''} na sua biblioteca`}
-          renderItem={(playlist) => (
-            <PlaylistCard
-              key={playlist.id}
-              playlist={playlist}
-              onClick={handlePlaylistClick}
-            />
-          )}
-        />
-      </div>
-    </Layout>
+      <ContentList
+        items={playlists}
+        loading={loading}
+        error={error}
+        emptyMessage="Nenhuma playlist encontrada"
+        emptyDescription="Crie sua primeira playlist para começar a organizar suas músicas!"
+        loadingMessage="Carregando playlists..."
+        onRetry={handleRetry}
+        footerMessage={`${playlists.length} playlist${playlists.length !== 1 ? 's' : ''} na sua biblioteca`}
+        renderItem={(playlist) => (
+          <PlaylistCard
+            key={playlist.id}
+            playlist={playlist}
+            onClick={handlePlaylistClick}
+          />
+        )}
+      />
+    </div>
   );
 }

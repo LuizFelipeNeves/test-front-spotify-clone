@@ -12,7 +12,7 @@ interface SidebarProps {
 
 export function Sidebar({ className = '', isOpen = true, onClose }: SidebarProps) {
   const location = useLocation();
-  const { isInstallable, isInstalled, isInstalling, install, error } = usePWAInstall();
+  const { isInstallable, isInstalled, isInstalling, isLoading, install, error } = usePWAInstall();
 
   // Função para determinar se a rota está ativa
   const isActiveRoute = (route: string) => {
@@ -24,7 +24,7 @@ export function Sidebar({ className = '', isOpen = true, onClose }: SidebarProps
     const baseClasses = "flex items-center gap-4 cursor-pointer transition-colors";
     const activeClasses = "text-white";
     const inactiveClasses = "text-gray-400 hover:text-gray-300";
-    
+
     return `${baseClasses} ${isActiveRoute(route) ? activeClasses : inactiveClasses}`;
   };
 
@@ -53,35 +53,35 @@ export function Sidebar({ className = '', isOpen = true, onClose }: SidebarProps
 
         {/* Navigation */}
         <nav className="space-y-6">
-          <Link 
-            to={ROUTES.HOME} 
+          <Link
+            to={ROUTES.HOME}
             className={getNavItemClasses(ROUTES.HOME)}
             onClick={handleLinkClick}
           >
             <Home size={24} />
             <span className="text-base font-medium">Home</span>
           </Link>
-          
-          <Link 
-            to={ROUTES.ARTISTS} 
+
+          <Link
+            to={ROUTES.ARTISTS}
             className={getNavItemClasses(ROUTES.ARTISTS)}
             onClick={handleLinkClick}
           >
             <Users size={24} />
             <span className="text-base font-medium">Artistas</span>
           </Link>
-          
-          <Link 
-            to={ROUTES.PLAYLISTS} 
+
+          <Link
+            to={ROUTES.PLAYLISTS}
             className={getNavItemClasses(ROUTES.PLAYLISTS)}
             onClick={handleLinkClick}
           >
             <Play size={24} />
             <span className="text-base font-medium">Playlists</span>
           </Link>
-          
-          <Link 
-            to={ROUTES.PROFILE} 
+
+          <Link
+            to={ROUTES.PROFILE}
             className={getNavItemClasses(ROUTES.PROFILE)}
             onClick={handleLinkClick}
           >
@@ -92,46 +92,23 @@ export function Sidebar({ className = '', isOpen = true, onClose }: SidebarProps
       </div>
 
       {/* PWA Install Button - Fixo no final */}
-      {(isInstallable || isInstalled) && (
+      {!isLoading && isInstallable && !isInstalled && (
         <div className="mt-6">
-          <button 
+          <button
             onClick={install}
-            disabled={isInstalling || isInstalled}
-            className={`flex items-center gap-3 transition-colors ${
-              isInstalled 
-                ? 'text-green-400 cursor-default' 
-                : isInstalling 
-                  ? 'text-gray-400 cursor-not-allowed' 
-                  : 'text-white hover:text-gray-300'
-            }`}
-            aria-label={
-              isInstalled 
-                ? 'PWA já instalado' 
-                : isInstalling 
-                  ? 'Instalando PWA...' 
-                  : 'Instalar PWA'
-            }
+            disabled={isInstalling}
+            className={`flex items-center gap-3 text-white hover:text-gray-300 transition-colors`}
+            aria-label={isInstalling ? 'Instalando PWA...' : 'Instalar PWA'}
           >
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-              isInstalled 
-                ? 'bg-green-900/50' 
-                : 'bg-gray-800'
-            }`}>
+            <div className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center">
               {isInstalling ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
-              ) : isInstalled ? (
-                <Check className="w-5 h-5" />
               ) : (
                 <Download className="w-5 h-5" />
               )}
             </div>
             <span className="text-base font-medium">
-              {isInstalled 
-                ? 'PWA Instalado' 
-                : isInstalling 
-                  ? 'Instalando...' 
-                  : 'Instalar PWA'
-              }
+              {isInstalling ? 'Instalando...' : 'Instalar PWA'}
             </span>
           </button>
           {error && (

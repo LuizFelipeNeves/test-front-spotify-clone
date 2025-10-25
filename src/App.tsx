@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { useAuthStore } from '@/store/authStore'
+import Layout from '@/components/Layout'
 import LoginPage from '@/pages/LoginPage'
 import CallbackPage from '@/pages/CallbackPage'
 import HomePage from '@/pages/HomePage'
@@ -19,7 +20,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
     return <Navigate to={ROUTES.LOGIN} replace />
   }
   
-  return <>{children}</>
+  return <Layout>{children}</Layout>
 }
 
 

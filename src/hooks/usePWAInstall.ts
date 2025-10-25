@@ -13,6 +13,7 @@ interface PWAInstallState {
   isInstallable: boolean;
   isInstalled: boolean;
   isInstalling: boolean;
+  isLoading: boolean;
   error: string | null;
 }
 
@@ -27,6 +28,7 @@ export function usePWAInstall(): PWAInstallState & PWAInstallActions {
     isInstallable: false,
     isInstalled: false,
     isInstalling: false,
+    isLoading: true,
     error: null
   });
 
@@ -36,18 +38,21 @@ export function usePWAInstall(): PWAInstallState & PWAInstallActions {
     const isInWebAppiOS = (window.navigator as any).standalone === true;
     const isInstalled = isStandalone || isInWebAppiOS;
     
-    setState(prev => ({ ...prev, isInstalled }));
+    setState(prev => ({ ...prev, isInstalled, isLoading: false }));
   }, []);
 
   useEffect(() => {
-    checkInstallStatus();
+    // Adiciona um pequeno delay para evitar flickering inicial
+    const timer = setTimeout(() => {
+      checkInstallStatus();
+    }, 100);
 
     // Listener para o evento beforeinstallprompt
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       const promptEvent = e as BeforeInstallPromptEvent;
       setDeferredPrompt(promptEvent);
-      setState(prev => ({ ...prev, isInstallable: true, error: null }));
+      setState(prev => ({ ...prev, isInstallable: true, isLoading: false, error: null }));
     };
 
     // Listener para quando o app é instalado
@@ -75,6 +80,7 @@ export function usePWAInstall(): PWAInstallState & PWAInstallActions {
     mediaQuery.addEventListener('change', handleDisplayModeChange);
 
     return () => {
+      clearTimeout(timer);
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
       window.removeEventListener('appinstalled', handleAppInstalled);
       mediaQuery.removeEventListener('change', handleDisplayModeChange);

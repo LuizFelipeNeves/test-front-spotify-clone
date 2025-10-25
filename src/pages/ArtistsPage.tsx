@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import Layout from '@/components/Layout';
 import { PageHeader } from '@/components/PageHeader';
 import { ContentList } from '@/components/ContentList';
 import { ArtistCard } from '@/components/ArtistCard';
@@ -51,31 +50,29 @@ export default function ArtistsPage() {
   };
 
   return (
-    <Layout>
-      <div className="p-4 sm:p-8 lg:p-12">
-        <PageHeader 
-          title="Artistas" 
-          description="Aqui você encontra seus artistas preferidos ordenados por suas preferências"
-        />
+    <div className="p-4 sm:p-8 lg:p-12">
+      <PageHeader 
+        title="Artistas" 
+        description="Aqui você encontra seus artistas preferidos ordenados por suas preferências"
+      />
 
-        <ContentList
-          items={artists}
-          loading={loading}
-          error={error}
-          emptyMessage="Nenhum artista encontrado"
-          emptyDescription="Comece a ouvir música para ver seus artistas favoritos aqui!"
-          loadingMessage="Carregando artistas..."
-          onRetry={handleRetry}
-          footerMessage={`Mostrando ${artists.length} artistas baseados no seu histórico de reprodução`}
-          renderItem={(artist) => (
-            <ArtistCard
-              key={artist.id}
-              artist={artist}
-              onClick={handleArtistClick}
-            />
-          )}
-        />
-      </div>
-    </Layout>
+      <ContentList
+        items={artists}
+        loading={loading}
+        error={error}
+        emptyMessage="Nenhum artista encontrado"
+        emptyDescription="Comece a ouvir música para ver seus artistas favoritos aqui!"
+        loadingMessage="Carregando artistas..."
+        onRetry={handleRetry}
+        footerMessage={`Mostrando ${artists.length} artistas baseados no seu histórico de reprodução`}
+        renderItem={(artist) => (
+          <ArtistCard
+            key={artist.id}
+            artist={artist}
+            onClick={handleArtistClick}
+          />
+        )}
+      />
+    </div>
   );
 }

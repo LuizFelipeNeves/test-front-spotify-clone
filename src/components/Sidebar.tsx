@@ -1,7 +1,8 @@
-import { Home, Users, Play, User } from 'lucide-react';
+import { Home, Users, Play, User, Download, Check, Loader2 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import SpotifyLogo from './SpotifyLogo';
 import { ROUTES } from '@/utils/constants';
+import { usePWAInstall } from '@/hooks/usePWAInstall';
 
 interface SidebarProps {
   className?: string;
@@ -11,6 +12,7 @@ interface SidebarProps {
 
 export function Sidebar({ className = '', isOpen = true, onClose }: SidebarProps) {
   const location = useLocation();
+  const { isInstallable, isInstalled, isInstalling, install, error } = usePWAInstall();
 
   // Função para determinar se a rota está ativa
   const isActiveRoute = (route: string) => {
@@ -90,16 +92,55 @@ export function Sidebar({ className = '', isOpen = true, onClose }: SidebarProps
       </div>
 
       {/* PWA Install Button - Fixo no final */}
-      <div className="mt-6">
-        <button className="flex items-center gap-3 text-white hover:text-gray-300 transition-colors">
-          <div className="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-5 h-5">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-            </svg>
-          </div>
-          <span className="text-base font-medium">Instalar PWA</span>
-        </button>
-      </div>
+      {(isInstallable || isInstalled) && (
+        <div className="mt-6">
+          <button 
+            onClick={install}
+            disabled={isInstalling || isInstalled}
+            className={`flex items-center gap-3 transition-colors ${
+              isInstalled 
+                ? 'text-green-400 cursor-default' 
+                : isInstalling 
+                  ? 'text-gray-400 cursor-not-allowed' 
+                  : 'text-white hover:text-gray-300'
+            }`}
+            aria-label={
+              isInstalled 
+                ? 'PWA já instalado' 
+                : isInstalling 
+                  ? 'Instalando PWA...' 
+                  : 'Instalar PWA'
+            }
+          >
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+              isInstalled 
+                ? 'bg-green-900/50' 
+                : 'bg-gray-800'
+            }`}>
+              {isInstalling ? (
+                <Loader2 className="w-5 h-5 animate-spin" />
+              ) : isInstalled ? (
+                <Check className="w-5 h-5" />
+              ) : (
+                <Download className="w-5 h-5" />
+              )}
+            </div>
+            <span className="text-base font-medium">
+              {isInstalled 
+                ? 'PWA Instalado' 
+                : isInstalling 
+                  ? 'Instalando...' 
+                  : 'Instalar PWA'
+              }
+            </span>
+          </button>
+          {error && (
+            <p className="text-red-400 text-sm mt-2 px-2" role="alert">
+              {error}
+            </p>
+          )}
+        </div>
+      )}
     </div>
   );
 }

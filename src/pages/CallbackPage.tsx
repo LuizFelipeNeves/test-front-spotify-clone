@@ -28,16 +28,10 @@ const CallbackPage = () => {
         const tokenData = await AuthService.exchangeCodeForTokens(code);
         const { access_token, refresh_token } = tokenData;
 
-        // Configurar o token no serviço da API
-        localStorage.setItem('spotify_access_token', access_token);
-        if (refresh_token) {
-          localStorage.setItem('spotify_refresh_token', refresh_token);
-        }
-
         // Buscar dados do usuário
         const userData = await spotifyService.getUserProfile();
 
-        // Fazer login no store
+        // Fazer login no store (que automaticamente salva no localStorage)
         login(access_token, refresh_token, userData);
 
         // Redirecionar para a página principal

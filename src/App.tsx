@@ -7,6 +7,7 @@ import HomePage from '@/pages/HomePage'
 import ArtistsPage from '@/pages/ArtistsPage'
 import PlaylistsPage from '@/pages/PlaylistsPage'
 import ProfilePage from '@/pages/ProfilePage'
+import { PWAUpdateNotification } from '@/components/PWAUpdateNotification'
 import { ROUTES } from '@/utils/constants'
 import './App.css'
 
@@ -95,6 +96,9 @@ function App() {
           } 
         />
       </Routes>
+      
+      {/* Componente de notificação de atualização PWA */}
+      <PWAUpdateNotification />
     </Router>
   )
 }

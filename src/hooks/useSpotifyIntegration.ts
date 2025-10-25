@@ -19,19 +19,27 @@ interface SpotifyIntegrationActions {
 }
 
 export function useSpotifyIntegration(): SpotifyIntegrationState & SpotifyIntegrationActions {
-  const { logout: authLogout } = useAuthStore();
+  const { logout: authLogout, isAuthenticated, user: authUser, accessToken } = useAuthStore();
   const [state, setState] = useState<SpotifyIntegrationState>({
-    isConnected: false,
-    user: null,
+    isConnected: isAuthenticated,
+    user: authUser,
     loading: false,
     error: null
   });
 
+  // Sincroniza com o estado do authStore
+  useEffect(() => {
+    setState(prev => ({
+      ...prev,
+      isConnected: isAuthenticated,
+      user: authUser
+    }));
+  }, [isAuthenticated, authUser]);
+
   // Verifica se já existe um token de acesso armazenado
   useEffect(() => {
     const checkExistingConnection = async () => {
-      const token = localStorage.getItem('spotify_access_token');
-      if (token) {
+      if (accessToken && !authUser) {
         try {
           setState(prev => ({ ...prev, loading: true }));
           const user = await spotifyService.getUserProfile();
@@ -43,8 +51,8 @@ export function useSpotifyIntegration(): SpotifyIntegrationState & SpotifyIntegr
             error: null
           }));
         } catch (error) {
-          console.warn('Token inválido, removendo:', error);
-          localStorage.removeItem('spotify_access_token');
+          console.warn('Token inválido, fazendo logout:', error);
+          authLogout();
           setState(prev => ({
             ...prev,
             isConnected: false,
@@ -57,7 +65,7 @@ export function useSpotifyIntegration(): SpotifyIntegrationState & SpotifyIntegr
     };
 
     checkExistingConnection();
-  }, []);
+  }, [accessToken, authUser, authLogout]);
 
   const connect = useCallback(async () => {
     try {
@@ -92,17 +100,15 @@ export function useSpotifyIntegration(): SpotifyIntegrationState & SpotifyIntegr
   }, []);
 
   const disconnect = useCallback(() => {
-    localStorage.removeItem('spotify_access_token');
-    localStorage.removeItem('spotify_refresh_token');
+    // Faz logout no authStore (que automaticamente limpa o localStorage)
+    authLogout();
+    
     setState({
       isConnected: false,
       user: null,
       loading: false,
       error: null
     });
-    
-    // Também faz logout no authStore para redirecionar para login
-    authLogout();
     
     console.log('Desconectado do Spotify');
   }, [authLogout]);

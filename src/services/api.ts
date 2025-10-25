@@ -2,6 +2,8 @@
  * API wrapper for fetch with error handling
  */
 
+import { useAuthStore } from '@/store/authStore';
+
 export interface ApiResponse<T> {
   data: T;
   status: number;
@@ -17,17 +19,55 @@ export interface ApiError {
 class ApiClient {
   private baseURL: string;
 
-  constructor(baseURL: string = '') {
+  constructor(baseURL: string) {
     this.baseURL = baseURL;
   }
 
   private getAuthHeaders(): Record<string, string> {
-    const token = localStorage.getItem('spotify_access_token');
-    return token ? { Authorization: `Bearer ${token}` } : {};
+    const { accessToken } = useAuthStore.getState();
+    return accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
   }
 
   private async handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
     if (!response.ok) {
+      // Se o token expirou (401), tenta renovar automaticamente
+      if (response.status === 401) {
+        const { refreshToken } = useAuthStore.getState();
+        if (refreshToken) {
+          try {
+            const { AuthService } = await import('./auth.service');
+            const newTokenData = await AuthService.refreshAccessToken(refreshToken);
+            
+            // Atualiza o token no store
+            const { setTokens } = useAuthStore.getState();
+            setTokens(newTokenData.access_token, newTokenData.refresh_token);
+            
+            // Refaz a requisição original com o novo token
+            const originalRequest = response.url;
+            const newResponse = await fetch(originalRequest, {
+              method: response.type,
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${newTokenData.access_token}`,
+              },
+            });
+            
+            if (newResponse.ok) {
+              const data = await newResponse.json();
+              return {
+                data,
+                status: newResponse.status,
+              };
+            }
+          } catch (refreshError) {
+            console.warn('Falha ao renovar token:', refreshError);
+            // Se falhar ao renovar, faz logout
+            const { logout } = useAuthStore.getState();
+            logout();
+          }
+        }
+      }
+      
       const error: ApiError = {
         message: `HTTP error! status: ${response.status}`,
         status: response.status,
@@ -115,4 +155,4 @@ class ApiClient {
   }
 }
 
-export const apiClient = new ApiClient();
+export const apiClient = new ApiClient('');

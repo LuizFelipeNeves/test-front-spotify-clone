@@ -21,6 +21,11 @@ class ApiClient {
     this.baseURL = baseURL;
   }
 
+  private getAuthHeaders(): Record<string, string> {
+    const token = localStorage.getItem('spotify_access_token');
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  }
+
   private async handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
     if (!response.ok) {
       const error: ApiError = {
@@ -45,6 +50,7 @@ class ApiClient {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        ...this.getAuthHeaders(),
         ...options?.headers,
       },
       ...options,
@@ -62,6 +68,7 @@ class ApiClient {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        ...this.getAuthHeaders(),
         ...options?.headers,
       },
       body: data ? JSON.stringify(data) : undefined,
@@ -80,6 +87,7 @@ class ApiClient {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        ...this.getAuthHeaders(),
         ...options?.headers,
       },
       body: data ? JSON.stringify(data) : undefined,
@@ -97,6 +105,7 @@ class ApiClient {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
+        ...this.getAuthHeaders(),
         ...options?.headers,
       },
       ...options,

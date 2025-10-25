@@ -108,18 +108,11 @@ export default function ArtistsPage() {
         )}
       />
 
-      {/* Loading indicator for infinite scroll */}
-      {isFetchingNextPage && (
-        <div className="flex justify-center items-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
-          <span className="ml-3 text-gray-600">Carregando mais artistas...</span>
-        </div>
-      )}
-
       {/* Infinite scroll trigger */}
       {hasNextPage && (
         <div ref={loadMoreRef} className="h-10 flex justify-center items-center">
-          <span className="text-gray-500 text-sm">Carregando mais...</span>
+         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
+          <span className="ml-3 text-gray-600">Carregando mais artistas...</span>
         </div>
       )}
     </div>

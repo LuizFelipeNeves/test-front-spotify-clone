@@ -10,7 +10,7 @@ export const ArtistDetailPage: React.FC = () => {
   const { id: artistId } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const isOnline = useOnlineStatus();
-  
+
   if (!artistId) {
     return <div>ID do artista não encontrado</div>;
   }
@@ -67,10 +67,10 @@ export const ArtistDetailPage: React.FC = () => {
     if (!isOnline) {
       return 'Você está offline. Verifique sua conexão com a internet.';
     }
-    
+
     const errorData = artistErrorData || albumsErrorData;
     const errorWithStatus = errorData as any; // Cast para acessar propriedades customizadas
-    
+
     if (errorData?.message?.includes('Failed to fetch')) {
       return 'Erro de conexão. Verifique sua internet e tente novamente.';
     }
@@ -171,7 +171,7 @@ export const ArtistDetailPage: React.FC = () => {
             {visibleAlbums.length > 0 && (
               <div className="mb-12">
                 <h2 className="text-xl font-bold mb-6">Álbuns ({visibleAlbums.length})</h2>
-                
+
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4">
                   {visibleAlbums.map((album) => (
                     <AlbumCard
@@ -187,7 +187,7 @@ export const ArtistDetailPage: React.FC = () => {
             {visibleSingles.length > 0 && (
               <div className="mb-12">
                 <h2 className="text-xl font-bold mb-6">Singles e EPs ({visibleSingles.length})</h2>
-                
+
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4">
                   {visibleSingles.map((single) => (
                     <AlbumCard
@@ -203,7 +203,7 @@ export const ArtistDetailPage: React.FC = () => {
             {visibleCompilations.length > 0 && (
               <div className="mb-12">
                 <h2 className="text-xl font-bold mb-6">Compilações ({visibleCompilations.length})</h2>
-                
+
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4">
                   {visibleCompilations.map((compilation) => (
                     <AlbumCard
@@ -215,18 +215,11 @@ export const ArtistDetailPage: React.FC = () => {
               </div>
             )}
 
-            {/* Loading indicator for infinite scroll */}
-            {isFetchingNextPage && (
-              <div className="flex justify-center items-center py-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
-                <span className="ml-3 text-gray-400">Carregando mais conteúdo...</span>
-              </div>
-            )}
-
             {/* Infinite scroll trigger */}
             {hasNextPage && (
               <div ref={loadMoreRef} className="h-10 flex justify-center items-center">
-                <span className="text-gray-500 text-sm">Carregando mais...</span>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
+                <span className="ml-3 text-gray-400">Carregando mais conteúdo...</span>
               </div>
             )}
           </>

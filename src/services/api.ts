@@ -42,29 +42,23 @@ class ApiClient {
             const { setTokens } = useAuthStore.getState();
             setTokens(newTokenData.access_token, newTokenData.refresh_token);
             
-            // Refaz a requisição original com o novo token
-            const originalRequest = response.url;
-            const newResponse = await fetch(originalRequest, {
-              method: response.type,
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${newTokenData.access_token}`,
-              },
-            });
-            
-            if (newResponse.ok) {
-              const data = await newResponse.json();
-              return {
-                data,
-                status: newResponse.status,
-              };
-            }
+            // Não tenta refazer a requisição aqui, deixa para o chamador tentar novamente
+            const error: ApiError = {
+              message: 'Token refreshed, please retry the request',
+              status: 401,
+              code: 'TOKEN_REFRESHED',
+            };
+            throw error;
           } catch (refreshError) {
             console.warn('Falha ao renovar token:', refreshError);
             // Se falhar ao renovar, faz logout
             const { logout } = useAuthStore.getState();
             logout();
           }
+        } else {
+          // Se não tem refresh token, faz logout
+          const { logout } = useAuthStore.getState();
+          logout();
         }
       }
       

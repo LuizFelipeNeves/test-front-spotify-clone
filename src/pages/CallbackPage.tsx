@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { spotifyService } from '@/services/spotify.service';
 import { AuthService } from '@/services/auth.service';
@@ -8,9 +8,16 @@ const CallbackPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { login } = useAuthStore();
+  const hasProcessed = useRef(false);
 
   useEffect(() => {
     const handleCallback = async () => {
+      // Prevenir execução dupla (React StrictMode em desenvolvimento)
+      if (hasProcessed.current) {
+        return;
+      }
+      hasProcessed.current = true;
+
       try {
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('code');
@@ -28,10 +35,14 @@ const CallbackPage = () => {
         const tokenData = await AuthService.exchangeCodeForTokens(code);
         const { access_token, refresh_token } = tokenData;
 
-        // Buscar dados do usuário
+        // Primeiro configurar os tokens no store para que o apiClient possa usá-los
+        const { setTokens } = useAuthStore.getState();
+        setTokens(access_token, refresh_token);
+
+        // Agora buscar dados do usuário (com o token já configurado)
         const userData = await spotifyService.getUserProfile();
 
-        // Fazer login no store (que automaticamente salva no localStorage)
+        // Fazer login completo no store (que automaticamente salva no localStorage)
         login(access_token, refresh_token, userData);
 
         // Redirecionar para a página principal
@@ -40,6 +51,8 @@ const CallbackPage = () => {
         console.error('Authentication error:', err);
         setError(err instanceof Error ? err.message : 'Authentication failed');
         setLoading(false);
+        // Reset em caso de erro para permitir nova tentativa
+        hasProcessed.current = false;
       }
     };
 

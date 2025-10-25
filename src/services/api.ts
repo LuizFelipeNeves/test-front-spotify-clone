@@ -51,14 +51,19 @@ class ApiClient {
             throw error;
           } catch (refreshError) {
             console.warn('Falha ao renovar token:', refreshError);
-            // Se falhar ao renovar, faz logout
+            // Só faz logout se não for erro de rede
+            const errorMessage = refreshError instanceof Error ? refreshError.message : String(refreshError);
+            if (!errorMessage.includes('Failed to fetch') && navigator.onLine) {
+              const { logout } = useAuthStore.getState();
+              logout();
+            }
+          }
+        } else {
+          // Se não tem refresh token, só faz logout se estiver online
+          if (navigator.onLine) {
             const { logout } = useAuthStore.getState();
             logout();
           }
-        } else {
-          // Se não tem refresh token, faz logout
-          const { logout } = useAuthStore.getState();
-          logout();
         }
       }
       

@@ -1,22 +1,27 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Wifi, WifiOff } from 'lucide-react';
+import { useInView } from 'react-intersection-observer';
 import { useArtist, useInfiniteArtistAlbums } from '@/hooks/useSpotifyQueries';
-import { ContentList } from '@/components/ContentList';
+import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 import { AlbumCard } from '@/components/AlbumCard';
-import type { Album } from '@/types';
 
 export const ArtistDetailPage: React.FC = () => {
   const { id: artistId } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const isOnline = useOnlineStatus();
   
+  if (!artistId) {
+    return <div>ID do artista não encontrado</div>;
+  }
+
   // Fetch artist data
   const {
     data: artist,
     isLoading: artistLoading,
     isError: artistError,
     error: artistErrorData
-  } = useArtist(artistId || '');
+  } = useArtist(artistId);
 
   // Fetch artist albums with infinite scroll
   const {
@@ -27,7 +32,7 @@ export const ArtistDetailPage: React.FC = () => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useInfiniteArtistAlbums(artistId || '', 20);
+  } = useInfiniteArtistAlbums(artistId, 20);
 
   // Flatten all pages into a single array of albums
   const albums = albumsData?.pages.flatMap(page => page.items) ?? [];
@@ -40,22 +45,38 @@ export const ArtistDetailPage: React.FC = () => {
   const error = artistError || albumsError;
   const errorMessage = artistErrorData?.message || albumsErrorData?.message || null;
 
-  // Infinite scroll
-  useEffect(() => {
-    const handleScroll = () => {
-      if (
-        hasNextPage &&
-        !isFetchingNextPage &&
-        window.innerHeight + document.documentElement.scrollTop >=
-        document.documentElement.offsetHeight - 1000
-      ) {
-        fetchNextPage();
-      }
-    };
+  // Função para determinar a mensagem de erro apropriada
+  const getErrorMessage = () => {
+    if (!isOnline) {
+      return 'Você está offline. Verifique sua conexão com a internet.';
+    }
+    
+    const errorData = artistErrorData || albumsErrorData;
+    const errorWithStatus = errorData as any; // Cast para acessar propriedades customizadas
+    
+    if (errorData?.message?.includes('Failed to fetch')) {
+      return 'Erro de conexão. Verifique sua internet e tente novamente.';
+    }
+    if (errorWithStatus?.status === 404) {
+      return 'Artista não encontrado.';
+    }
+    if (errorWithStatus?.status === 401) {
+      return 'Sessão expirada. Faça login novamente.';
+    }
+    return errorData?.message || 'Erro ao carregar dados do artista.';
+  };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+  // Infinite scroll with intersection observer
+  const { ref: loadMoreRef, inView } = useInView({
+    threshold: 0,
+    rootMargin: '100px',
+  });
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   if (loading) {
     return (
@@ -68,7 +89,14 @@ export const ArtistDetailPage: React.FC = () => {
   if (error || !artist) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
-        <p className="text-red-500 mb-4">{error || 'Artista não encontrado'}</p>
+        <div className="flex items-center mb-4">
+          {isOnline ? (
+            <Wifi className="w-6 h-6 text-green-500 mr-2" />
+          ) : (
+            <WifiOff className="w-6 h-6 text-red-500 mr-2" />
+          )}
+          <p className="text-red-500">{getErrorMessage()}</p>
+        </div>
         <button
           onClick={() => navigate('/artists')}
           className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
@@ -157,6 +185,13 @@ export const ArtistDetailPage: React.FC = () => {
               <div className="flex justify-center items-center py-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
                 <span className="ml-3 text-gray-400">Carregando mais conteúdo...</span>
+              </div>
+            )}
+
+            {/* Infinite scroll trigger */}
+            {hasNextPage && (
+              <div ref={loadMoreRef} className="h-10 flex justify-center items-center">
+                <span className="text-gray-500 text-sm">Carregando mais...</span>
               </div>
             )}
           </>

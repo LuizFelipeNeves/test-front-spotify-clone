@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
+import { useInView } from 'react-intersection-observer';
 import { PageHeader } from '@/components/PageHeader';
 import { ContentList } from '@/components/ContentList';
 import { PlaylistCard } from '@/components/PlaylistCard';
@@ -27,22 +28,17 @@ export default function PlaylistsPage() {
   // Flatten all pages into a single array of playlists
   const playlists = data?.pages.flatMap(page => page.items) ?? [];
 
-  // Infinite scroll effect
-  useEffect(() => {
-    const handleScroll = () => {
-      if (
-        hasNextPage &&
-        !isFetchingNextPage &&
-        window.innerHeight + document.documentElement.scrollTop >= 
-        document.documentElement.offsetHeight - 1000
-      ) {
-        fetchNextPage();
-      }
-    };
+  // Infinite scroll with intersection observer
+  const { ref: loadMoreRef, inView } = useInView({
+    threshold: 0,
+    rootMargin: '100px',
+  });
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const handlePlaylistClick = (playlist: Playlist) => {
     // Abre a playlist no Spotify
@@ -129,6 +125,13 @@ export default function PlaylistsPage() {
         <div className="flex justify-center items-center py-8">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
           <span className="ml-3 text-gray-600">Carregando mais playlists...</span>
+        </div>
+      )}
+
+      {/* Infinite scroll trigger */}
+      {hasNextPage && (
+        <div ref={loadMoreRef} className="h-10 flex justify-center items-center">
+          <span className="text-gray-500 text-sm">Carregando mais...</span>
         </div>
       )}
 

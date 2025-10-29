@@ -64,13 +64,11 @@ function ContentList<T>({
   // until we can properly implement react-window
   return (
     <div className={className}>
-      <div className="space-y-4">
-        {items.map((item, index) => (
-          <div key={index}>
-            {renderItem(item, index)}
-          </div>
-        ))}
-      </div>
+      {items.map((item, index) => (
+        <div key={index}>
+          {renderItem(item, index)}
+        </div>
+      ))}
     </div>
   );
 }

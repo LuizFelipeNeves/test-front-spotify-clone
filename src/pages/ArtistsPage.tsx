@@ -99,6 +99,7 @@ export default function ArtistsPage() {
         emptyMessage="Nenhum artista encontrado"
         emptyDescription="Comece a ouvir música para ver seus artistas favoritos aqui!"
         onRetry={handleRetry}
+        className="grid grid-cols-2 gap-4 md:gap-6"
         renderItem={(artist) => (
           <ArtistCard
             key={artist.id}

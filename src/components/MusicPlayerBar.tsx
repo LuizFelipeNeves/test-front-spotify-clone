@@ -175,7 +175,7 @@ const MusicPlayerBar: React.FC = () => {
   const volumePercentage = volume * 100;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-700 px-3 py-1.5 sm:px-4 sm:py-3 z-50">
+    <div className="fixed bottom-[3.5rem] left-0 right-0 bg-gray-900 border-t border-gray-700 px-3 py-1.5 sm:px-4 sm:py-3 z-40 md:bottom-0 md:z-50">
       <div className="max-w-screen-2xl mx-auto">
         {/* Layout Mobile - Vertical Stack */}
         <div className="block sm:hidden">

@@ -1,5 +1,6 @@
 import { Home, Users, Play, User, Download, Loader2 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
+import { cn } from '@/lib/utils';
 import SpotifyLogo from './SpotifyLogo';
 import { ROUTES } from '@/utils/constants';
 import { usePWAInstall } from '@/hooks/usePWAInstall';
@@ -10,95 +11,61 @@ interface SidebarProps {
   onClose?: () => void;
 }
 
-export function Sidebar({ className = '', isOpen = true, onClose }: SidebarProps) {
+export function Sidebar({ className, isOpen = true, onClose }: SidebarProps) {
   const location = useLocation();
   const { isInstallable, isInstalled, isInstalling, isLoading, install, error } = usePWAInstall();
 
-  // Função para determinar se a rota está ativa
-  const isActiveRoute = (route: string) => {
-    return location.pathname === route;
-  };
+  const navItems = [
+    { label: 'Home', icon: Home, route: ROUTES.HOME },
+    { label: 'Artistas', icon: Users, route: ROUTES.ARTISTS },
+    { label: 'Playlists', icon: Play, route: ROUTES.PLAYLISTS },
+    { label: 'Perfil', icon: User, route: ROUTES.PROFILE },
+  ];
 
-  // Função para obter classes CSS baseadas no estado ativo
-  const getNavItemClasses = (route: string) => {
-    const baseClasses = "flex items-center gap-4 cursor-pointer transition-colors";
-    const activeClasses = "text-white";
-    const inactiveClasses = "text-gray-400 hover:text-gray-300";
-
-    return `${baseClasses} ${isActiveRoute(route) ? activeClasses : inactiveClasses}`;
-  };
-
-  // Função para lidar com cliques nos links em mobile
-  const handleLinkClick = () => {
-    if (onClose) {
-      onClose();
-    }
-  };
+  const isActiveRoute = (route: string) => location.pathname === route;
 
   return (
-    <div className={`
-      w-64 bg-black border-r border-gray-900 p-6 flex flex-col h-full
-      fixed md:static top-0 left-0 
-      transform transition-transform duration-300 ease-in-out
-      ${isOpen ? 'translate-x-0' : '-translate-x-full'}
-      md:translate-x-0
-      ${className}
-    `}>
-      {/* Logo e Navigation */}
-      <div className="flex-1">
-        {/* Logo */}
-        <div className="flex items-center justify-center gap-2 mb-12 py-4">
-          <SpotifyLogo size="lg" showText />
-        </div>
-
-        {/* Navigation */}
-        <nav className="space-y-6">
-          <Link
-            to={ROUTES.HOME}
-            className={getNavItemClasses(ROUTES.HOME)}
-            onClick={handleLinkClick}
-          >
-            <Home size={24} />
-            <span className="text-base font-medium">Home</span>
-          </Link>
-
-          <Link
-            to={ROUTES.ARTISTS}
-            className={getNavItemClasses(ROUTES.ARTISTS)}
-            onClick={handleLinkClick}
-          >
-            <Users size={24} />
-            <span className="text-base font-medium">Artistas</span>
-          </Link>
-
-          <Link
-            to={ROUTES.PLAYLISTS}
-            className={getNavItemClasses(ROUTES.PLAYLISTS)}
-            onClick={handleLinkClick}
-          >
-            <Play size={24} />
-            <span className="text-base font-medium">Playlists</span>
-          </Link>
-
-          <Link
-            to={ROUTES.PROFILE}
-            className={getNavItemClasses(ROUTES.PROFILE)}
-            onClick={handleLinkClick}
-          >
-            <User size={24} />
-            <span className="text-base font-medium">Perfil</span>
-          </Link>
-        </nav>
+    <aside
+      className={cn(
+        'w-64 bg-black border-r border-gray-900 p-6 flex flex-col h-full fixed md:static top-0 left-0 transform transition-transform duration-300 ease-in-out',
+        isOpen ? 'translate-x-0' : '-translate-x-full',
+        'md:translate-x-0',
+        className
+      )}
+    >
+      {/* Logo */}
+      <div className="flex items-center justify-center gap-2 mb-12 py-4">
+        <SpotifyLogo size="lg" showText />
       </div>
 
-      {/* PWA Install Button - Fixo no final */}
+      {/* Navegação */}
+      <nav className="flex-1 space-y-6">
+        {navItems.map(({ label, icon: Icon, route }) => (
+          <Link
+            key={route}
+            to={route}
+            onClick={onClose}
+            className={cn(
+              'flex items-center gap-4 cursor-pointer transition-colors text-base font-medium',
+              isActiveRoute(route)
+                ? 'text-white'
+                : 'text-gray-400 hover:text-gray-300'
+            )}
+          >
+            <Icon size={24} />
+            <span>{label}</span>
+          </Link>
+        ))}
+      </nav>
+
+      {/* Botão de instalação do PWA */}
       {!isLoading && isInstallable && !isInstalled && (
         <div className="mt-6">
           <button
             onClick={install}
             disabled={isInstalling}
-            className={`flex items-center gap-3 text-white hover:text-gray-300 transition-colors`}
             aria-label={isInstalling ? 'Instalando PWA...' : 'Instalar PWA'}
+            className="flex items-center gap-3 text-white hover:text-gray-300 transition-colors"
           >
             <div className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center">
               {isInstalling ? (
@@ -111,6 +78,7 @@ export function Sidebar({ className = '', isOpen = true, onClose }: SidebarProps
               {isInstalling ? 'Instalando...' : 'Instalar PWA'}
             </span>
           </button>
+
           {error && (
             <p className="text-red-400 text-sm mt-2 px-2" role="alert">
               {error}
@@ -118,6 +86,6 @@ export function Sidebar({ className = '', isOpen = true, onClose }: SidebarProps
           )}
         </div>
       )}
-    </div>
+    </aside>
   );
 }

@@ -7,7 +7,9 @@ export const spotifyQueryKeys = {
   userPlaylists: (limit?: number, offset?: number) => ['userPlaylists', limit, offset] as const,
   artist: (artistId: string) => ['artist', artistId] as const,
   artistAlbums: (artistId: string, limit?: number, offset?: number) => ['artistAlbums', artistId, limit, offset] as const,
+  artistTopTracks: (artistId: string) => ['artistTopTracks', artistId] as const,
   playlist: (playlistId: string) => ['playlist', playlistId] as const,
+  playlistTracks: (playlistId: string, limit?: number, offset?: number) => ['playlistTracks', playlistId, limit, offset] as const,
 }
 
 // Hook para buscar top artists
@@ -103,6 +105,28 @@ export function usePlaylist(playlistId: string) {
   return useQuery({
     queryKey: spotifyQueryKeys.playlist(playlistId),
     queryFn: () => spotifyService.getPlaylist(playlistId),
+    staleTime: 5 * 60 * 1000, // 5 minutos
+    gcTime: 15 * 60 * 1000, // 15 minutos
+    enabled: !!playlistId,
+  })
+}
+
+// Hook para buscar top tracks de um artista
+export function useArtistTopTracks(artistId: string) {
+  return useQuery({
+    queryKey: spotifyQueryKeys.artistTopTracks(artistId),
+    queryFn: () => spotifyService.getArtistTopTracks(artistId),
+    staleTime: 10 * 60 * 1000, // 10 minutos
+    gcTime: 20 * 60 * 1000, // 20 minutos
+    enabled: !!artistId,
+  })
+}
+
+// Hook para buscar tracks de uma playlist
+export function usePlaylistTracks(playlistId: string, limit = 50, offset = 0) {
+  return useQuery({
+    queryKey: spotifyQueryKeys.playlistTracks(playlistId, limit, offset),
+    queryFn: () => spotifyService.getPlaylistTracks(playlistId, limit, offset),
     staleTime: 5 * 60 * 1000, // 5 minutos
     gcTime: 15 * 60 * 1000, // 15 minutos
     enabled: !!playlistId,

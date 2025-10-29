@@ -37,11 +37,11 @@ class ApiClient {
           try {
             const { AuthService } = await import('./auth.service');
             const newTokenData = await AuthService.refreshAccessToken(refreshToken);
-            
+
             // Atualiza o token no store
             const { setTokens } = useAuthStore.getState();
             setTokens(newTokenData.access_token, newTokenData.refresh_token);
-            
+
             // Não tenta refazer a requisição aqui, deixa para o chamador tentar novamente
             const error: ApiError = {
               message: 'Token refreshed, please retry the request',
@@ -66,7 +66,7 @@ class ApiClient {
           }
         }
       }
-      
+
       const error: ApiError = {
         message: `HTTP error! status: ${response.status}`,
         status: response.status,
@@ -74,11 +74,40 @@ class ApiClient {
       throw error;
     }
 
-    const data = await response.json();
-    return {
-      data,
-      status: response.status,
-    };
+    // Handle 204 No Content responses (common for successful DELETE/PUT operations)
+    if (response.status === 204) {
+      console.log('📄 API Response: 204 No Content - treating as success');
+      return {
+        data: null as T,
+        status: response.status,
+      };
+    }
+
+    // Check if response has content before trying to parse JSON
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      console.log('📄 API Response: Non-JSON response, treating as success');
+      return {
+        data: null as T,
+        status: response.status,
+      };
+    }
+
+    // Only parse JSON if we're confident it's JSON
+    try {
+      const data = await response.json();
+      console.log('📄 API Response: JSON parsed successfully');
+      return {
+        data,
+        status: response.status,
+      };
+    } catch (error) {
+      console.warn('📄 API Response: Failed to parse JSON, treating as success:', error);
+      return {
+        data: null as T,
+        status: response.status,
+      };
+    }
   }
 
   async get<T>(

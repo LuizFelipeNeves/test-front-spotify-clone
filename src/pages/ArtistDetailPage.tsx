@@ -5,11 +5,14 @@ import { useInView } from 'react-intersection-observer';
 import { useArtist, useInfiniteArtistAlbums } from '@/hooks/useSpotifyQueries';
 import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 import { AlbumCard } from '@/components/AlbumCard';
+import { useSpotifyPlayerContext } from '@/contexts/SpotifyPlayerContext';
+import type { Album } from '@/components/AlbumCard';
 
 export const ArtistDetailPage: React.FC = () => {
   const { id: artistId } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const isOnline = useOnlineStatus();
+  const { playTrack, isReady } = useSpotifyPlayerContext();
 
   if (!artistId) {
     return <div>ID do artista não encontrado</div>;
@@ -61,6 +64,23 @@ export const ArtistDetailPage: React.FC = () => {
 
   const loading = artistLoading || albumsLoading;
   const error = artistError || albumsError;
+
+  // Function to play an album
+  const handlePlayAlbum = async (album: Album) => {
+    if (!isReady) {
+      console.warn('Player not ready');
+      return;
+    }
+
+    try {
+      // Play the album using the context URI
+      const albumUri = `spotify:album:${album.id}`;
+      // We don't need a specific track URI, just the album context
+      playTrack('', albumUri);
+    } catch (error) {
+      console.error('Error playing album:', error);
+    }
+  };
 
   // Função para determinar a mensagem de erro apropriada
   const getErrorMessage = () => {
@@ -177,6 +197,7 @@ export const ArtistDetailPage: React.FC = () => {
                     <AlbumCard
                       key={`album-${album.id}`}
                       album={album}
+                      onPlay={handlePlayAlbum}
                     />
                   ))}
                 </div>
@@ -193,6 +214,7 @@ export const ArtistDetailPage: React.FC = () => {
                     <AlbumCard
                       key={`single-${single.id}`}
                       album={single}
+                      onPlay={handlePlayAlbum}
                     />
                   ))}
                 </div>
@@ -209,6 +231,7 @@ export const ArtistDetailPage: React.FC = () => {
                     <AlbumCard
                       key={`compilation-${compilation.id}`}
                       album={compilation}
+                      onPlay={handlePlayAlbum}
                     />
                   ))}
                 </div>

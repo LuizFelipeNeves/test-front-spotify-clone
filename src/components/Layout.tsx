@@ -1,5 +1,6 @@
 import { type ReactNode, useState } from 'react';
 import { Sidebar } from './Sidebar';
+import MusicPlayerBar from './MusicPlayerBar';
 import { Menu, X } from 'lucide-react';
 
 interface LayoutProps {
@@ -46,10 +47,13 @@ export function Layout({ children, className = '' }: LayoutProps) {
       
       {/* Main Content Area */}
       <main className="flex-1 overflow-auto md:ml-0">
-        <div className="pt-16 md:pt-0">
+        <div className="pt-16 md:pt-0 pb-20">
           {children}
         </div>
       </main>
+
+      {/* Music Player Bar */}
+      <MusicPlayerBar />
     </div>
   );
 }

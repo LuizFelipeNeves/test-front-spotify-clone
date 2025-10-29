@@ -21,6 +21,8 @@ interface PlayerStore {
   setVolume: (volume: number) => void;
   setProgress: (progress: number) => void;
   setDuration: (duration: number) => void;
+  setShuffle: (shuffle: boolean) => void;
+  setRepeat: (repeat: 'off' | 'track' | 'context') => void;
   toggleShuffle: () => void;
   toggleRepeat: () => void;
 
@@ -35,7 +37,6 @@ interface PlayerStore {
   playTrack: (track: Track, queue?: Track[]) => void;
   pauseTrack: () => void;
   togglePlay: () => void;
-  seekTo: (time: number) => void;
 }
 
 export const usePlayerStore = create<PlayerStore>((set, get) => ({
@@ -56,6 +57,8 @@ export const usePlayerStore = create<PlayerStore>((set, get) => ({
   setVolume: volume => set({ volume: Math.max(0, Math.min(1, volume)) }),
   setProgress: progress => set({ progress }),
   setDuration: duration => set({ duration }),
+  setShuffle: shuffle => set({ shuffle }),
+  setRepeat: repeat => set({ repeat }),
 
   toggleShuffle: () => set(state => ({ shuffle: !state.shuffle })),
 
@@ -161,6 +164,4 @@ export const usePlayerStore = create<PlayerStore>((set, get) => ({
   pauseTrack: () => set({ isPlaying: false }),
 
   togglePlay: () => set(state => ({ isPlaying: !state.isPlaying })),
-
-  seekTo: time => set({ progress: time }),
 }));

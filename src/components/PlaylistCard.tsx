@@ -1,5 +1,10 @@
+import React from 'react';
+import { Play, Lock, Users, Globe } from 'lucide-react';
 import type { Playlist } from '@/types';
 import { useImageCache } from '@/hooks/useImageCache';
+import { usePlaylistTracks } from '@/hooks/useSpotifyQueries';
+import { usePlayerStore } from '@/store/playerStore';
+import { useSpotifyPlayerContext } from '@/contexts/SpotifyPlayerContext';
 
 interface PlaylistCardProps {
   playlist: Playlist;
@@ -31,6 +36,62 @@ export function PlaylistCard({ playlist, onClick, className = '' }: PlaylistCard
     { fallbackUrl: fallbackImage }
   );
 
+  const { data: playlistTracksData } = usePlaylistTracks(playlist.id);
+  const { setCurrentTrack, setQueue, setIsPlaying } = usePlayerStore();
+  const { playTrack, isReady } = useSpotifyPlayerContext();
+
+  const handlePlay = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    console.log('PlaylistCard handlePlay called:', {
+      playlistId: playlist.id,
+      playlistName: playlist.name,
+      playlistTracksData,
+      isReady
+    });
+    
+    if (playlistTracksData?.items && playlistTracksData.items.length > 0) {
+      const tracks = playlistTracksData.items.map(item => item.track).filter(track => track);
+      console.log('Filtered tracks:', tracks);
+      
+      if (tracks.length > 0) {
+        const firstTrack = tracks[0];
+        console.log('First track to play:', firstTrack);
+        
+        // Update the store state
+        setCurrentTrack(firstTrack);
+        setQueue(tracks);
+        setIsPlaying(true);
+        
+        // Try to play the track on Spotify if ready
+        if (isReady) {
+          const trackUri = `spotify:track:${firstTrack.id}`;
+          const playlistUri = `spotify:playlist:${playlist.id}`;
+          console.log('Calling playTrack with:', { trackUri, playlistUri });
+          
+          try {
+            // First try with playlist context
+            await playTrack(trackUri, playlistUri);
+          } catch (error) {
+            console.error('Failed to play with playlist context, trying without context:', error);
+            // If that fails, try playing just the track without playlist context
+            try {
+              await playTrack(trackUri);
+            } catch (fallbackError) {
+              console.error('Failed to play track even without context:', fallbackError);
+            }
+          }
+        } else {
+          console.warn('Player not ready, cannot play track');
+        }
+      } else {
+        console.warn('No valid tracks found in playlist');
+      }
+    } else {
+      console.warn('No playlist tracks data available');
+    }
+  };
+
   const formatTrackCount = (count: number) => {
     if (count === 1) return '1 música';
     return `${count.toLocaleString()} músicas`;
@@ -42,7 +103,7 @@ export function PlaylistCard({ playlist, onClick, className = '' }: PlaylistCard
     }
   };
 
-  const handlePlayClick = handleClick;
+  const handlePlayClick = handlePlay;
 
   return (
     <div
@@ -70,22 +131,24 @@ export function PlaylistCard({ playlist, onClick, className = '' }: PlaylistCard
             />
           )}
           
-          {/* Play Button - Visible on hover */}
-          <button
-            onClick={handlePlayClick}
-            className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-60 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-opacity-70"
-            aria-label={`Reproduzir ${playlist.name}`}
-          >
-            <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center hover:bg-green-400 transition-colors shadow-lg">
-              <svg 
-                className="w-4 h-4 text-black ml-0.5" 
-                fill="currentColor" 
-                viewBox="0 0 24 24"
-              >
-                <path d="M8 5v14l11-7z"/>
-              </svg>
-            </div>
-          </button>
+          {/* Play Button - Visible on hover when has tracks */}
+          {playlistTracksData?.items && playlistTracksData.items.length > 0 && (
+            <button
+              onClick={handlePlayClick}
+              className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-60 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-opacity-70"
+              aria-label={`Reproduzir ${playlist.name}`}
+            >
+              <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center hover:bg-green-400 transition-colors shadow-lg">
+                <svg 
+                  className="w-4 h-4 text-black ml-0.5" 
+                  fill="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M8 5v14l11-7z"/>
+                </svg>
+              </div>
+            </button>
+          )}
         </div>
 
         {/* Playlist Info */}

@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useAuthStore } from '@/store/authStore'
+import { SpotifyPlayerProvider } from '@/contexts/SpotifyPlayerContext'
 import Layout from '@/components/Layout'
 import LoginPage from '@/pages/LoginPage'
 import CallbackPage from '@/pages/CallbackPage'
@@ -83,8 +84,9 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Router>
-        <Routes>
+      <SpotifyPlayerProvider>
+        <Router>
+          <Routes>
           {/* Rotas públicas */}
           <Route path={ROUTES.LOGIN} element={<LoginPage />} />
           <Route path="/callback" element={<CallbackPage />} />
@@ -136,9 +138,10 @@ function App() {
           />
         </Routes>
         
-        {/* Componente de notificação de atualização PWA */}
-        <PWAUpdateNotification />
-      </Router>
+          {/* Componente de notificação de atualização PWA - apenas em produção */}
+          {import.meta.env.PROD && <PWAUpdateNotification />}
+        </Router>
+      </SpotifyPlayerProvider>
     </QueryClientProvider>
   )
 }

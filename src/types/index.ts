@@ -94,6 +94,7 @@ export interface AuthState {
   user: User | null;
   accessToken: string | null;
   refreshToken: string | null;
+  expiresAt: number | null;
 }
 
 export interface PlayerState {

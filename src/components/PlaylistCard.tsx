@@ -1,5 +1,3 @@
-import React from 'react';
-import { Play, Lock, Users, Globe } from 'lucide-react';
 import type { Playlist } from '@/types';
 import { useImageCache } from '@/hooks/useImageCache';
 import { usePlaylistTracks } from '@/hooks/useSpotifyQueries';

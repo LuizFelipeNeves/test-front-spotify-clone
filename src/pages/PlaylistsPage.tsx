@@ -1,14 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { useInView } from 'react-intersection-observer';
-import { WifiOff } from 'lucide-react';
-import { PageHeader } from '@/components/PageHeader';
-import { ContentList } from '@/components/ContentList';
+import { PageContent } from '@/components/ui/page-content';
+import { InfiniteScrollList } from '@/components/ui/infinite-scroll-list';
+import { CreateButton } from '@/components/ui/create-button';
 import { PlaylistCard } from '@/components/PlaylistCard';
 import { CreatePlaylistModal } from '@/components/CreatePlaylistModal';
 import { useSpotifyIntegration } from '@/hooks/useSpotifyIntegration';
 import { useInfiniteUserPlaylists } from '@/hooks/useSpotifyQueries';
-import { useOnlineStatus } from '@/hooks/useOnlineStatus';
+import { useContentPage } from '@/hooks/content-page';
 import type { Playlist } from '@/types';
 
 export default function PlaylistsPage() {
@@ -16,8 +15,7 @@ export default function PlaylistsPage() {
   const [isCreating, setIsCreating] = useState(false);
   const queryClient = useQueryClient();
   const { createPlaylist } = useSpotifyIntegration();
-  const isOnline = useOnlineStatus();
-  
+
   const {
     data,
     isLoading,
@@ -31,63 +29,10 @@ export default function PlaylistsPage() {
   // Flatten all pages into a single array of playlists
   const playlists = data?.pages.flatMap(page => page.items) ?? [];
 
-  // Get error message based on online status and error type
-  const getErrorMessage = () => {
-    if (!isOnline) {
-      return (
-        <div className="flex items-center gap-2">
-          <WifiOff className="w-5 h-5" />
-          <span>Você está offline. Verifique sua conexão com a internet.</span>
-        </div>
-      );
-    }
-
-    if (error) {
-      const errorData = error as any;
-      const errorMessage = errorData?.message || 'Erro desconhecido';
-
-      if (errorMessage.includes('Failed to fetch')) {
-        return (
-          <div className="flex items-center gap-2">
-            <WifiOff className="w-5 h-5" />
-            <span>Erro de conexão. Verifique sua internet e tente novamente.</span>
-          </div>
-        );
-      }
-
-      if (errorData?.status === 404) {
-        return 'Playlists não encontradas.';
-      }
-
-      if (errorData?.status === 401) {
-        return 'Sessão expirada. Faça login novamente.';
-      }
-
-      return `Erro ao carregar playlists: ${errorMessage}`;
-    }
-
-    return 'Erro ao carregar playlists';
-  };
-
-  // Infinite scroll with intersection observer
-  const { ref: loadMoreRef, inView } = useInView({
-    threshold: 0,
-    rootMargin: '100px',
-  });
-
-  useEffect(() => {
-    if (inView && hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
-    }
-  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
+  const { getEmptyState, handleRetry } = useContentPage({ contentType: 'playlists' });
 
   const handlePlaylistClick = (playlist: Playlist) => {
-    // Abre a playlist no Spotify
     window.open(playlist.external_urls.spotify, '_blank');
-  };
-
-  const handleRetry = () => {
-    window.location.reload();
   };
 
   const handleCreatePlaylist = () => {
@@ -97,59 +42,46 @@ export default function PlaylistsPage() {
   const handleCreatePlaylistSubmit = async (name: string) => {
     try {
       setIsCreating(true);
-      
-      // Cria a playlist via API do Spotify
       await createPlaylist(name, '');
-      
-      // Invalida o cache para recarregar as playlists
+
       queryClient.invalidateQueries({
         queryKey: ['userPlaylists']
       });
-      
-      // Fecha o modal
+
       setIsModalOpen(false);
     } catch (error) {
       console.error('Erro ao criar playlist:', error);
-      // Aqui poderia usar um toast ou outro método de notificação
     } finally {
       setIsCreating(false);
     }
   };
 
   const createPlaylistButton = (
-    <button
+    <CreateButton
       onClick={handleCreatePlaylist}
-      className="px-3 sm:px-6 py-3 bg-green-500 text-black font-semibold rounded-full hover:bg-green-400 focus:bg-green-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition-colors flex items-center gap-2"
+      text="Criar Playlist"
       title="Criar Playlist"
-      aria-label="Criar nova playlist"
-    >
-      <svg 
-        className="w-5 h-5" 
-        fill="currentColor" 
-        viewBox="0 0 24 24"
-        aria-hidden="true"
-      >
-        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-      </svg>
-      <span className="hidden sm:inline">Criar Playlist</span>
-    </button>
+      ariaLabel="Criar nova playlist"
+    />
   );
 
   return (
-    <div className="p-4 sm:p-8 lg:p-12">
-      <PageHeader
-        title="Minhas Playlists"
-        description="Sua coleção pessoal de playlists"
-        actionButton={createPlaylistButton}
-      />
-
-      <ContentList
+    <PageContent
+      title="Minhas Playlists"
+      description="Sua coleção pessoal de playlists"
+      actionButton={createPlaylistButton}
+    >
+      <InfiniteScrollList
         items={playlists}
         loading={isLoading}
-        error={isError ? getErrorMessage() : null}
-        emptyMessage="Nenhuma playlist encontrada"
-        emptyDescription="Crie sua primeira playlist para começar a organizar suas músicas!"
+        error={isError ? error?.message || 'Erro ao carregar playlists' : null}
+        emptyMessage={getEmptyState().message}
+        emptyDescription={getEmptyState().description}
         onRetry={handleRetry}
+        hasNextPage={hasNextPage}
+        isFetchingNextPage={isFetchingNextPage}
+        fetchNextPage={fetchNextPage}
+        loadingText="Carregando mais playlists..."
         renderItem={(playlist) => (
           <PlaylistCard
             key={playlist.id}
@@ -159,20 +91,12 @@ export default function PlaylistsPage() {
         )}
       />
 
-      {/* Infinite scroll trigger */}
-      {hasNextPage && (
-        <div ref={loadMoreRef} className="h-10 flex justify-center items-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
-          <span className="ml-3 text-gray-600">Carregando mais playlists...</span>
-        </div>
-      )}
-
       <CreatePlaylistModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onCreatePlaylist={handleCreatePlaylistSubmit}
         isCreating={isCreating}
       />
-    </div>
+    </PageContent>
   );
 }

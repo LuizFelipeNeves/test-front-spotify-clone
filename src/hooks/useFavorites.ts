@@ -52,7 +52,7 @@ export const useFavorites = (trackId?: string) => {
 
       return { previousState };
     },
-    onError: (error, isCurrentlyFavorited, context) => {
+    onError: (error, _isCurrentlyFavorited, context) => {
       // Reverter para estado anterior em caso de erro
       if (context?.previousState !== undefined) {
         queryClient.setQueryData(['track-favorite', trackId], context.previousState);

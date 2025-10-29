@@ -1,0 +1,1 @@
+export { useContentPage } from './useContentPage';

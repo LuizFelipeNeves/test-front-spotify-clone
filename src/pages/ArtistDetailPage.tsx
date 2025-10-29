@@ -1,12 +1,16 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Wifi, WifiOff } from 'lucide-react';
 import { useInView } from 'react-intersection-observer';
 import { useArtist, useInfiniteArtistAlbums } from '@/hooks/useSpotifyQueries';
 import { useOnlineStatus } from '@/hooks/useOnlineStatus';
-import { AlbumCard } from '@/components/AlbumCard';
 import { useSpotifyPlayerContext } from '@/contexts/SpotifyPlayerContext';
 import type { Album } from '@/components/AlbumCard';
+
+import { ArtistDetailHeader } from '@/components/artist-detail/ArtistDetailHeader';
+import { AlbumGrid } from '@/components/artist-detail/AlbumGrid';
+import { LoadingSpinner } from '@/components/LoadingSpinner';
+import { ArtistDetailErrorState } from '@/components/artist-detail/ArtistDetailErrorState';
+import { EmptyState } from '@/components/EmptyState';
 
 export const ArtistDetailPage: React.FC = () => {
   const { id: artistId } = useParams<{ id: string }>();
@@ -116,133 +120,39 @@ export const ArtistDetailPage: React.FC = () => {
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
-      </div>
-    );
+    return <LoadingSpinner message="Carregando artista..." />;
   }
 
   if (error || !artist) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <div className="flex items-center mb-4">
-          {isOnline ? (
-            <Wifi className="w-6 h-6 text-green-500 mr-2" />
-          ) : (
-            <WifiOff className="w-6 h-6 text-red-500 mr-2" />
-          )}
-          <p className="text-red-500">{getErrorMessage()}</p>
-        </div>
-        <button
-          onClick={() => navigate('/artists')}
-          className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
-        >
-          Voltar para Artistas
-        </button>
-      </div>
+      <ArtistDetailErrorState
+        isOnline={isOnline}
+        errorMessage={getErrorMessage()}
+        onBackClick={() => navigate('/artists')}
+      />
     );
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
-      {/* Header with back button */}
-      <div className="flex items-center p-6 pb-0">
-        <button
-          onClick={() => navigate('/artists')}
-          className="flex items-center text-white hover:text-green-500 transition-colors mr-4"
-        >
-          <ArrowLeft className="w-6 h-6 mr-2" />
-          <span className="text-lg font-medium">{artist.name}</span>
-        </button>
-      </div>
+      <ArtistDetailHeader artist={artist} />
 
-      {/* Artist info section */}
-      <div className="flex items-center p-6 pt-4">
-        {artist.images?.[0] && (
-          <img
-            src={artist.images[0].url}
-            alt={artist.name}
-            className="w-24 h-24 rounded-full object-cover mr-6"
-          />
-        )}
-        <div>
-          <h1 className="text-2xl font-bold mb-2">{artist.name}</h1>
-          <p className="text-gray-400 text-sm">
-            {artist.followers?.total?.toLocaleString()} seguidores
-          </p>
-          {artist.genres?.length > 0 && (
-            <p className="text-gray-400 text-sm mt-1">
-              {artist.genres.slice(0, 3).join(', ')}
-            </p>
-          )}
-        </div>
-      </div>
-
-      {/* Albums, Singles and Compilations sections */}
       <div className="px-6 pb-6">
         {albums.length === 0 && !isFetchingNextPage ? (
-          <div className="text-center py-12">
-            <p className="text-gray-400 text-lg">Nenhum álbum, single ou compilação encontrado</p>
-          </div>
+          <EmptyState
+            title="Nenhum álbum, single ou compilação encontrado"
+            description="Parece que este artista ainda não tem lançamentos disponíveis."
+          />
         ) : (
           <>
-            {/* Albums section */}
-            {visibleAlbums.length > 0 && (
-              <div className="mb-12">
-                <h2 className="text-xl font-bold mb-6">Álbuns ({visibleAlbums.length})</h2>
-
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4">
-                  {visibleAlbums.map((album) => (
-                    <AlbumCard
-                      key={`album-${album.id}`}
-                      album={album}
-                      onPlay={handlePlayAlbum}
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Singles section */}
-            {visibleSingles.length > 0 && (
-              <div className="mb-12">
-                <h2 className="text-xl font-bold mb-6">Singles e EPs ({visibleSingles.length})</h2>
-
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4">
-                  {visibleSingles.map((single) => (
-                    <AlbumCard
-                      key={`single-${single.id}`}
-                      album={single}
-                      onPlay={handlePlayAlbum}
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Compilations section */}
-            {visibleCompilations.length > 0 && (
-              <div className="mb-12">
-                <h2 className="text-xl font-bold mb-6">Compilações ({visibleCompilations.length})</h2>
-
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4">
-                  {visibleCompilations.map((compilation) => (
-                    <AlbumCard
-                      key={`compilation-${compilation.id}`}
-                      album={compilation}
-                      onPlay={handlePlayAlbum}
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
+            <AlbumGrid title="Álbuns" albums={visibleAlbums} onPlay={handlePlayAlbum} />
+            <AlbumGrid title="Singles e EPs" albums={visibleSingles} onPlay={handlePlayAlbum} />
+            <AlbumGrid title="Compilações" albums={visibleCompilations} onPlay={handlePlayAlbum} />
 
             {/* Infinite scroll trigger */}
             {hasNextPage && (
               <div ref={loadMoreRef} className="h-10 flex justify-center items-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
-                <span className="ml-3 text-gray-400">Carregando mais conteúdo...</span>
+                <LoadingSpinner size="sm" message="Carregando mais conteúdo..." />
               </div>
             )}
           </>

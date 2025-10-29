@@ -21,11 +21,15 @@ export interface Artist {
   genres: string[];
   popularity: number;
   followers: {
+    href: string | null;
     total: number;
   };
   external_urls: {
     spotify: string;
   };
+  href: string;
+  type: 'artist';
+  uri: string;
 }
 
 export interface Playlist {

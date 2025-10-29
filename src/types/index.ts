@@ -133,3 +133,11 @@ export interface PlaylistFormData {
   description: string;
   isPublic: boolean;
 }
+
+export type ApiError = {
+  message: string;
+  status: number;
+  code?: string;
+};
+
+// End of global type definitions

@@ -3,6 +3,7 @@ import { useAuthStore } from '@/store/authStore';
 import { spotifyService } from '@/services/spotify.service';
 import { AuthService } from '@/services/auth.service';
 import SpotifyLogo from '@/components/SpotifyLogo';
+import { Button } from '@/components/ui/Button';
 
 const CallbackPage = () => {
   const [loading, setLoading] = useState(true);
@@ -82,12 +83,13 @@ const CallbackPage = () => {
           Erro na autenticação: {error}
         </p>
 
-        <button
+        <Button
           onClick={() => window.location.href = '/login'}
-          className="bg-green-500 hover:bg-green-400 text-black font-bold py-3 px-8 rounded-full text-lg transition-colors"
+          className="font-bold py-3 px-8 rounded-full text-lg"
+          variant="spotify"
         >
           Tentar novamente
-        </button>
+        </Button>
       </div>
     );
   }

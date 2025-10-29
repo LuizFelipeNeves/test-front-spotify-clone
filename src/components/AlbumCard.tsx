@@ -1,5 +1,6 @@
 import type { Album } from '@/types';
 import { useImageCache } from '@/hooks/useImageCache';
+import { Button } from '@/components/ui/Button';
 
 interface AlbumCardProps {
   album: Album;
@@ -87,15 +88,16 @@ export function AlbumCard({ album, onClick, onPlay, className = '' }: AlbumCardP
         {/* Overlay com botão de play */}
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 rounded-lg flex items-center justify-center">
           <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <button
+            <Button
               onClick={handlePlayClick}
-              className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center shadow-lg hover:bg-green-400 hover:scale-110 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50"
+              className="w-12 h-12 rounded-full flex items-center justify-center shadow-lg ml-1 hover:scale-110 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50 text-white"
+              variant="spotify"
               aria-label={`Reproduzir ${album.name}`}
             >
-              <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M8 5v14l11-7z"/>
               </svg>
-            </button>
+            </Button>
           </div>
         </div>
       </div>

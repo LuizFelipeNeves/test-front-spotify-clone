@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Button } from '@/components/ui/Button';
 
 interface CreatePlaylistModalProps {
   isOpen: boolean;
@@ -36,26 +37,28 @@ export function CreatePlaylistModal({ isOpen, onClose, onCreatePlaylist, isCreat
       className="fixed inset-0 bg-black/30 backdrop-blur-[2px] flex items-center justify-center z-50"
       onClick={handleOverlayClick}
     >
-      <div className="bg-gray-800 rounded-lg p-6 w-full max-w-sm mx-4 relative">
+      <div className="bg-gray-800 rounded-lg p-6 w-full max-w-sm mx-4 relative" role="dialog" aria-modal="true" aria-labelledby="playlist-name-title">
         {/* Close button */}
-        <button
+        <Button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+          className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors p-0"
           aria-label="Fechar modal"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
-        </button>
+        </Button>
 
         {/* Modal content */}
         <div className="text-center mb-4">
-          <h2 className="text-gray-400 text-sm mb-3">Dê um nome a sua playlist</h2>
+          <h2 id="playlist-name-title" className="text-gray-400 text-sm mb-3">Dê um nome a sua playlist</h2>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="mb-6">
+            <label htmlFor="playlist-name" className="sr-only">Nome da Playlist</label>
             <input
+              id="playlist-name"
               type="text"
               value={playlistName}
               onChange={(e) => setPlaylistName(e.target.value)}
@@ -67,10 +70,11 @@ export function CreatePlaylistModal({ isOpen, onClose, onCreatePlaylist, isCreat
           </div>
 
           <div className="flex justify-center">
-            <button
+            <Button
               type="submit"
               disabled={!playlistName.trim() || isCreating}
-              className="px-8 py-3 bg-green-500 text-black font-semibold rounded-full hover:bg-green-400 focus:bg-green-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              className="px-8 py-3 font-semibold rounded-full flex items-center gap-2 focus:bg-green-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-colors"
+              variant="spotify"
             >
               {isCreating && (
                 <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
@@ -79,7 +83,7 @@ export function CreatePlaylistModal({ isOpen, onClose, onCreatePlaylist, isCreat
                 </svg>
               )}
               {isCreating ? 'Criando...' : 'Criar'}
-            </button>
+            </Button>
           </div>
         </form>
       </div>

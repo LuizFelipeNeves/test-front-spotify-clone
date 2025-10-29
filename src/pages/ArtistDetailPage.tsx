@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useInView } from 'react-intersection-observer';
 import { useArtist, useInfiniteArtistAlbums } from '@/hooks/useSpotifyQueries';
+import { useFilteredArtistAlbums } from '@/hooks/useFilteredArtistAlbums';
 import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 import { useSpotifyPlayerContext } from '@/contexts/SpotifyPlayerContext';
 import type { Album } from '@/components/AlbumCard';
@@ -10,6 +11,7 @@ import { ArtistDetailHeader } from '@/components/artist-detail/ArtistDetailHeade
 import { AlbumGrid } from '@/components/artist-detail/AlbumGrid';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { ArtistDetailErrorState } from '@/components/artist-detail/ArtistDetailErrorState';
+import { getArtistErrorMessage, toApiError } from '@/utils/errorMessages';
 import { EmptyState } from '@/components/EmptyState';
 
 export const ArtistDetailPage: React.FC = () => {
@@ -44,27 +46,7 @@ export const ArtistDetailPage: React.FC = () => {
   // Flatten all pages into a single array of albums
   const albums = albumsData?.pages.flatMap(page => page.items) ?? [];
 
-  // Separate albums, singles, and compilations
-  const albumsOnly = albums.filter(album => album.album_type === 'album');
-  const singlesOnly = albums.filter(album => album.album_type === 'single');
-  const compilationsOnly = albums.filter(album => album.album_type === 'compilation');
-
-  // Remove duplicates based on album name and release date
-  const removeDuplicates = (items: typeof albums) => {
-    const seen = new Set();
-    return items.filter(item => {
-      const key = `${item.name}-${item.release_date}`;
-      if (seen.has(key)) {
-        return false;
-      }
-      seen.add(key);
-      return true;
-    });
-  };
-
-  const visibleAlbums = removeDuplicates(albumsOnly);
-  const visibleSingles = removeDuplicates(singlesOnly);
-  const visibleCompilations = removeDuplicates(compilationsOnly);
+  const { visibleAlbums, visibleSingles, visibleCompilations } = useFilteredArtistAlbums({ albums });
 
   const loading = artistLoading || albumsLoading;
   const error = artistError || albumsError;
@@ -87,25 +69,7 @@ export const ArtistDetailPage: React.FC = () => {
   };
 
   // Função para determinar a mensagem de erro apropriada
-  const getErrorMessage = () => {
-    if (!isOnline) {
-      return 'Você está offline. Verifique sua conexão com a internet.';
-    }
-
-    const errorData = artistErrorData || albumsErrorData;
-    const errorWithStatus = errorData as any; // Cast para acessar propriedades customizadas
-
-    if (errorData?.message?.includes('Failed to fetch')) {
-      return 'Erro de conexão. Verifique sua internet e tente novamente.';
-    }
-    if (errorWithStatus?.status === 404) {
-      return 'Artista não encontrado.';
-    }
-    if (errorWithStatus?.status === 401) {
-      return 'Sessão expirada. Faça login novamente.';
-    }
-    return errorData?.message || 'Erro ao carregar dados do artista.';
-  };
+  const errorMessage = getArtistErrorMessage(isOnline, toApiError(artistErrorData), toApiError(albumsErrorData));
 
   // Infinite scroll with intersection observer
   const { ref: loadMoreRef, inView } = useInView({
@@ -127,7 +91,7 @@ export const ArtistDetailPage: React.FC = () => {
     return (
       <ArtistDetailErrorState
         isOnline={isOnline}
-        errorMessage={getErrorMessage()}
+        errorMessage={errorMessage}
         onBackClick={() => navigate('/artists')}
       />
     );

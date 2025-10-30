@@ -21,8 +21,7 @@ const LoginPage = () => {
       <Button
         onClick={handleSpotifyLogin}
         variant="spotify"
-        size="lg"
-        className="w-full"
+        size="xl"
         data-testid="login-button"
         aria-label="Entrar com sua conta Spotify"
       >

@@ -114,4 +114,52 @@ export class AuthService {
   static calculateTokenExpiration(expiresIn: number): number {
     return Date.now() + (expiresIn * 1000);
   }
+
+  private static readonly STORAGE_KEYS = {
+    ACCESS_TOKEN: 'spotify_access_token',
+    REFRESH_TOKEN: 'spotify_refresh_token',
+    USER: 'spotify_user',
+    EXPIRES_AT: 'spotify_expires_at',
+  };
+
+  static setAuthData(
+    accessToken: string,
+    refreshToken: string,
+    user: any,
+    expiresIn: number
+  ): void {
+    const expiresAt = AuthService.calculateTokenExpiration(expiresIn);
+
+    localStorage.setItem(AuthService.STORAGE_KEYS.ACCESS_TOKEN, accessToken);
+    localStorage.setItem(AuthService.STORAGE_KEYS.REFRESH_TOKEN, refreshToken);
+    localStorage.setItem(AuthService.STORAGE_KEYS.USER, JSON.stringify(user));
+    localStorage.setItem(AuthService.STORAGE_KEYS.EXPIRES_AT, expiresAt.toString());
+  }
+
+  static getAuthData(): {
+    accessToken: string | null;
+    refreshToken: string | null;
+    user: any | null;
+    expiresAt: number | null;
+  } {
+    const accessToken = localStorage.getItem(AuthService.STORAGE_KEYS.ACCESS_TOKEN);
+    const refreshToken = localStorage.getItem(AuthService.STORAGE_KEYS.REFRESH_TOKEN);
+    const user = localStorage.getItem(AuthService.STORAGE_KEYS.USER);
+    const expiresAt = localStorage.getItem(AuthService.STORAGE_KEYS.EXPIRES_AT);
+
+    return {
+      accessToken,
+      refreshToken,
+      user: user ? JSON.parse(user) : null,
+      expiresAt: expiresAt ? Number(expiresAt) : null,
+    };
+  }
+
+  static clearAuthData(): void {
+    Object.values(AuthService.STORAGE_KEYS).forEach((key) => localStorage.removeItem(key));
+  }
+
+  static updateUserData(user: any): void {
+    localStorage.setItem(AuthService.STORAGE_KEYS.USER, JSON.stringify(user));
+  }
 }

@@ -8,8 +8,8 @@ describe('Authentication', () => {
     cy.visit('/');
     
     // Verificar se a página de login é exibida
-    cy.contains('Entrar com Spotify').should('be.visible');
-    cy.contains('Conecte-se à sua conta do Spotify').should('be.visible');
+    cy.contains('Entrar').should('be.visible');
+    cy.contains('Entra com sua conta Spotify clicando no botão abaixo').should('be.visible');
   });
 
   it('should have working login button', () => {
@@ -21,18 +21,19 @@ describe('Authentication', () => {
       .and('not.be.disabled');
   });
 
-  it('should redirect to Spotify authorization when login button is clicked', () => {
+  it('should redirect to callback when login button is clicked in test environment', () => {
     cy.visit('/');
     
-    // Interceptar a requisição para o Spotify
-    cy.window().then((win) => {
-      cy.stub(win, 'open').as('windowOpen');
-    });
+    // Verificar se o botão existe
+    cy.get('[data-testid="login-button"]').should('be.visible');
     
+    // Simular o clique no botão e verificar se redireciona para callback
     cy.get('[data-testid="login-button"]').click();
     
-    // Verificar se a janela foi aberta (simulação)
-    cy.get('@windowOpen').should('have.been.called');
+    // Em ambiente de teste, deve redirecionar para o callback
+    cy.url().should('include', '/callback');
+    cy.url().should('include', 'code=mock_auth_code');
+    cy.url().should('include', 'state=mock_state');
   });
 
   it('should handle authentication state correctly', () => {

@@ -3,8 +3,8 @@ import { usePlayerStore } from '@/store/playerStore';
 import { useSpotifyPlayerContext } from '@/contexts/SpotifyPlayerContext';
 import { formatDuration } from '@/utils/format';
 import { useFavorites } from '@/hooks/useFavorites';
-import { ProgressBar } from './ui/ProgressBar';
-import { VolumeSlider } from './ui/VolumeSlider';
+import { ProgressBar } from '@/components/ui';
+import { VolumeSlider } from '@/components/ui';
 import {
   Play,
   Pause,

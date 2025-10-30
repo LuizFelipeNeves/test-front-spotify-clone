@@ -5,14 +5,14 @@ import { useArtist, useInfiniteArtistAlbums } from '@/hooks/useSpotifyQueries';
 import { useFilteredArtistAlbums } from '@/hooks/useFilteredArtistAlbums';
 import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 import { useSpotifyPlayerContext } from '@/contexts/SpotifyPlayerContext';
-import type { Album } from '@/components/AlbumCard';
+import type { Album } from '@/types';
 
-import { ArtistDetailHeader } from '@/components/artist-detail/ArtistDetailHeader';
-import { AlbumGrid } from '@/components/artist-detail/AlbumGrid';
-import { LoadingSpinner } from '@/components/LoadingSpinner';
-import { ArtistDetailErrorState } from '@/components/artist-detail/ArtistDetailErrorState';
+import { ArtistDetailHeader } from '@/components';
+import { AlbumGrid } from '@/components';
+import { LoadingSpinner } from '@/components';
+import { ArtistDetailErrorState } from '@/components';
 import { getArtistErrorMessage, toApiError } from '@/utils/errorMessages';
-import { EmptyState } from '@/components/EmptyState';
+import { EmptyState } from '@/components';
 
 export const ArtistDetailPage: React.FC = () => {
   const { id: artistId } = useParams<{ id: string }>();
@@ -20,17 +20,13 @@ export const ArtistDetailPage: React.FC = () => {
   const isOnline = useOnlineStatus();
   const { playTrack, isReady } = useSpotifyPlayerContext();
 
-  if (!artistId) {
-    return <div>ID do artista não encontrado</div>;
-  }
-
   // Fetch artist data
   const {
     data: artist,
     isLoading: artistLoading,
     isError: artistError,
     error: artistErrorData
-  } = useArtist(artistId);
+  } = useArtist(artistId || '');
 
   // Fetch artist albums with infinite scroll
   const {
@@ -41,7 +37,7 @@ export const ArtistDetailPage: React.FC = () => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useInfiniteArtistAlbums(artistId, 20);
+  } = useInfiniteArtistAlbums(artistId || '', 20);
 
   // Flatten all pages into a single array of albums
   const albums = albumsData?.pages.flatMap(page => page.items) ?? [];
@@ -83,6 +79,10 @@ export const ArtistDetailPage: React.FC = () => {
     }
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
+  if (!artistId) {
+    return <div>ID do artista não encontrado</div>;
+  }
+
   if (loading) {
     return <LoadingSpinner message="Carregando artista..." />;
   }
@@ -104,7 +104,7 @@ export const ArtistDetailPage: React.FC = () => {
       <div className="px-6 pb-6">
         {albums.length === 0 && !isFetchingNextPage ? (
           <EmptyState
-            title="Nenhum álbum, single ou compilação encontrado"
+            message="Nenhum álbum, single ou compilação encontrado"
             description="Parece que este artista ainda não tem lançamentos disponíveis."
           />
         ) : (

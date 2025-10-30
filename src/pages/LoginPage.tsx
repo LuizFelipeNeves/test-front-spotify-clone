@@ -1,6 +1,6 @@
 import { useAuthStore } from '@/store/authStore';
 import { AuthService } from '@/services/auth.service';
-import SpotifyLogo from '@/components/SpotifyLogo';
+import { SpotifyLogo } from '@/components';
 import { UI_TEXTS } from '@/constants/ui';
 
 const LoginPage = () => {

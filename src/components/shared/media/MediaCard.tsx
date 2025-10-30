@@ -2,7 +2,8 @@ import React from 'react';
 import { Play } from 'lucide-react';
 import type { MediaItemBase, MediaType } from '@/constants/ui';
 import { UI_CONFIG, UI_TEXTS } from '@/constants/ui';
-import { formatFollowers, formatReleaseDate, formatArtists } from '@/utils/format';
+import { formatReleaseDate, formatArtists } from '@/utils/format';
+import type { Album } from '@/types';
 
 interface MediaCardProps<T extends MediaItemBase> {
   item: T;
@@ -120,17 +121,8 @@ export function MediaCard<T extends MediaItemBase>({
   );
 }
 
-// Especializações para cada tipo de mídia
-export const ArtistCard = (props: Omit<MediaCardProps<any>, 'type' | 'subtitle' | 'metadata'>) => (
-  <MediaCard
-    {...props}
-    type="artist"
-    subtitle={props.item.followers ? `${formatFollowers(props.item.followers.total)} ${UI_TEXTS.seguidores}` : ''}
-    className="rounded-full"
-  />
-);
 
-export const AlbumCard = (props: Omit<MediaCardProps<any>, 'type' | 'subtitle' | 'metadata'>) => (
+export const AlbumCard = (props: Omit<MediaCardProps<Album>, 'type' | 'subtitle' | 'metadata'>) => (
   <MediaCard
     {...props}
     type="album"

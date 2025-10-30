@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import { PageContent } from '@/components/ui/page-content';
-import { InfiniteScrollList } from '@/components/ui/infinite-scroll-list';
-import { ArtistCard } from '@/components/ArtistCard';
+import { PageContent } from '@/components/ui';
+import { InfiniteScrollList } from '@/components';
+import { ArtistCard } from '@/components';
 import { useInfiniteTopArtists } from '@/hooks/useSpotifyQueries';
 import { useContentPage } from '@/hooks/content-page';
 import { UI_TEXTS } from '@/constants/ui';

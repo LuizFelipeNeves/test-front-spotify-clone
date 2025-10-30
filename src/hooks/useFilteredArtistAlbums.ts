@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { Album } from '@/components/AlbumCard';
+import type { Album } from '@/types';
 
 interface UseFilteredArtistAlbumsProps {
   albums: Album[];

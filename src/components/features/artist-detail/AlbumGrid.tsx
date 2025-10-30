@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { AlbumCard } from '@/components/AlbumCard';
-import type { Album } from '@/components/AlbumCard';
+import { AlbumCard } from '@/components';
+import type { Album } from '@/types';
 
 interface AlbumGridProps {
   title: string;
@@ -18,10 +18,10 @@ export const AlbumGrid: React.FC<AlbumGridProps> = ({ title, albums, onPlay }) =
     <div className="mb-12">
       <h2 className="text-xl font-bold mb-6">{title} ({albums.length})</h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4">
-        {albums.map((album) => (
+        {albums.map((album: Album) => (
           <AlbumCard
             key={`${title}-${album.id}`}
-            album={album}
+            item={album}
             onPlay={onPlay}
           />
         ))}

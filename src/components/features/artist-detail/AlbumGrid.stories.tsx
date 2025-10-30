@@ -2,7 +2,7 @@
 import type { StoryFn, Meta } from '@storybook/react';
 
 import { AlbumGrid } from './AlbumGrid';
-import type { Album } from '@/components/AlbumCard';
+import type { Album } from '@/types';
 
 export default {
   title: 'Components/AlbumGrid',
@@ -29,6 +29,7 @@ const mockAlbum: Album = {
   album_type: 'album',
   external_urls: { spotify: '' },
   total_tracks: 10,
+  uri: 'spotify:album:1',
 };
 
 const Template: StoryFn<{ title: string; albums: Album[]; onPlay: (album: Album) => void }> = (args) => (

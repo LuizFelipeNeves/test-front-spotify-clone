@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { PageHeader } from '@/components/PageHeader';
+import { PageHeader } from '@/components';
 
 export interface PageContentProps {
   title: string | ReactNode;

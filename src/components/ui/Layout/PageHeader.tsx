@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { SpotifyConnectionStatus } from './SpotifyConnectionStatus';
+import { SpotifyConnectionStatus } from '@/components';
 
 interface PageHeaderProps {
   title: string | ReactNode;

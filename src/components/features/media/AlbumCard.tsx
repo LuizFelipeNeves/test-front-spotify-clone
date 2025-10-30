@@ -1,6 +1,6 @@
 import type { Album } from '@/types';
 import { useImageCache } from '@/hooks/useImageCache';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui';
 
 interface AlbumCardProps {
   album: Album;

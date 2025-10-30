@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { PageContent } from './PageContent';
-import { CreateButton } from '../create-button';
+import { CreateButton } from '@/components';
 
 const meta = {
   title: 'UI/PageContent',

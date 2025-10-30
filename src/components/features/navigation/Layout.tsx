@@ -2,7 +2,7 @@ import { type ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Home, Users, Play, User } from 'lucide-react';
 import { Sidebar } from './Sidebar';
-import MusicPlayerBar from './MusicPlayerBar';
+import { MusicPlayerBar } from '@/components';
 import { ROUTES } from '@/utils/constants';
 
 interface LayoutProps {

@@ -1,23 +1,12 @@
-export { PageContent } from './page-content';
-export { InfiniteScrollList } from './infinite-scroll-list';
-export { CreateButton } from './create-button';
-export { Indicator } from './Indicator';
-export { VolumeSlider } from './VolumeSlider';
-export { ProgressBar } from './ProgressBar';
+// UI Components - Componentes base reutilizáveis
+export { Button } from './Button/Button';
+export { Card } from './Card/Card';
+export { Indicator } from './Controls/Indicator';
+export { CreateButton } from './Controls/CreateButton';
+export { PageContent } from './Layout/PageContent';
 
-export {
-  MediaCard,
-  ArtistCard,
-  AlbumCard,
-  PlaylistCard
-} from '../base/MediaCard';
+// Feedback Components - Estados e feedback visual
+export { ProgressBar } from './Feedback/ProgressBar';
 
-export {
-  StatusState,
-  EmptyState,
-  ErrorState,
-  LoadingState
-} from '../base/StatusState';
-
-export { ResponsiveGrid } from '../base/ResponsiveGrid';
-export { InfinitePage } from '../base/InfinitePage';
+// Controls Components - Controles interativos
+export { VolumeSlider } from './Controls/VolumeSlider';

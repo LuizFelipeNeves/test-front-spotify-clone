@@ -149,6 +149,7 @@ export const useSpotifyPlayer = () => {
               total_tracks: 0,
               album_type: 'album' as const,
               external_urls: { spotify: '' },
+              uri: track.album.uri,
             },
             popularity: 0,
             preview_url: null,
@@ -267,6 +268,7 @@ export const useSpotifyPlayer = () => {
                 total_tracks: data.item.album.total_tracks || 0,
                 album_type: 'album' as const,
                 external_urls: { spotify: data.item.album.external_urls?.spotify || '' },
+                uri: data.item.album.uri,
               },
             };
 

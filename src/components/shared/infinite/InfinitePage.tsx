@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import { PageContent } from '@/components/ui/page-content';
-import { InfiniteScrollList } from '@/components/ui/infinite-scroll-list';
+import { PageContent } from '@/components/ui';
+import { InfiniteScrollList } from '@/components';
 import { useContentPage } from '@/hooks/content-page';
 import { UI_CONFIG } from '@/constants/ui';
 

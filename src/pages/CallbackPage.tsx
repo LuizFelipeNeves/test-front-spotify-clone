@@ -2,8 +2,8 @@ import { useEffect, useState, useRef } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { spotifyService } from '@/services/spotify.service';
 import { AuthService } from '@/services/auth.service';
-import SpotifyLogo from '@/components/SpotifyLogo';
-import { Button } from '@/components/ui/Button';
+import { SpotifyLogo } from '@/components';
+import { Button } from '@/components/ui';
 import { UI_TEXTS } from '@/constants/ui';
 
 const CallbackPage = () => {

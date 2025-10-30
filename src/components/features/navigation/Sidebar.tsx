@@ -1,7 +1,7 @@
 import { Home, Users, Play, User, Download, Loader2 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import SpotifyLogo from './SpotifyLogo';
+import { SpotifyLogo } from '@/components';
 import { ROUTES } from '@/utils/constants';
 import { usePWAInstall } from '@/hooks/usePWAInstall';
 

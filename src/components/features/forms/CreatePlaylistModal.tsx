@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui';
 import { UI_TEXTS } from '@/constants/ui';
 
 interface CreatePlaylistModalProps {

@@ -112,6 +112,6 @@ export type MediaType = 'artist' | 'album' | 'playlist';
 export interface MediaItemBase {
   id: string;
   name: string;
-  images: Array<{ url: string; height?: number; width?: number }>;
+  images: Array<{ url: string; height?: number | null; width?: number | null }>;
   uri: string;
 }

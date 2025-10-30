@@ -1,6 +1,6 @@
 import { useAuthStore } from '@/store/authStore';
 import { useSpotifyIntegration } from '@/hooks/useSpotifyIntegration';
-import { PageHeader } from '@/components/PageHeader';
+import { PageHeader } from '@/components';
 import { useImageCache } from '@/hooks/useImageCache';
 
 export default function ProfilePage() {

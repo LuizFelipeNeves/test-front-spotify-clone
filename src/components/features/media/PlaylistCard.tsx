@@ -6,8 +6,8 @@ import { usePlaylistTracks } from '@/hooks/useSpotifyQueries';
 import { usePlayerStore } from '@/store/playerStore';
 import { useSpotifyPlayerContext } from '@/contexts/SpotifyPlayerContext';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/Button';
-import { Indicator } from '@/components/ui/Indicator';
+import { Button } from '@/components/ui';
+import { Indicator } from '@/components/ui';
 
 interface PlaylistCardProps {
   playlist: Playlist;

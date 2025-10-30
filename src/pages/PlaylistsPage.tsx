@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { PageContent } from '@/components/ui/page-content';
-import { InfiniteScrollList } from '@/components/ui/infinite-scroll-list';
-import { CreateButton } from '@/components/ui/create-button';
-import { PlaylistCard } from '@/components/PlaylistCard';
-import { CreatePlaylistModal } from '@/components/CreatePlaylistModal';
+import { PageContent } from '@/components/ui';
+import { InfiniteScrollList } from '@/components';
+import { CreateButton } from '@/components/ui';
+import { FeaturePlaylistCard } from '@/components';
+import { CreatePlaylistModal } from '@/components';
 import { useSpotifyIntegration } from '@/hooks/useSpotifyIntegration';
 import { useInfiniteUserPlaylists } from '@/hooks/useSpotifyQueries';
 import { useContentPage } from '@/hooks/content-page';
@@ -82,8 +82,8 @@ export default function PlaylistsPage() {
         isFetchingNextPage={isFetchingNextPage}
         fetchNextPage={fetchNextPage}
         loadingText="Carregando mais playlists..."
-        renderItem={(playlist) => (
-          <PlaylistCard
+        renderItem={(playlist: Playlist) => (
+          <FeaturePlaylistCard
             key={playlist.id}
             playlist={playlist}
             onClick={handlePlaylistClick}

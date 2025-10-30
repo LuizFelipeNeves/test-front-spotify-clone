@@ -67,7 +67,7 @@ export function PlaylistCard({ playlist, onClick, className }: PlaylistCardProps
     <div
       onClick={handleClick}
       className={cn(
-        'group relative bg-gray-900 rounded-lg p-4 hover:bg-gray-800 transition-all duration-300 cursor-pointer',
+        'group relative bg-gray-900 rounded-lg p-4 hover:bg-gray-800 transition-all duration-300 cursor-pointer h-24 flex flex-col',
         className
       )}
     >
@@ -103,23 +103,23 @@ export function PlaylistCard({ playlist, onClick, className }: PlaylistCardProps
           )}
         </div>
 
-        <div className="flex-1 min-w-0">
-          <h3 className="text-white font-semibold text-lg truncate group-hover:text-green-400 transition-colors">
+        <div className="flex-1 min-w-0 overflow-hidden">
+          <h3 className="text-white font-semibold text-sm truncate group-hover:text-green-400 transition-colors">
             {playlist.name}
           </h3>
 
-          {playlist.description && (
-            <p
-              className="text-gray-400 text-sm mt-1 line-clamp-2"
-              dangerouslySetInnerHTML={{ __html: safeDescription }}
-            />
-          )}
-
-          <div className="flex items-center gap-2 mt-2 text-gray-500 text-sm">
+          <div className="flex items-center gap-1 mt-1 text-gray-500 text-xs">
             <span>Por {playlist.owner.display_name}</span>
             <span>•</span>
             <span>{formatTrackCount(playlist.tracks.total)}</span>
           </div>
+
+          {playlist.description && (
+            <p
+              className="text-gray-400 text-xs mt-1 line-clamp-1 leading-tight"
+              dangerouslySetInnerHTML={{ __html: safeDescription }}
+            />
+          )}
         </div>
 
         <div className="flex flex-col items-end gap-2">

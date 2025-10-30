@@ -1,9 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import { PageContent } from '@/components/ui';
-import { InfiniteScrollList } from '@/components';
-import { ArtistCard } from '@/components';
+import { ContentPage, ArtistCard } from '@/components';
 import { useInfiniteTopArtists } from '@/hooks/useSpotifyQueries';
-import { useContentPage } from '@/hooks/content-page';
 import { UI_TEXTS } from '@/constants/ui';
 import type { Artist } from '@/types';
 
@@ -22,37 +19,43 @@ export default function ArtistsPage() {
   // Flatten all pages into a single array of artists
   const artists = data?.pages.flatMap(page => page.items) ?? [];
 
-  const { getEmptyState, handleRetry } = useContentPage({ contentType: 'artists' });
-
   const handleArtistClick = (artist: Artist) => {
     navigate(`/artists/${artist.id}`);
   };
 
+  const handleArtistPlay = (artist: Artist) => {
+    // TODO: Implementar função de play do artista
+    console.log('Playing artist:', artist.name);
+  };
+
+  const handleRetry = () => {
+    // Refetch data
+    window.location.reload();
+  };
+
   return (
-    <PageContent
+    <ContentPage
       title={UI_TEXTS.artistas}
       description={UI_TEXTS.descubraArtistas}
-    >
-      <InfiniteScrollList
-        items={artists}
-        loading={isLoading}
-        error={isError ? error?.message || 'Erro ao carregar artistas' : null}
-        emptyMessage={getEmptyState().message}
-        emptyDescription={getEmptyState().description}
-        onRetry={handleRetry}
-        gridClassName="grid grid-cols-2 gap-4 md:gap-6"
-        hasNextPage={hasNextPage}
-        isFetchingNextPage={isFetchingNextPage}
-        fetchNextPage={fetchNextPage}
-        loadingText={UI_TEXTS.carregandoMaisArtistas}
-        renderItem={(artist) => (
-          <ArtistCard
-            key={artist.id}
-            artist={artist}
-            onClick={handleArtistClick}
-          />
-        )}
-      />
-    </PageContent>
+      items={artists}
+      loading={isLoading}
+      error={isError ? error?.message || 'Erro ao carregar artistas' : null}
+      emptyMessage="Nenhum artista encontrado"
+      emptyDescription="Conecte-se ao Spotify para ver seus artistas favoritos"
+      onRetry={handleRetry}
+      hasNextPage={hasNextPage}
+      isFetchingNextPage={isFetchingNextPage}
+      fetchNextPage={fetchNextPage}
+      loadingText={UI_TEXTS.carregandoMaisArtistas}
+      gridClassName="grid grid-cols-2 gap-4 md:gap-6"
+      renderItem={(artist) => (
+        <ArtistCard
+          key={artist.id}
+          artist={artist}
+          onClick={handleArtistClick}
+          onPlay={handleArtistPlay}
+        />
+      )}
+    />
   );
 }

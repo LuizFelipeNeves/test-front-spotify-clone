@@ -1,6 +1,6 @@
 import { useAuthStore } from '@/store/authStore';
 import { AuthService } from '@/services/auth.service';
-import { SpotifyLogo } from '@/components';
+import { AuthLayout, Button } from '@/components';
 import { UI_TEXTS } from '@/constants/ui';
 
 const LoginPage = () => {
@@ -17,20 +17,16 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="fixed inset-0 bg-black flex flex-col items-center justify-center px-6">
-      <SpotifyLogo size="md" className="mb-8" />
-
-      <p className="text-white text-center mb-8 text-lg">
-        {UI_TEXTS.entrarComSpotify}
-      </p>
-
-      <button
+    <AuthLayout description={UI_TEXTS.entrarComSpotify}>
+      <Button
         onClick={handleSpotifyLogin}
-        className="bg-green-500 hover:bg-green-400 text-black font-bold py-4 px-16 rounded-full text-lg transition-colors"
+        variant="spotify"
+        size="lg"
+        className="w-full"
       >
         {UI_TEXTS.entrar}
-      </button>
-    </div>
+      </Button>
+    </AuthLayout>
   );
 };
 

@@ -1,13 +1,9 @@
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { PageContent } from '@/components/ui';
-import { InfiniteScrollList } from '@/components';
-import { CreateButton } from '@/components/ui';
-import { FeaturePlaylistCard } from '@/components';
-import { CreatePlaylistModal } from '@/components';
+import { ContentPage, CreateButton, FeaturePlaylistCard, CreatePlaylistModal } from '@/components';
 import { useSpotifyIntegration } from '@/hooks/useSpotifyIntegration';
 import { useInfiniteUserPlaylists } from '@/hooks/useSpotifyQueries';
-import { useContentPage } from '@/hooks/content-page';
+import { UI_TEXTS } from '@/constants/ui';
 import type { Playlist } from '@/types';
 
 export default function PlaylistsPage() {
@@ -29,10 +25,13 @@ export default function PlaylistsPage() {
   // Flatten all pages into a single array of playlists
   const playlists = data?.pages.flatMap(page => page.items) ?? [];
 
-  const { getEmptyState, handleRetry } = useContentPage({ contentType: 'playlists' });
-
   const handlePlaylistClick = (playlist: Playlist) => {
     window.open(playlist.external_urls.spotify, '_blank');
+  };
+
+  const handleRetry = () => {
+    // Refetch data
+    window.location.reload();
   };
 
   const handleCreatePlaylist = () => {
@@ -66,22 +65,21 @@ export default function PlaylistsPage() {
   );
 
   return (
-    <PageContent
-      title="Minhas Playlists"
-      description="Sua coleção pessoal de playlists"
-      actionButton={createPlaylistButton}
-    >
-      <InfiniteScrollList
+    <>
+      <ContentPage
+        title={UI_TEXTS.minhasPlaylists}
+        description={UI_TEXTS.colecaoPlaylists}
         items={playlists}
         loading={isLoading}
         error={isError ? error?.message || 'Erro ao carregar playlists' : null}
-        emptyMessage={getEmptyState().message}
-        emptyDescription={getEmptyState().description}
+        emptyMessage="Nenhuma playlist encontrada"
+        emptyDescription="Crie sua primeira playlist para começar a organizar suas músicas"
         onRetry={handleRetry}
         hasNextPage={hasNextPage}
         isFetchingNextPage={isFetchingNextPage}
         fetchNextPage={fetchNextPage}
-        loadingText="Carregando mais playlists..."
+        loadingText={UI_TEXTS.carregandoMaisPlaylists}
+        gridClassName="grid grid-cols-2 gap-4 md:gap-6"
         renderItem={(playlist: Playlist) => (
           <FeaturePlaylistCard
             key={playlist.id}
@@ -91,12 +89,19 @@ export default function PlaylistsPage() {
         )}
       />
 
+      {/* Create button shown when there are no playlists */}
+      {!isLoading && !isError && playlists.length === 0 && (
+        <div className="text-center mt-8">
+          {createPlaylistButton}
+        </div>
+      )}
+
       <CreatePlaylistModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onCreatePlaylist={handleCreatePlaylistSubmit}
         isCreating={isCreating}
       />
-    </PageContent>
+    </>
   );
 }

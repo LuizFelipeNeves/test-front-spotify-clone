@@ -89,17 +89,19 @@ export function MediaCard<T extends MediaItemBase>({
           }}
         />
         {/* Play button overlay */}
-        <div
-          onClick={handlePlayClick}
-          className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-        >
-          <button
-            className="bg-green-500 text-white rounded-full p-3 shadow-lg hover:scale-105 transition-transform duration-200"
-            aria-label={`Play ${item.name}`}
+        {onPlay && (
+          <div
+            onClick={handlePlayClick}
+            className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-black/30"
           >
-            <Play className="w-5 h-5 fill-current ml-0.5" />
-          </button>
-        </div>
+            <button
+              className="bg-green-500 text-white rounded-full p-3 shadow-lg hover:scale-105 transition-transform duration-200"
+              aria-label={`Play ${item.name}`}
+            >
+              <Play className="w-5 h-5 fill-current ml-0.5" />
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="p-3 space-y-1">

@@ -29,6 +29,10 @@ export { ResponsiveGrid } from './shared/grid/ResponsiveGrid';
 export { InfiniteScrollList } from './shared/infinite/InfiniteScrollList';
 export { InfinitePage } from './shared/infinite/InfinitePage';
 
+// Layout Components - Componentes de layout compartilhados
+export { AuthLayout } from './shared/layout/AuthLayout';
+export { ContentPage } from './shared/layout/ContentPage';
+
 // Media Components - Cards e componentes de mídia
 export {
   MediaCard,
@@ -37,6 +41,7 @@ export {
 } from './shared/media/MediaCard';
 
 export { ArtistCard } from './shared/media/ArtistCard';
+export { UserAvatar } from './shared/media/UserAvatar';
 
 export { ArtistCard as FeatureArtistCard } from './features/media/ArtistCard';
 export { AlbumCard as FeatureAlbumCard } from './features/media/AlbumCard';

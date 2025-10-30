@@ -115,6 +115,7 @@ export const ArtistCardStory: Story = {
       <ArtistCard
         artist={mockArtist}
         onClick={(artist) => console.log('Navigate to:', artist.id)}
+        onPlay={(artist) => console.log('Play artist:', artist.name)}
       />
     </div>
   ),
@@ -212,6 +213,7 @@ export const Grid: Story = {
             key={artist.id}
             artist={artist}
             onClick={(artist) => console.log('Navigate to:', artist.id)}
+            onPlay={(artist) => console.log('Play artist:', artist.name)}
           />
         ))}
       </div>
@@ -239,6 +241,7 @@ export const Accessibility: Story = {
           <ArtistCard
             artist={mockArtist}
             onClick={(artist) => console.log('Navigate to:', artist.id)}
+            onPlay={(artist) => console.log('Play artist:', artist.name)}
           />
           <AlbumCard
             item={mockAlbum}

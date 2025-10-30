@@ -1,18 +1,27 @@
 import type { Artist } from '@/types';
 import { useImageCache } from '@/hooks/useImageCache';
+import { Play } from 'lucide-react';
 
 interface ArtistCardProps {
   artist: Artist;
   onClick?: (artist: Artist) => void;
+  onPlay?: (artist: Artist) => void;
   className?: string;
 }
 
 const fallBackImage = 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=200&h=200&fit=crop'
 
-export function ArtistCard({ artist, onClick, className = '' }: ArtistCardProps) {
+export function ArtistCard({ artist, onClick, onPlay, className = '' }: ArtistCardProps) {
   const handleClick = () => {
     if (onClick) {
       onClick(artist);
+    }
+  };
+
+  const handlePlayClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onPlay) {
+      onPlay(artist);
     }
   };
 
@@ -60,16 +69,32 @@ export function ArtistCard({ artist, onClick, className = '' }: ArtistCardProps)
               </svg>
             </div>
           ) : (
-            <img
-              src={imageUrl || fallBackImage}
-              alt={artist.name}
-              className="w-20 h-20 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full object-cover ring-2 ring-transparent group-hover:ring-green-500/30 transition-all duration-300"
-              onError={(e) => {
-                // Fallback para imagem padrão se a imagem falhar
-                const target = e.target as HTMLImageElement;
-                target.src = fallBackImage;
-              }}
-            />
+            <div className="relative">
+              <img
+                src={imageUrl || fallBackImage}
+                alt={artist.name}
+                className="w-20 h-20 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full object-cover ring-2 ring-transparent group-hover:ring-green-500/30 transition-all duration-300"
+                onError={(e) => {
+                  // Fallback para imagem padrão se a imagem falhar
+                  const target = e.target as HTMLImageElement;
+                  target.src = fallBackImage;
+                }}
+              />
+              {/* Play button overlay */}
+              {onPlay && (
+                <div
+                  onClick={handlePlayClick}
+                  className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-black/30 rounded-full"
+                >
+                  <button
+                    className="bg-green-500 text-white rounded-full p-3 shadow-lg hover:scale-105 transition-transform duration-200"
+                    aria-label={`Play ${artist.name}`}
+                  >
+                    <Play className="w-4 h-4 fill-current ml-0.5" />
+                  </button>
+                </div>
+              )}
+            </div>
           )}
           {/* Indicador de alta popularidade */}
           {artist.popularity && artist.popularity > 80 && (

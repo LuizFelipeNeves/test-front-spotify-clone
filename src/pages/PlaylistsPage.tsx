@@ -54,53 +54,48 @@ export default function PlaylistsPage() {
     }
   };
 
-  const createPlaylistButton = (
-    <CreateButton
-      onClick={handleCreatePlaylist}
-      text="Criar Playlist"
-      title="Criar Playlist"
-      ariaLabel="Criar nova playlist"
-    />
-  );
-
   return (
     <>
+      {/* Skip links for accessibility */}
       <SkipLink href="#playlists-content">
         {UI_TEXTS.pularParaConteudoPlaylists}
       </SkipLink>
 
       <MainContent id="playlists-content">
         <ContentPage
-        title={UI_TEXTS.minhasPlaylists}
-        description={UI_TEXTS.colecaoPlaylists}
-        items={playlists}
-        loading={isLoading}
-        error={isError ? error?.message || 'Erro ao carregar playlists' : null}
-        emptyMessage="Nenhuma playlist encontrada"
-        emptyDescription="Crie sua primeira playlist para começar a organizar suas músicas"
-        onRetry={handleRetry}
-        hasNextPage={hasNextPage}
-        isFetchingNextPage={isFetchingNextPage}
-        fetchNextPage={fetchNextPage}
-        loadingText={UI_TEXTS.carregandoMaisPlaylists}
-        gridClassName="grid grid-cols-2 gap-4 md:gap-6"
-        renderItem={(playlist: Playlist) => (
-          <FeaturePlaylistCard
-            key={playlist.id}
-            playlist={playlist}
-            onClick={handlePlaylistClick}
-          />
-        )}
-      />
-
-      {/* Create button shown when there are no playlists */}
-      {!isLoading && !isError && playlists.length === 0 && (
-        <div className="text-center mt-8">
-          {createPlaylistButton}
-        </div>
+          title={UI_TEXTS.minhasPlaylists}
+          description={UI_TEXTS.colecaoPlaylists}
+          items={playlists}
+          loading={isLoading}
+          error={isError ? error?.message || 'Erro ao carregar playlists' : null}
+          emptyMessage="Nenhuma playlist encontrada"
+          emptyDescription="Crie sua primeira playlist para começar a organizar suas músicas!"
+          onRetry={handleRetry}
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          fetchNextPage={fetchNextPage}
+          loadingText={UI_TEXTS.carregandoMaisPlaylists}
+          gridClassName="grid grid-cols-2 gap-4 md:gap-6"
+          actionButton={
+            <CreateButton
+              onClick={() => setIsModalOpen(true)}
+              text="Criar Playlist"
+              ariaLabel="Criar nova playlist"
+            />
+          }
+          renderItem={(playlist) => (
+            <FeaturePlaylistCard
+              key={playlist.id}
+              playlist={playlist}
+              onClick={handlePlaylistClick}
+              // Accessibility attributes
+              aria-label={`Playlist ${playlist.name}. ${playlist.tracks ? `${playlist.tracks.total} músicas.` : ''} ${playlist.description ? `Descrição: ${playlist.description}.` : ''}`}
+            />
           )}
+        />
       </MainContent>
 
+      {/* Create Playlist Modal */}
       <CreatePlaylistModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

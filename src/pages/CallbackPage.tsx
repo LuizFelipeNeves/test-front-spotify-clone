@@ -2,8 +2,8 @@ import { useEffect, useState, useRef } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { spotifyService } from '@/services/spotify.service';
 import { AuthService } from '@/services/auth.service';
-import { AuthLayout, Button } from '@/components';
-import { LoadingSpinner } from '@/components';
+import { SpotifyLogo } from '@/components';
+import { Button } from '@/components/ui';
 import { UI_TEXTS } from '@/constants/ui';
 
 const CallbackPage = () => {
@@ -63,30 +63,35 @@ const CallbackPage = () => {
 
   if (loading) {
     return (
-      <AuthLayout description={UI_TEXTS.processandoAutenticacao}>
-        <LoadingSpinner message="" />
-      </AuthLayout>
+      <div className="fixed inset-0 bg-black flex flex-col items-center justify-center px-6">
+        <div className="animate-pulse">
+          <SpotifyLogo size="md" className="mb-8" />
+        </div>
+
+        <p className="text-white text-center text-lg">
+          {UI_TEXTS.processandoAutenticacao}
+        </p>
+      </div>
     );
   }
 
   if (error) {
     return (
-      <AuthLayout>
-        <div className="text-center">
-          <p className="text-red-400 text-lg mb-6">
-            {UI_TEXTS.erroNaAutenticacao} {error}
-          </p>
+      <div className="fixed inset-0 bg-black flex flex-col items-center justify-center px-6">
+        <SpotifyLogo size="md" className="mb-8" />
 
-          <Button
-            onClick={() => window.location.href = '/login'}
-            variant="spotify"
-            size="lg"
-            className="w-full"
-          >
-            {UI_TEXTS.tentarNovamente}
-          </Button>
-        </div>
-      </AuthLayout>
+        <p className="text-red-400 text-center text-lg mb-4">
+          {UI_TEXTS.erroNaAutenticacao} {error}
+        </p>
+
+        <Button
+          onClick={() => window.location.href = '/login'}
+          className="font-bold py-3 px-8 rounded-full text-lg"
+          variant="spotify"
+        >
+          {UI_TEXTS.tentarNovamente}
+        </Button>
+      </div>
     );
   }
 

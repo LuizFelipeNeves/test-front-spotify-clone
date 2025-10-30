@@ -45,6 +45,7 @@ export function Sidebar({ className, isOpen = true, onClose }: SidebarProps) {
             key={route}
             to={route}
             onClick={onClose}
+            data-testid={`nav-${label.toLowerCase()}`}
             className={cn(
               'flex items-center gap-4 cursor-pointer transition-colors text-base font-medium',
               isActiveRoute(route)

@@ -21,15 +21,11 @@ export interface Artist {
   genres: string[];
   popularity: number;
   followers: {
-    href: string | null;
     total: number;
   };
   external_urls: {
     spotify: string;
   };
-  href: string;
-  type: 'artist';
-  uri: string;
 }
 
 export interface Playlist {
@@ -76,7 +72,6 @@ export interface Album {
   external_urls: {
     spotify: string;
   };
-  uri: string;
 }
 
 export interface PlaylistTrack {
@@ -95,7 +90,6 @@ export interface AuthState {
   user: User | null;
   accessToken: string | null;
   refreshToken: string | null;
-  expiresAt: number | null;
 }
 
 export interface PlayerState {
@@ -135,11 +129,3 @@ export interface PlaylistFormData {
   description: string;
   isPublic: boolean;
 }
-
-export type ApiError = {
-  message: string;
-  status: number;
-  code?: string;
-};
-
-// End of global type definitions

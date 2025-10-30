@@ -4,8 +4,16 @@ import * as Sentry from '@sentry/react';
  * Initialize Sentry for error tracking and performance monitoring
  */
 export const initSentry = () => {
+  const dsn = import.meta.env.VITE_SENTRY_DSN;
+  
+  // Only initialize Sentry if DSN is provided and valid
+  if (!dsn || dsn === 'your_sentry_dsn' || dsn.trim() === '') {
+    console.log('Sentry DSN not configured, skipping initialization');
+    return;
+  }
+
   Sentry.init({
-    dsn: import.meta.env.VITE_SENTRY_DSN,
+    dsn,
     environment: import.meta.env.MODE,
     integrations: [Sentry.browserTracingIntegration()],
     // Performance Monitoring

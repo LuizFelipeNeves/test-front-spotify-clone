@@ -10,6 +10,7 @@ export function SkipLink({ href, children, className = '' }: SkipLinkProps) {
   return (
     <a
       href={href}
+      data-testid="skip-link"
       className={`
         sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4
         bg-green-500 text-black px-4 py-2 rounded-md font-semibold

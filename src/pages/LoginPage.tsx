@@ -23,6 +23,8 @@ const LoginPage = () => {
         variant="spotify"
         size="lg"
         className="w-full"
+        data-testid="login-button"
+        aria-label="Entrar com sua conta Spotify"
       >
         {UI_TEXTS.entrar}
       </Button>

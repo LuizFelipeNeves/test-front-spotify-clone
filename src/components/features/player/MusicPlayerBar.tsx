@@ -120,6 +120,7 @@ const MusicPlayerBar: React.FC = () => {
                 <button
                   onClick={toggleFavorite}
                   disabled={isFavoriteLoading}
+                  data-testid="favorite-button"
                   className={`ml-2 transition-colors flex-shrink-0 ${
                     isFavorited ? 'text-green-500' : 'text-gray-400 hover:text-white'
                   } ${isFavoriteLoading ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'}`}
@@ -150,6 +151,7 @@ const MusicPlayerBar: React.FC = () => {
                     duration={duration}
                     onSeek={spotifySeek}
                     className="h-0.5"
+                    data-testid="progress-bar"
                   />
                   <span className="text-xs text-gray-400 w-8 text-right">
                     {formatDuration(duration)}
@@ -162,6 +164,7 @@ const MusicPlayerBar: React.FC = () => {
                     onClick={() => isReady && spotifyPreviousTrack()}
                     className="text-gray-400 hover:text-white transition-colors disabled:opacity-50"
                     disabled={!isReady}
+                    data-testid="previous-button"
                   >
                     <SkipBack className="w-6.5 h-6.5" />
                   </button>
@@ -170,6 +173,7 @@ const MusicPlayerBar: React.FC = () => {
                     onClick={() => isReady && spotifyTogglePlay()}
                     className="bg-white text-black rounded-full p-2.5 hover:scale-105 transition-transform disabled:opacity-50"
                     disabled={!isReady}
+                    data-testid="play-pause-button"
                   >
                     {isPlaying ? (
                       <Pause className="w-6 h-6" />
@@ -182,6 +186,7 @@ const MusicPlayerBar: React.FC = () => {
                     onClick={() => isReady && spotifyNextTrack()}
                     className="text-gray-400 hover:text-white transition-colors disabled:opacity-50"
                     disabled={!isReady}
+                    data-testid="next-button"
                   >
                     <SkipForward className="w-6.5 h-6.5" />
                   </button>
@@ -215,6 +220,7 @@ const MusicPlayerBar: React.FC = () => {
             <button
               onClick={toggleFavorite}
               disabled={isFavoriteLoading}
+              data-testid="favorite-button-desktop"
               className={`transition-colors flex-shrink-0 ${
                 isFavorited ? 'text-green-500' : 'text-gray-400 hover:text-white'
               } ${isFavoriteLoading ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'}`}
@@ -233,6 +239,7 @@ const MusicPlayerBar: React.FC = () => {
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => spotifyToggleShuffle(!shuffle)}
+                data-testid="shuffle-button"
                 className={`transition-colors ${
                   shuffle ? 'text-green-500' : 'text-gray-400 hover:text-white'
                 }`}
@@ -244,6 +251,7 @@ const MusicPlayerBar: React.FC = () => {
                 onClick={() => isReady && spotifyPreviousTrack()}
                 className="text-gray-400 hover:text-white transition-colors disabled:opacity-50"
                 disabled={!isReady}
+                data-testid="previous-button-desktop"
               >
                 <SkipBack className="w-5 h-5" />
               </button>
@@ -252,6 +260,7 @@ const MusicPlayerBar: React.FC = () => {
                 onClick={() => isReady && spotifyTogglePlay()}
                 className="bg-white text-black rounded-full p-2 hover:scale-105 transition-transform disabled:opacity-50"
                 disabled={!isReady}
+                data-testid="play-pause-button-desktop"
               >
                 {isPlaying ? (
                   <Pause className="w-5 h-5" />
@@ -264,12 +273,14 @@ const MusicPlayerBar: React.FC = () => {
                 onClick={() => isReady && spotifyNextTrack()}
                 className="text-gray-400 hover:text-white transition-colors disabled:opacity-50"
                 disabled={!isReady}
+                data-testid="next-button-desktop"
               >
                 <SkipForward className="w-5 h-5" />
               </button>
 
               <button
                 onClick={handleToggleRepeat}
+                data-testid="repeat-button"
                 className={`transition-colors ${
                   repeat !== 'off' ? 'text-green-500' : 'text-gray-400 hover:text-white'
                 }`}
@@ -291,6 +302,7 @@ const MusicPlayerBar: React.FC = () => {
                 progress={progress}
                 duration={duration}
                 onSeek={spotifySeek}
+                data-testid="progress-bar-desktop"
               />
               <span className="text-xs text-gray-400 w-10">
                 {formatDuration(duration)}

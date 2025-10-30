@@ -21,7 +21,7 @@ describe('useAuth', () => {
     const { result } = renderHook(() => useAuth());
 
     act(() => {
-      result.current.login('access_token', 'refresh_token', mockUser);
+      result.current.login('access_token', 'refresh_token', mockUser, 3600);
     });
 
     expect(result.current.isAuthenticated).toBe(true);
@@ -35,7 +35,7 @@ describe('useAuth', () => {
 
     // First login
     act(() => {
-      result.current.login('access_token', 'refresh_token', mockUser);
+      result.current.login('access_token', 'refresh_token', mockUser, 3600);
     });
 
     // Then logout
@@ -55,7 +55,7 @@ describe('useAuth', () => {
 
     // First login
     act(() => {
-      result.current.login('access_token', 'refresh_token', mockUser);
+      result.current.login('access_token', 'refresh_token', mockUser, 3600);
     });
 
     // Then update user

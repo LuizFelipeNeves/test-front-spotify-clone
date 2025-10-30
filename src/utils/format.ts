@@ -99,6 +99,31 @@ export const getImageUrl = (
 /**
  * Generate random color for placeholders
  */
+/**
+ * Format followers count with K, M suffixes
+ */
+export const formatFollowers = (count: number): string => {
+  return formatNumber(count);
+};
+
+/**
+ * Format release date to readable format
+ */
+export const formatReleaseDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  return date.getFullYear().toString();
+};
+
+/**
+ * Format track count
+ */
+export const formatTrackCount = (count: number): string => {
+  return `${count} ${count === 1 ? 'faixa' : 'faixas'}`;
+};
+
+/**
+ * Generate random color for placeholders
+ */
 export const generateRandomColor = (): string => {
   const colors = [
     '#1DB954', // Spotify Green

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { X, RefreshCw } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { UI_TEXTS } from '@/constants/ui';
 
 interface PWAUpdateNotificationProps {
   onUpdate?: () => void;
@@ -62,9 +63,9 @@ export function PWAUpdateNotification({ onUpdate }: PWAUpdateNotificationProps) 
           <RefreshCw className="w-5 h-5 text-green-400 flex-shrink-0" />
 
           <div className="flex-1 min-w-0">
-            <h3 className="text-sm font-medium text-white">Nova versão disponível</h3>
+            <h3 className="text-sm font-medium text-white">{UI_TEXTS.novaVersaoDisponivel}</h3>
             <p className="text-sm text-gray-300 mt-1">
-              Uma nova versão do app está disponível. Atualize para obter as últimas funcionalidades.
+              {UI_TEXTS.novaVersaoDescricao}
             </p>
 
             <div className="flex gap-2 mt-3">
@@ -79,10 +80,10 @@ export function PWAUpdateNotification({ onUpdate }: PWAUpdateNotificationProps) 
                 {isUpdating ? (
                   <>
                     <RefreshCw className="w-4 h-4 animate-spin" />
-                    Atualizando...
+                    {UI_TEXTS.atualizando}
                   </>
                 ) : (
-                  'Atualizar'
+                  UI_TEXTS.atualizar
                 )}
               </button>
 
@@ -90,7 +91,7 @@ export function PWAUpdateNotification({ onUpdate }: PWAUpdateNotificationProps) 
                 onClick={handleDismiss}
                 className="px-3 py-1.5 text-sm font-medium text-gray-300 hover:text-white transition-colors"
               >
-                Depois
+                {UI_TEXTS.depois}
               </button>
             </div>
           </div>

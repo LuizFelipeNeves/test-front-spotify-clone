@@ -4,6 +4,7 @@ import { InfiniteScrollList } from '@/components/ui/infinite-scroll-list';
 import { ArtistCard } from '@/components/ArtistCard';
 import { useInfiniteTopArtists } from '@/hooks/useSpotifyQueries';
 import { useContentPage } from '@/hooks/content-page';
+import { UI_TEXTS } from '@/constants/ui';
 import type { Artist } from '@/types';
 
 export default function ArtistsPage() {
@@ -29,8 +30,8 @@ export default function ArtistsPage() {
 
   return (
     <PageContent
-      title="Artistas"
-      description="Descubra e explore seus artistas favoritos"
+      title={UI_TEXTS.artistas}
+      description={UI_TEXTS.descubraArtistas}
     >
       <InfiniteScrollList
         items={artists}
@@ -43,7 +44,7 @@ export default function ArtistsPage() {
         hasNextPage={hasNextPage}
         isFetchingNextPage={isFetchingNextPage}
         fetchNextPage={fetchNextPage}
-        loadingText="Carregando mais artistas..."
+        loadingText={UI_TEXTS.carregandoMaisArtistas}
         renderItem={(artist) => (
           <ArtistCard
             key={artist.id}

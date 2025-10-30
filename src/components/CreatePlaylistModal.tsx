@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/Button';
+import { UI_TEXTS } from '@/constants/ui';
 
 interface CreatePlaylistModalProps {
   isOpen: boolean;
@@ -51,7 +52,7 @@ export function CreatePlaylistModal({ isOpen, onClose, onCreatePlaylist, isCreat
 
         {/* Modal content */}
         <div className="text-center mb-4">
-          <h2 id="playlist-name-title" className="text-gray-400 text-sm mb-3">Dê um nome a sua playlist</h2>
+          <h2 id="playlist-name-title" className="text-gray-400 text-sm mb-3">{UI_TEXTS.nomePlaylist}</h2>
         </div>
 
         <form onSubmit={handleSubmit}>
@@ -62,7 +63,7 @@ export function CreatePlaylistModal({ isOpen, onClose, onCreatePlaylist, isCreat
               type="text"
               value={playlistName}
               onChange={(e) => setPlaylistName(e.target.value)}
-              placeholder="Minha playlist #1"
+              placeholder={UI_TEXTS.nomePlaylistPlaceholder}
               className="w-full bg-transparent border-b border-gray-600 text-white text-xl font-semibold text-center pb-2 focus:outline-none focus:border-green-500 transition-colors"
               autoFocus
               maxLength={100}
@@ -82,7 +83,7 @@ export function CreatePlaylistModal({ isOpen, onClose, onCreatePlaylist, isCreat
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
               )}
-              {isCreating ? 'Criando...' : 'Criar'}
+              {isCreating ? UI_TEXTS.criando : UI_TEXTS.criar}
             </Button>
           </div>
         </form>

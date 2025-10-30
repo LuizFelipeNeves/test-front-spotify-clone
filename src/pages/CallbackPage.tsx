@@ -4,6 +4,7 @@ import { spotifyService } from '@/services/spotify.service';
 import { AuthService } from '@/services/auth.service';
 import SpotifyLogo from '@/components/SpotifyLogo';
 import { Button } from '@/components/ui/Button';
+import { UI_TEXTS } from '@/constants/ui';
 
 const CallbackPage = () => {
   const [loading, setLoading] = useState(true);
@@ -68,7 +69,7 @@ const CallbackPage = () => {
         </div>
 
         <p className="text-white text-center text-lg">
-          Processando autenticação...
+          {UI_TEXTS.processandoAutenticacao}
         </p>
       </div>
     );
@@ -80,7 +81,7 @@ const CallbackPage = () => {
         <SpotifyLogo size="md" className="mb-8" />
 
         <p className="text-red-400 text-center text-lg mb-4">
-          Erro na autenticação: {error}
+          {UI_TEXTS.erroNaAutenticacao} {error}
         </p>
 
         <Button
@@ -88,7 +89,7 @@ const CallbackPage = () => {
           className="font-bold py-3 px-8 rounded-full text-lg"
           variant="spotify"
         >
-          Tentar novamente
+          {UI_TEXTS.tentarNovamente}
         </Button>
       </div>
     );

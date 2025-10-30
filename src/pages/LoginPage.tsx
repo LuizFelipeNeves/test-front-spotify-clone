@@ -1,6 +1,7 @@
 import { useAuthStore } from '@/store/authStore';
 import { AuthService } from '@/services/auth.service';
 import SpotifyLogo from '@/components/SpotifyLogo';
+import { UI_TEXTS } from '@/constants/ui';
 
 const LoginPage = () => {
   const { isAuthenticated } = useAuthStore();
@@ -20,14 +21,14 @@ const LoginPage = () => {
       <SpotifyLogo size="md" className="mb-8" />
 
       <p className="text-white text-center mb-8 text-lg">
-        Entra com sua conta Spotify clicando no botão abaixo
+        {UI_TEXTS.entrarComSpotify}
       </p>
 
       <button
         onClick={handleSpotifyLogin}
         className="bg-green-500 hover:bg-green-400 text-black font-bold py-4 px-16 rounded-full text-lg transition-colors"
       >
-        Entrar
+        {UI_TEXTS.entrar}
       </button>
     </div>
   );

@@ -1,5 +1,6 @@
 import { useOnlineStatus } from '@/hooks/useOnlineStatus';
-import { cn } from '@/lib/utils'; // opcional, se você já usa shadcn/ui
+import { cn } from '@/lib/utils';
+import { UI_TEXTS } from '@/constants/ui';
 
 interface SpotifyConnectionStatusProps {
   className?: string;
@@ -9,7 +10,7 @@ export function SpotifyConnectionStatus({ className }: SpotifyConnectionStatusPr
   const isOnline = useOnlineStatus();
 
   const color = isOnline ? 'green' : 'red';
-  const statusText = isOnline ? 'Online' : 'Offline';
+  const statusText = isOnline ? UI_TEXTS.online : UI_TEXTS.offline;
   const pulseClass = isOnline ? 'animate-pulse' : '';
 
   return (

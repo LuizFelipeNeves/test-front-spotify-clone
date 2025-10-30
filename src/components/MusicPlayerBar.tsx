@@ -1,15 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { usePlayerStore } from '@/store/playerStore';
 import { useSpotifyPlayerContext } from '@/contexts/SpotifyPlayerContext';
 import { formatDuration } from '@/utils/format';
 import { useFavorites } from '@/hooks/useFavorites';
+import { ProgressBar } from './ui/ProgressBar';
+import { VolumeSlider } from './ui/VolumeSlider';
 import {
   Play,
   Pause,
   SkipBack,
   SkipForward,
-  Volume2,
-  VolumeX,
   Shuffle,
   Repeat,
   Repeat1,
@@ -42,81 +42,10 @@ const MusicPlayerBar: React.FC = () => {
     toggleRepeat: spotifyToggleRepeat,
   } = useSpotifyPlayerContext();
 
-  const [isDragging, setIsDragging] = useState(false);
-  const [localProgress, setLocalProgress] = useState(progress);
-  const [showVolumeSlider, setShowVolumeSlider] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [previousVolume, setPreviousVolume] = useState(volume);
 
-  const progressBarRef = useRef<HTMLDivElement>(null);
-  const volumeSliderRef = useRef<HTMLDivElement>(null);
-
-  // Update local progress when not dragging
-  useEffect(() => {
-    if (!isDragging) {
-      setLocalProgress(progress);
-    }
-  }, [progress, isDragging]);
-
-  // Handle progress bar click and drag
-  const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!progressBarRef.current || !duration || isDragging) return;
-
-    const rect = progressBarRef.current.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const newProgress = (clickX / rect.width) * duration;
-
-    setLocalProgress(newProgress);
-
-    if (isReady) {
-      spotifySeek(newProgress);
-    }
-  };
-
-  const handleProgressMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!progressBarRef.current || !duration) return;
-
-    const rect = progressBarRef.current.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const newProgress = (clickX / rect.width) * duration;
-
-    setLocalProgress(newProgress);
-    setIsDragging(true);
-  };
-
-  const handleProgressMouseMove = (e: MouseEvent) => {
-    if (!isDragging || !progressBarRef.current || !duration) return;
-
-    const rect = progressBarRef.current.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const newProgress = Math.max(0, Math.min(duration, (clickX / rect.width) * duration));
-    
-    setLocalProgress(newProgress);
-  };
-
-  const handleProgressMouseUp = () => {
-    if (isDragging) {
-      setIsDragging(false);
-
-      if (isReady && localProgress !== progress) {
-        spotifySeek(localProgress);
-
-        // Small delay to allow Spotify API to update before we resume syncing
-        setTimeout(() => {
-          // Force a re-sync after seek completes
-        }, 100);
-      }
-    }
-  };
-
-  // Handle volume control
-  const handleVolumeClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!volumeSliderRef.current) return;
-
-    const rect = volumeSliderRef.current.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const newVolume = Math.max(0, Math.min(1, clickX / rect.width));
-    
+  const handleVolumeChange = (newVolume: number) => {
     setStoreVolume(newVolume);
     if (isReady) {
       spotifySetVolume(newVolume);
@@ -125,6 +54,10 @@ const MusicPlayerBar: React.FC = () => {
       setIsMuted(false);
     }
   };
+
+
+  // Handle volume control
+
 
   const toggleMute = () => {
     if (isMuted) {
@@ -153,26 +86,12 @@ const MusicPlayerBar: React.FC = () => {
     }
   };
 
-  // Add global mouse event listeners for dragging
-  useEffect(() => {
-    if (isDragging) {
-      document.addEventListener('mousemove', handleProgressMouseMove);
-      document.addEventListener('mouseup', handleProgressMouseUp);
 
-      return () => {
-        document.removeEventListener('mousemove', handleProgressMouseMove);
-        document.removeEventListener('mouseup', handleProgressMouseUp);
-      };
-    }
-  }, [isDragging]);
 
   // Don't render if no current track
   if (!currentTrack) {
     return null;
   }
-
-  const progressPercentage = duration ? (localProgress / duration) * 100 : 0;
-  const volumePercentage = volume * 100;
 
   return (
     <div className="fixed bottom-[3.5rem] left-0 right-0 bg-gray-900 border-t border-gray-700 px-3 py-1.5 sm:px-4 sm:py-3 z-40 md:bottom-0 md:z-50">
@@ -224,26 +143,14 @@ const MusicPlayerBar: React.FC = () => {
               <div className="flex items-center justify-between space-x-2 mt-1">
                 <div className="flex items-center space-x-1 flex-1 max-w-[70%]">
                   <span className="text-xs text-gray-400 w-8 text-left">
-                    {formatDuration(localProgress)}
+                    {formatDuration(progress)}
                   </span>
-                  <div
-                    ref={progressBarRef}
-                    className="flex-1 h-0.5 bg-gray-600 rounded-full cursor-pointer group"
-                    onMouseDown={handleProgressMouseDown}
-                    onClick={handleProgressClick}
-                    style={{ height: '2px' }}
-                  >
-                    <div
-                      className="h-full bg-white rounded-full relative group-hover:bg-green-500 transition-colors"
-                      style={{ width: `${progressPercentage}%` }}
-                    >
-                      <div
-                        className={`absolute right-0 top-1/2 transform -translate-y-1/2 w-0.5 h-0.5 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity ${
-                          isDragging ? 'opacity-100' : ''
-                        }`}
-                      />
-                    </div>
-                  </div>
+                  <ProgressBar
+                    progress={progress}
+                    duration={duration}
+                    onSeek={spotifySeek}
+                    className="h-0.5"
+                  />
                   <span className="text-xs text-gray-400 w-8 text-right">
                     {formatDuration(duration)}
                   </span>
@@ -378,25 +285,13 @@ const MusicPlayerBar: React.FC = () => {
             {/* Progress Bar */}
             <div className="flex items-center space-x-2 w-full">
               <span className="text-xs text-gray-400 w-10 text-right">
-                {formatDuration(localProgress)}
+                {formatDuration(progress)}
               </span>
-              <div
-                ref={progressBarRef}
-                className="flex-1 h-1 bg-gray-600 rounded-full cursor-pointer group"
-                onMouseDown={handleProgressMouseDown}
-                onClick={handleProgressClick}
-              >
-                <div
-                  className="h-full bg-white rounded-full relative group-hover:bg-green-500 transition-colors"
-                  style={{ width: `${progressPercentage}%` }}
-                >
-                  <div
-                    className={`absolute right-0 top-1/2 transform -translate-y-1/2 w-3 h-3 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity ${
-                      isDragging ? 'opacity-100' : ''
-                    }`}
-                  />
-                </div>
-              </div>
+              <ProgressBar
+                progress={progress}
+                duration={duration}
+                onSeek={spotifySeek}
+              />
               <span className="text-xs text-gray-400 w-10">
                 {formatDuration(duration)}
               </span>
@@ -405,39 +300,12 @@ const MusicPlayerBar: React.FC = () => {
 
           {/* Volume Control */}
           <div className="flex items-center space-x-2 flex-1 justify-end">
-            <div className="relative">
-              <button
-                onClick={toggleMute}
-                onMouseEnter={() => setShowVolumeSlider(true)}
-                className="text-gray-400 hover:text-white transition-colors"
-              >
-                {isMuted || volume === 0 ? (
-                  <VolumeX className="w-5 h-5" />
-                ) : (
-                  <Volume2 className="w-5 h-5" />
-                )}
-              </button>
-
-              {showVolumeSlider && (
-                <div
-                  className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-gray-800 p-2 rounded-md"
-                  onMouseLeave={() => setShowVolumeSlider(false)}
-                >
-                  <div
-                    ref={volumeSliderRef}
-                    className="w-20 h-1 bg-gray-600 rounded-full cursor-pointer group"
-                    onClick={handleVolumeClick}
-                  >
-                    <div
-                      className="h-full bg-white rounded-full relative group-hover:bg-green-500 transition-colors"
-                      style={{ width: `${volumePercentage}%` }}
-                    >
-                      <div className="absolute right-0 top-1/2 transform -translate-y-1/2 w-3 h-3 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
+            <VolumeSlider
+              volume={volume}
+              isMuted={isMuted}
+              onVolumeChange={handleVolumeChange}
+              onToggleMute={toggleMute}
+            />
           </div>
         </div>
       </div>

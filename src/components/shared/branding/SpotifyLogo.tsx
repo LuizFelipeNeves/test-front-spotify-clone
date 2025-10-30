@@ -27,8 +27,8 @@ const SpotifyLogo = ({ size = 'md', showText = true, className = '' }: SpotifyLo
   };
 
   return (
-    <div className={`flex items-center gap-2 ${className}`}>
-      <div className={`${sizeClasses[size]} bg-white rounded-full flex items-center justify-center`}>
+    <div className={`flex items-center gap-2 ${className}`} role="img" aria-label="Spotify">
+      <div className={`${sizeClasses[size]} bg-white rounded-full flex items-center justify-center`} aria-hidden="true">
         <svg viewBox="0 0 24 24" className={iconSizeClasses[size]}>
           <path
             fill="black"
@@ -37,7 +37,7 @@ const SpotifyLogo = ({ size = 'md', showText = true, className = '' }: SpotifyLo
         </svg>
       </div>
       {showText && (
-        <span className={`text-white ${textSizeClasses[size]} font-bold`}>
+        <span className={`text-white ${textSizeClasses[size]} font-bold`} aria-hidden="true">
           Spotify
         </span>
       )}

@@ -73,6 +73,23 @@ export const UI_TEXTS = {
 
   // Tempo
   aoVivo: 'AO VIVO',
+
+  // Acessibilidade
+  pularParaConteudoPrincipal: 'Pular para conteúdo principal',
+  pularParaConteudoArtistas: 'Pular para conteúdo dos artistas',
+  pularParaConteudoPlaylists: 'Pular para conteúdo das playlists',
+  irParaConteudoPrincipal: 'Ir para conteúdo principal',
+  irParaNavegacao: 'Ir para navegação',
+  pularParaBusca: 'Pular para busca',
+
+  // Anúncios de rota para leitores de tela
+  paginaInicial: 'Página inicial',
+  paginaArtistas: 'Artistas',
+  paginaPlaylists: 'Playlists',
+  paginaPerfil: 'Perfil',
+  paginaLogin: 'Login',
+  paginaCallback: 'Processando autenticação',
+  paginaGenerica: 'Página',
 };
 
 // Configurações de UI

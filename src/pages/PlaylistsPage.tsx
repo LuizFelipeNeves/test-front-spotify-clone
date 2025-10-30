@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { ContentPage, CreateButton, FeaturePlaylistCard, CreatePlaylistModal } from '@/components';
+import { ContentPage, CreateButton, FeaturePlaylistCard, CreatePlaylistModal, SkipLink, MainContent } from '@/components';
 import { useSpotifyIntegration } from '@/hooks/useSpotifyIntegration';
 import { useInfiniteUserPlaylists } from '@/hooks/useSpotifyQueries';
 import { UI_TEXTS } from '@/constants/ui';
@@ -30,7 +30,6 @@ export default function PlaylistsPage() {
   };
 
   const handleRetry = () => {
-    // Refetch data
     window.location.reload();
   };
 
@@ -66,7 +65,12 @@ export default function PlaylistsPage() {
 
   return (
     <>
-      <ContentPage
+      <SkipLink href="#playlists-content">
+        {UI_TEXTS.pularParaConteudoPlaylists}
+      </SkipLink>
+
+      <MainContent id="playlists-content">
+        <ContentPage
         title={UI_TEXTS.minhasPlaylists}
         description={UI_TEXTS.colecaoPlaylists}
         items={playlists}
@@ -94,7 +98,8 @@ export default function PlaylistsPage() {
         <div className="text-center mt-8">
           {createPlaylistButton}
         </div>
-      )}
+          )}
+      </MainContent>
 
       <CreatePlaylistModal
         isOpen={isModalOpen}

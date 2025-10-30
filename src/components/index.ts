@@ -43,6 +43,10 @@ export {
 export { ArtistCard } from './shared/media/ArtistCard';
 export { UserAvatar } from './shared/media/UserAvatar';
 
+// Accessibility Components
+export { SkipLink } from './shared/accessibility/SkipLink';
+export { MainContent } from './shared/accessibility/MainContent';
+
 export { ArtistCard as FeatureArtistCard } from './features/media/ArtistCard';
 export { AlbumCard as FeatureAlbumCard } from './features/media/AlbumCard';
 export { PlaylistCard as FeaturePlaylistCard } from './features/media/PlaylistCard';

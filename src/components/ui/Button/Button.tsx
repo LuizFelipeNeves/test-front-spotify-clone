@@ -13,7 +13,7 @@ const buttonVariants = cva(
         secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
-        spotify: 'bg-green-500 text-black hover:bg-green-400',
+        spotify: 'bg-green-500 text-black hover:bg-green-400 focus-visible:ring-green-300 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-black',
       },
       size: {
         default: 'h-10 px-4 py-2',

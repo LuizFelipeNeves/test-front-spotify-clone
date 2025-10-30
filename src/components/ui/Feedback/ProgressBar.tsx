@@ -5,6 +5,7 @@ interface ProgressBarProps {
   duration: number;
   onSeek: (newProgress: number) => void;
   className?: string;
+  'aria-label'?: string;
 }
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({
@@ -12,10 +13,12 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   duration,
   onSeek,
   className = '',
+  'aria-label': ariaLabel = 'Progresso da música',
 }) => {
   const progressBarRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [localProgress, setLocalProgress] = useState(progress);
+  const [isFocused, setIsFocused] = useState(false);
 
   // Update local progress when not dragging
   useEffect(() => {
@@ -67,6 +70,51 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
     }
   };
 
+  // Keyboard navigation
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (!duration) return;
+
+    const step = duration * 0.05; // 5% of duration
+    let newProgress = localProgress;
+
+    switch (e.key) {
+      case 'ArrowLeft':
+        e.preventDefault();
+        newProgress = Math.max(0, localProgress - step);
+        break;
+      case 'ArrowRight':
+        e.preventDefault();
+        newProgress = Math.min(duration, localProgress + step);
+        break;
+      case 'Home':
+        e.preventDefault();
+        newProgress = 0;
+        break;
+      case 'End':
+        e.preventDefault();
+        newProgress = duration;
+        break;
+      case ' ':
+      case 'Enter':
+        e.preventDefault();
+        // Toggle play/pause functionality could be added here
+        return;
+      default:
+        return;
+    }
+
+    setLocalProgress(newProgress);
+    onSeek(newProgress);
+  };
+
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
+  };
+
   // Add global mouse event listeners for dragging
   useEffect(() => {
     if (isDragging) {
@@ -85,20 +133,40 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   return (
     <div
       ref={progressBarRef}
-      className={`flex-1 h-1 bg-gray-600 rounded-full cursor-pointer group ${className}`}
+      className={`flex-1 h-1 bg-gray-600 rounded-full cursor-pointer group focus:outline-none focus:ring-2 focus:ring-green-300 focus:ring-offset-1 ${className}`}
+      role="slider"
+      aria-label={ariaLabel}
+      aria-valuemin={0}
+      aria-valuemax={duration}
+      aria-valuenow={localProgress}
+      aria-valuetext={`${formatTime(localProgress)} de ${formatTime(duration)}`}
+      tabIndex={0}
       onMouseDown={handleProgressMouseDown}
       onClick={handleProgressClick}
+      onKeyDown={handleKeyDown}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
     >
       <div
-        className="h-full bg-white rounded-full relative group-hover:bg-green-500 transition-colors"
+        className={`h-full bg-white rounded-full relative transition-colors ${
+          isFocused ? 'bg-green-500' : 'group-hover:bg-green-500'
+        }`}
         style={{ width: `${progressPercentage}%` }}
       >
         <div
-          className={`absolute right-0 top-1/2 transform -translate-y-1/2 w-3 h-3 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity ${
-            isDragging ? 'opacity-100' : ''
+          className={`absolute right-0 top-1/2 transform -translate-y-1/2 w-3 h-3 bg-white rounded-full transition-opacity ${
+            isDragging || isFocused ? 'opacity-100' : 'group-hover:opacity-100'
           }`}
         />
       </div>
     </div>
   );
+
+  // Helper function to format time
+  function formatTime(ms: number): string {
+    const seconds = Math.floor(ms / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+  }
 };

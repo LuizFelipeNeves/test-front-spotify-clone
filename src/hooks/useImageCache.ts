@@ -1,4 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+
+// Type para setTimeout no Node.js vs browser
+type Timeout = ReturnType<typeof setTimeout>;
 import { imageCacheService } from '../services/imageCache.service';
 
 interface UseImageCacheOptions {
@@ -33,7 +36,7 @@ export function useImageCache(
   const [error, setError] = useState<string | null>(null);
   
   const abortControllerRef = useRef<AbortController | null>(null);
-  const timeoutRef = useRef<number | null>(null);
+  const timeoutRef = useRef<Timeout | null>(null);
 
   const loadImage = useCallback(async (url: string, attempt = 0): Promise<void> => {
     if (!url) return;

@@ -4,6 +4,9 @@ import { useAuthStore } from '@/store/authStore';
 import { spotifyService } from '@/services/spotify.service';
 import type { SpotifyPlayer } from '@/types/spotify';
 
+// Type para setTimeout no Node.js vs browser
+type Timeout = ReturnType<typeof setTimeout>;
+
 declare global {
   interface Window {
     onSpotifyWebPlaybackSDKReady: () => void;
@@ -33,8 +36,8 @@ export const useSpotifyPlayer = () => {
   const [player, setPlayer] = useState<SpotifyPlayer | null>(null);
   const [deviceId, setDeviceId] = useState<string | null>(null);
   const [isReady, setIsReady] = useState(false);
-  const intervalRef = useRef<number | null>(null);
-  const syncIntervalRef = useRef<number | null>(null);
+  const intervalRef = useRef<Timeout | null>(null);
+  const syncIntervalRef = useRef<Timeout | null>(null);
   const sdkLoadedRef = useRef(false);
 
   // Load Spotify Web Playback SDK only once

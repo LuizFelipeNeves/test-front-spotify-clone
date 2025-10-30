@@ -37,8 +37,15 @@ export function CreatePlaylistModal({ isOpen, onClose, onCreatePlaylist, isCreat
     <div
       className="fixed inset-0 bg-black/30 backdrop-blur-[2px] flex items-center justify-center z-50"
       onClick={handleOverlayClick}
+      data-testid="modal-backdrop"
     >
-      <div className="bg-gray-800 rounded-lg p-6 w-full max-w-sm mx-4 relative" role="dialog" aria-modal="true" aria-labelledby="playlist-name-title">
+      <div 
+        className="bg-gray-800 rounded-lg p-6 w-full max-w-sm mx-4 relative" 
+        role="dialog" 
+        aria-modal="true" 
+        aria-labelledby="playlist-name-title"
+        data-testid="create-playlist-modal"
+      >
         {/* Close button */}
         <Button
           onClick={onClose}
@@ -67,6 +74,7 @@ export function CreatePlaylistModal({ isOpen, onClose, onCreatePlaylist, isCreat
               className="w-full bg-transparent border-b border-gray-600 text-white text-xl font-semibold text-center pb-2 focus:outline-none focus:border-green-500 transition-colors"
               autoFocus
               maxLength={100}
+              data-testid="playlist-name-input"
             />
           </div>
 
@@ -76,6 +84,7 @@ export function CreatePlaylistModal({ isOpen, onClose, onCreatePlaylist, isCreat
               disabled={!playlistName.trim() || isCreating}
               className="px-8 py-3 font-semibold rounded-full flex items-center gap-2 focus:bg-green-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-colors"
               variant="spotify"
+              data-testid="create-button"
             >
               {isCreating && (
                 <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">

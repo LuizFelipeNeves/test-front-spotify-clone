@@ -66,6 +66,8 @@ export function PlaylistCard({ playlist, onClick, className }: PlaylistCardProps
   return (
     <div
       onClick={handleClick}
+      data-testid="playlist-card"
+      aria-label={`Playlist ${playlist.name}. Por ${playlist.owner.display_name}. ${formatTrackCount(playlist.tracks.total)}${playlist.description ? `. Descrição: ${playlist.description}` : ''}`}
       className={cn(
         'group relative bg-gray-900 rounded-lg p-4 hover:bg-gray-800 transition-all duration-300 cursor-pointer h-24 flex flex-col',
         className

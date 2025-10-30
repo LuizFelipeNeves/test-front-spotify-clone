@@ -98,7 +98,7 @@ export function InfiniteScrollList<T>({
   }
 
   return (
-    <div className={className}>
+    <div className={className} data-testid="infinite-scroll">
       <div className={gridClassName}>
         {items.map((item, index) => (
           <div key={index}>

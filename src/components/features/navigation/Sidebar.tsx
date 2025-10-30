@@ -26,6 +26,7 @@ export function Sidebar({ className, isOpen = true, onClose }: SidebarProps) {
 
   return (
     <aside
+      data-testid="sidebar"
       className={cn(
         'w-64 bg-black border-r border-gray-900 p-6 flex flex-col h-full fixed md:static top-0 left-0 transform transition-transform duration-300 ease-in-out',
         isOpen ? 'translate-x-0' : '-translate-x-full',

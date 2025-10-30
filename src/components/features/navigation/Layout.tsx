@@ -38,12 +38,16 @@ export function Layout({ children, className = '' }: LayoutProps) {
       <MusicPlayerBar />
 
       {/* Mobile Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-700 px-3 py-1.5 z-50 md:hidden">
+      <nav 
+        data-testid="mobile-menu"
+        className="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-700 px-3 py-1.5 z-50 md:hidden"
+      >
         <div className="flex items-center justify-around">
           {mobileNavItems.map(({ to, label, icon: Icon }) => (
             <Link
               key={to}
               to={to}
+              data-testid={`nav-${label.toLowerCase()}`}
               className={`flex flex-col items-center gap-0.5 p-1.5 rounded transition-colors ${
                 isActive(to)
                   ? 'text-white'

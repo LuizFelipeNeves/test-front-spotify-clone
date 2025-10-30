@@ -56,6 +56,7 @@ export function CreateButton({
   return (
     <button
       onClick={onClick}
+      data-testid="create-playlist-button"
       className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
       title={title}
       aria-label={ariaLabel}

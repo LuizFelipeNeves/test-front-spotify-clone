@@ -16,7 +16,7 @@ interface PlaylistCardProps {
 }
 
 export function PlaylistCard({ playlist, onClick, className }: PlaylistCardProps) {
-  const fallbackImage = 'https://via.placeholder.com/300x300/1f2937/9ca3af?text=Playlist';
+  const fallbackImage = 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=300&h=300&fit=crop';
 
   const bestImageUrl = useMemo(() => {
     if (!playlist.images?.length) return null;

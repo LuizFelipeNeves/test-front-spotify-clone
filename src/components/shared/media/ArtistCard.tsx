@@ -9,7 +9,7 @@ interface ArtistCardProps {
   className?: string;
 }
 
-const fallBackImage = 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=200&h=200&fit=crop'
+const fallBackImage = 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=300&h=300&fit=crop'
 
 export function ArtistCard({ artist, onClick, onPlay, className = '' }: ArtistCardProps) {
   const handleClick = () => {

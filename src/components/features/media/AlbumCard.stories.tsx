@@ -1,22 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { fn } from '@storybook/test';
-import { vi } from 'vitest';
 import { AlbumCard } from './AlbumCard';
 import type { Album } from '@/types';
 
-// Mock do hook useImageCache
-const mockUseImageCache = {
-  imageUrl: 'https://i.scdn.co/image/ab67616d0000b273dc30583ba717007b00cceb25',
-  isLoading: false,
-  error: null,
-  retry: fn(),
-  preloadImage: fn(),
-};
-
-// Mock do módulo useImageCache
-vi.mock('@/hooks/useImageCache', () => ({
-  useImageCache: () => mockUseImageCache,
-}));
+// Para o Storybook, não precisamos mockar o useImageCache
+// O hook funcionará normalmente com as imagens fornecidas
 
 const meta = {
   title: 'Features/Media/AlbumCard',

@@ -1,7 +1,15 @@
 import type { Preview } from '@storybook/react';
 import '../src/index.css';
+import { MockSpotifyPlayerProvider } from './MockProviders';
 
 const preview: Preview = {
+  decorators: [
+    (Story) => (
+       <MockSpotifyPlayerProvider>
+        <Story />
+      </MockSpotifyPlayerProvider>
+    ),
+  ],
   parameters: {
     controls: {
       matchers: {

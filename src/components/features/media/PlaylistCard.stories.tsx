@@ -1,65 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { fn } from '@storybook/test';
-import { vi } from 'vitest';
 import { PlaylistCard } from './PlaylistCard';
 import type { Playlist } from '@/types';
-
-// Mocks dos hooks e contextos
-const mockUseImageCache = {
-  imageUrl: 'https://i.scdn.co/image/ab67706c0000da84c6c4c8b6b6b6b6b6b6b6b6b6',
-  isLoading: false,
-};
-
-const mockUsePlaylistTracks = {
-  data: {
-    items: [
-      { track: { id: '1', name: 'Track 1' } },
-      { track: { id: '2', name: 'Track 2' } },
-      { track: { id: '3', name: 'Track 3' } },
-    ],
-  },
-};
-
-const mockPlayerStore = {
-  setCurrentTrack: fn(),
-  setQueue: fn(),
-  setIsPlaying: fn(),
-};
-
-const mockSpotifyPlayerContext = {
-  playTrack: fn(),
-  isReady: true,
-};
-
-// Mocks
-vi.mock('@/hooks/useImageCache', () => ({
-  useImageCache: () => mockUseImageCache,
-}));
-
-vi.mock('@/hooks/useSpotifyQueries', () => ({
-  usePlaylistTracks: () => mockUsePlaylistTracks,
-}));
-
-vi.mock('@/store/playerStore', () => ({
-  usePlayerStore: () => mockPlayerStore,
-}));
-
-vi.mock('@/contexts/SpotifyPlayerContext', () => ({
-  useSpotifyPlayerContext: () => mockSpotifyPlayerContext,
-}));
-
-vi.mock('@/components/ui', () => ({
-  Button: ({ children, onClick, ...props }: any) => (
-    <button onClick={onClick} {...props}>
-      {children}
-    </button>
-  ),
-  Indicator: ({ label, color, icon }: any) => (
-    <span className={`indicator ${color}`} data-icon={icon}>
-      {label}
-    </span>
-  ),
-}));
 
 const meta = {
   title: 'Features/Media/PlaylistCard',
@@ -303,10 +245,6 @@ Demonstra como o card se comporta durante o carregamento da imagem:
   },
   args: {
     playlist: samplePlaylist,
-  },
-  beforeEach: () => {
-    // Mock para simular carregamento
-    vi.mocked(mockUseImageCache).isLoading = true;
   },
 };
 

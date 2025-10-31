@@ -1,4 +1,5 @@
-import type { StorybookConfig } from '@storybook/react-vite';
+import { StorybookConfig } from '@storybook/react-vite';
+import path from 'path';
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
@@ -14,19 +15,18 @@ const config: StorybookConfig = {
   typescript: {
     check: false,
     reactDocgen: 'react-docgen-typescript',
-    reactDocgenTypescriptOptions: {
-      shouldExtractLiteralValuesFromEnum: true,
-      propFilter: (prop) => (prop.parent ? !/node_modules/.test(prop.parent.fileName) : true),
-    },
   },
-  viteFinal: async (config) => {
-    // Merge custom configuration into the default config
+  async viteFinal(config, { configType }) {
     const { mergeConfig } = await import('vite');
-    
+
     return mergeConfig(config, {
-      // Add dependencies to pre-optimization
+      resolve: {
+        alias: {
+          '@': path.resolve(__dirname, '../src'),
+        },
+      },
       optimizeDeps: {
-        include: ['storybook > @storybook/core > util'],
+        include: [],
       },
     });
   },

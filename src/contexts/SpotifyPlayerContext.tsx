@@ -1,3 +1,4 @@
+// contexts/SpotifyPlayerContext.tsx
 import React, { createContext, useContext } from 'react';
 import { useSpotifyPlayer } from '@/hooks/useSpotifyPlayer';
 import type { SpotifyPlayer } from '@/types/spotify';
@@ -18,7 +19,7 @@ interface SpotifyPlayerContextType {
   toggleRepeat: (repeat: 'track' | 'context' | 'off') => Promise<void>;
 }
 
-const SpotifyPlayerContext = createContext<SpotifyPlayerContextType | null>(null);
+export const SpotifyPlayerContext = createContext<SpotifyPlayerContextType | null>(null);
 
 export const SpotifyPlayerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const spotifyPlayer = useSpotifyPlayer();

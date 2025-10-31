@@ -1,17 +1,28 @@
 # 🎵 Spotify Clone
-
 Um clone do Spotify desenvolvido com **React + TypeScript + Vite + Tailwind CSS + PWA**.
 
-## 🚀 Stack
+* **Gerenciamento de Estado:** Utilizamos **React Query** para gerenciamento de estado assíncrono (cache de dados, requisições) e **Local Storage** para persistência de dados simples, complementado por **React Context** para estados mais localizados ou injeção de dependências.
+* **Hooks Customizados:** Lógicas reutilizáveis e complexas são encapsuladas em hooks customizados (`useAuth`, `useSpotifyIntegration`, etc.), promovendo a abstração e facilitando testes.
+* **Camada de Serviços:** A lógica de negócio e a interação com APIs externas (como a do Spotify) são centralizadas em uma camada de `services`, garantindo a separação de preocupações e facilitando a manutenção e testes unitários.
+* **Acessibilidade (A11y):** Todos os componentes são desenvolvidos com foco em acessibilidade, utilizando semântica HTML apropriada e atributos ARIA quando necessário, garantindo que a aplicação seja utilizável por todos.
+* **Estratégia de Testes:** Adotamos uma abordagem abrangente de testes, incluindo:
 
-- **React 18 + TypeScript**
-- **Vite** – build tool
-- **Tailwind CSS** – estilização
-- **PWA** – Progressive Web App
-- **Vitest** – testes unitários
-- **Cypress** – testes E2E
-- **Storybook** – documentação
-- **GitHub Actions** – CI/CD
+  * **Testes Unitários:** Com **Vitest**, para garantir a correção de funções e componentes isolados.
+  * **Testes E2E:** Com **Cypress**, para validar fluxos de usuário completos e a integração entre diferentes partes da aplicação. 
+
+  * **Testes Visuais e Documentação:** Com **Storybook**, para documentar componentes, facilitar o desenvolvimento isolado e realizar testes visuais em diferentes estados.
+
+   ⚠️ **Observação**: não foi possível finalizar os testes E2E.
+---
+
+### Arquitetura e padrões de design
+
+* **Componentização e Reusabilidade:** Componentes isolados, fortemente tipados com TypeScript, organizados por domínio (`features`, `shared`, `ui`). Priorizamos composição e separação clara entre lógica de negócio e apresentação.
+* **Gerenciamento de Estado:** **React Query** + **Local Storage** para estados persistentes, complementado por **React Context** para casos específicos.
+* **Hooks Customizados:** Abstração de lógica complexa em hooks (`useAuth`, `useSpotifyIntegration`).
+* **Camada de Serviços:** Interação com APIs externas centralizada em `services`.
+* **Acessibilidade (A11y):** Uso de semântica HTML apropriada e atributos ARIA.
+* **Estratégia de Testes:** Testes unitários (Vitest), E2E (Cypress, com instabilidade em alguns casos), testes visuais e documentação (Storybook).
 
 ## 🏃‍♂️ Setup
 

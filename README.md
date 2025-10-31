@@ -8,11 +8,12 @@ Um clone do Spotify desenvolvido com **React + TypeScript + Vite + Tailwind CSS 
 * **Estratégia de Testes:** Adotamos uma abordagem abrangente de testes, incluindo:
 
   * **Testes Unitários:** Com **Vitest**, para garantir a correção de funções e componentes isolados.
-  * **Testes E2E:** Com **Cypress**, para validar fluxos de usuário completos e a integração entre diferentes partes da aplicação. 
+
+  * **Testes E2E:** Com **Cypress**, para validar fluxos de usuário completos e a integração entre diferentes partes da aplicação.
 
   * **Testes Visuais e Documentação:** Com **Storybook**, para documentar componentes, facilitar o desenvolvimento isolado e realizar testes visuais em diferentes estados.
 
-   ⚠️ **Observação**: não foi possível finalizar os testes E2E.
+  ⚠️ **Observação**: não foi possível finalizar os testes E2E.
 ---
 
 ### Arquitetura e padrões de design
@@ -27,8 +28,8 @@ Um clone do Spotify desenvolvido com **React + TypeScript + Vite + Tailwind CSS 
 ## 🏃‍♂️ Setup
 
 ### Pré-requisitos
-- **Node.js 18+**
-- **npm**
+* **Node.js 18+**
+* **npm**
 
 ### Instalação
 
@@ -48,14 +49,15 @@ cp .env.example .env
 npm run dev
 ```
 
-Acesse: http://localhost:5173
+Acesse: [http://localhost:5173](http://localhost:5173)
 
 ### 📚 Storybook
 
 ```bash
 npm run storybook
 ```
-Acesse: http://localhost:6006
+
+Acesse: [http://localhost:6006](http://localhost:6006)
 
 ### 🐳 Docker
 
@@ -99,26 +101,29 @@ npm run cypress:run
 
 ## 🧩 Funcionalidades (v1)
 
-- [x] Tela de **Login**
-- [x] Tela de **Artistas**
-- [x] Componente de **Playlists**
-- [x] Tela de **Perfil do Usuário**
-- [x] Componente de **Artista (detalhes)**
-- [x] **Modal de Playlist**
-- [x] Integração com a **API do Spotify**
-- [x] Responsividade (mobile e tablet)
-- [x] Suporte **PWA**
-- [x] Configuração de **Sentry**, 
-- [x] Configurar **Lint**
-- [x] Configurar **Storybook**
-- [x] Módulo de **Player de Música**
-- [x] Controles de **Play/Pause, Skip, Shuffle, Volume**x
+* [x] Tela de **Login**
+* [x] Tela de **Artistas**
+* [x] Componente de **Playlists**
+* [x] Tela de **Perfil do Usuário**
+* [x] Componente de **Artista (detalhes)**
+* [x] **Modal de Playlist**
+* [x] Integração com a **API do Spotify**
+* [x] Responsividade (mobile e tablet)
+* [x] Suporte **PWA**
+* [x] Configuração de **Sentry**,
+* [x] Configurar **Lint**
+* [x] Configurar **Storybook**
+* [x] Módulo de **Player de Música**
+* [x] Controles de **Play/Pause, Skip, Shuffle, Volume**x
+
 ---
 
 ## 🧭 Planejamento Futuro (v2)
-- [ ] Sincronização de estado com API em tempo real
-- [ ] Tela de **Reprodução Atual**
-- [ ] Histórico de reprodução e recomendações personalizadas
+
+* [ ] Sincronização de estado com API em tempo real
+* [ ] Tela de **Reprodução Atual**
+* [ ] Histórico de reprodução e recomendações personalizadas
+
 ---
 
 ## 🧠 Boas Práticas
@@ -200,19 +205,28 @@ npm run dev
 
 ---
 
+## 🔗 Link do Deploy
+
+Acesse o projeto online: [Spotify Clone](https://test-front-spotify-clone.vercel.app)
+
+---
+
 ## 🔧 Troubleshooting
 
 ### Problemas Comuns
 
 #### ❌ Erro de dependências peer
+
 ```bash
 # Solução: Use --legacy-peer-deps
 npm install --legacy-peer-deps
 ```
 
 #### ❌ Erro "crypto.hash is not a function"
-- **Causa:** Versão do Node.js incompatível
-- **Solução:** Use Node.js 20.19+ ou 22.12+
+
+* **Causa:** Versão do Node.js incompatível
+* **Solução:** Use Node.js 20.19+ ou 22.12+
+
 ```bash
 # Verificar versão do Node
 node --version
@@ -223,6 +237,7 @@ nvm use 20
 ```
 
 #### ❌ Docker build falha
+
 ```bash
 # Limpar cache do Docker
 docker system prune -a
@@ -232,6 +247,7 @@ docker build --no-cache --target development -t magalu-spotify2:dev .
 ```
 
 #### ❌ Porta já em uso
+
 ```bash
 # Verificar processos na porta
 lsof -i :5173  # ou :6006 para Storybook
@@ -241,6 +257,7 @@ kill -9 <PID>
 ```
 
 #### ❌ Storybook não carrega
+
 ```bash
 # Reinstalar dependências
 rm -rf node_modules package-lock.json

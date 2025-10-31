@@ -72,6 +72,7 @@ export function ArtistCard({
       className={`relative hover:bg-gray-900 p-3 sm:p-4 lg:p-5 rounded-lg cursor-pointer transition-all duration-300 group ${className}`}
       role="button"
       tabIndex={0}
+      onClick={handleClick}
       onKeyDown={handleKeyDown}
       aria-label={`Ver detalhes de ${artist.name}`}
     >

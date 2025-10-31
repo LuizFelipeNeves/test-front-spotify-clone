@@ -23,11 +23,6 @@ export default function ArtistsPage() {
     navigate(`/artists/${artist.id}`);
   };
 
-  const handleArtistPlay = (artist: Artist) => {
-    // TODO: Implementar função de play do artista
-    console.log('Playing artist:', artist.name);
-  };
-
   const handleRetry = () => {
     // Refetch data
     window.location.reload();
@@ -60,7 +55,6 @@ export default function ArtistsPage() {
               key={artist.id}
               artist={artist}
               onClick={handleArtistClick}
-              onPlay={handleArtistPlay}
               // Accessibility attributes
               aria-label={`Artista ${artist.name}. ${artist.followers ? `${artist.followers.total} seguidores.` : ''} ${artist.genres ? `Gêneros: ${artist.genres.slice(0, 2).join(', ')}.` : ''}`}
             />

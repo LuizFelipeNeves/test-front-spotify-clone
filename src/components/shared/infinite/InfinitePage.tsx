@@ -39,7 +39,7 @@ export function InfinitePage<T>({
 }: InfinitePageProps<T>) {
   const navigate = useNavigate();
   const { getEmptyState, handleRetry } = useContentPage({
-    contentType: title.toLowerCase() as any
+    contentType: title.toLowerCase() as 'artists' | 'playlists' | 'albums' | 'tracks',
   });
 
   // Flatten all pages into a single array

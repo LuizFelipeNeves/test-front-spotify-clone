@@ -67,7 +67,7 @@ export function UserAvatar({
       ) : cachedImageUrl ? (
         <img
           src={cachedImageUrl}
-          alt={displayName}
+          alt={displayName || ''}
           className={`${sizeClasses[size]} rounded-full mx-auto object-cover`}
         />
       ) : (

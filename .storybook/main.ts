@@ -16,7 +16,7 @@ const config: StorybookConfig = {
     check: false,
     reactDocgen: 'react-docgen-typescript',
   },
-  async viteFinal(config, { configType }) {
+  async viteFinal(config) {
     const { mergeConfig } = await import('vite');
 
     return mergeConfig(config, {

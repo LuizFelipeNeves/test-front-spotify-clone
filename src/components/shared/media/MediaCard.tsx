@@ -18,6 +18,12 @@ interface MediaCardProps<T extends MediaItemBase> {
 }
 
 // Componente genérico para cards de mídia (Artista, Álbum, Playlist)
+interface MediaCardExtraProps {
+  'data-testid'?: string;
+  id?: string;
+  // outros atributos que você realmente quer repassar
+}
+
 export function MediaCard<T extends MediaItemBase>({
   item,
   type,
@@ -27,7 +33,8 @@ export function MediaCard<T extends MediaItemBase>({
   className = '',
   subtitle,
   metadata,
-}: MediaCardProps<T>) {
+  ...extraProps // só props extras seguras
+}: MediaCardProps<T> & MediaCardExtraProps) {
   const getFallbackImage = () => {
     switch (type) {
       case 'artist':
@@ -42,30 +49,25 @@ export function MediaCard<T extends MediaItemBase>({
   };
 
   const handleCardClick = () => {
-    if (!isLoading && onClick) {
-      onClick(item);
-    }
+    if (!isLoading && onClick) onClick(item);
   };
 
   const handlePlayClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!isLoading && onPlay) {
-      onPlay(item);
-    }
+    if (!isLoading && onPlay) onPlay(item);
   };
 
   if (isLoading) {
     return (
       <div
         className={`group relative bg-gray-800 rounded-md overflow-hidden transition-all duration-300 hover:bg-gray-700 cursor-pointer ${className}`}
+        {...extraProps} // só repassa data-testid ou id
       >
         <div className="aspect-square w-full bg-gray-700 animate-pulse" />
         <div className="p-3 space-y-2">
           <div className="h-4 bg-gray-700 rounded animate-pulse" />
           <div className="h-3 bg-gray-700 rounded w-3/4 animate-pulse" />
-          {metadata && (
-            <div className="h-3 bg-gray-700 rounded w-1/2 animate-pulse" />
-          )}
+          {metadata && <div className="h-3 bg-gray-700 rounded w-1/2 animate-pulse" />}
         </div>
       </div>
     );
@@ -77,6 +79,7 @@ export function MediaCard<T extends MediaItemBase>({
     <div
       onClick={handleCardClick}
       className={`group relative bg-gray-800 rounded-md overflow-hidden transition-all duration-300 hover:bg-gray-700 cursor-pointer ring-1 ring-white/10 hover:ring-white/20 ${className}`}
+      {...extraProps} // repassa só props seguras
     >
       <div className="aspect-square relative">
         <img
@@ -88,7 +91,6 @@ export function MediaCard<T extends MediaItemBase>({
             target.src = getFallbackImage();
           }}
         />
-        {/* Play button overlay */}
         {onPlay && (
           <div
             onClick={handlePlayClick}

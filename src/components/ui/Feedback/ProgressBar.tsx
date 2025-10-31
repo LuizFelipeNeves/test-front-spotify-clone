@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 
 interface ProgressBarProps {
   progress: number;
@@ -52,7 +52,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
     setIsDragging(true);
   };
 
-  const handleProgressMouseMove = (e: MouseEvent) => {
+  const handleProgressMouseMove = useCallback((e: MouseEvent) => {
     if (!isDragging || !progressBarRef.current || !duration) return;
 
     const rect = progressBarRef.current.getBoundingClientRect();
@@ -60,9 +60,9 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
     const newProgress = Math.max(0, Math.min(duration, (clickX / rect.width) * duration));
     
     setLocalProgress(newProgress);
-  };
+  }, [isDragging, progressBarRef, duration]);
 
-  const handleProgressMouseUp = () => {
+  const handleProgressMouseUp = useCallback(() => {
     if (isDragging) {
       setIsDragging(false);
 
@@ -70,7 +70,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
         onSeek(localProgress);
       }
     }
-  };
+  }, [isDragging, localProgress, progress, onSeek]);
 
   // Keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -128,7 +128,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
         document.removeEventListener('mouseup', handleProgressMouseUp);
       };
     }
-  }, [isDragging]);
+  }, [isDragging, handleProgressMouseMove, handleProgressMouseUp]);
 
   const progressPercentage = duration ? (localProgress / duration) * 100 : 0;
 

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { AlbumCard } from '@/components';
 import type { Album } from '@/types';
@@ -10,9 +9,7 @@ interface AlbumGridProps {
 }
 
 export const AlbumGrid: React.FC<AlbumGridProps> = ({ title, albums, onPlay }) => {
-  if (albums.length === 0) {
-    return null;
-  }
+  if (albums.length === 0) return null;
 
   return (
     <div className="mb-12">
@@ -23,6 +20,7 @@ export const AlbumGrid: React.FC<AlbumGridProps> = ({ title, albums, onPlay }) =
             key={`${title}-${album.id}`}
             item={album}
             onPlay={onPlay}
+            data-testid={`album-card-${album.id}`} // facilita o teste
           />
         ))}
       </div>

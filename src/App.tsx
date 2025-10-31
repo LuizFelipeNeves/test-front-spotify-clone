@@ -22,7 +22,7 @@ const queryClient = new QueryClient({
     queries: {
       staleTime: 5 * 60 * 1000, // 5 minutos
       gcTime: 10 * 60 * 1000, // 10 minutos
-      retry: (failureCount, error: any) => {
+      retry: (failureCount, error: Error & { status?: number }) => {
         // Não tenta novamente se for erro de rede (offline)
         if (error?.message?.includes('Failed to fetch') || !navigator.onLine) {
           return false;

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui';
 import { UI_TEXTS } from '@/constants/ui';
 
@@ -9,8 +9,27 @@ interface CreatePlaylistModalProps {
   isCreating?: boolean;
 }
 
-export function CreatePlaylistModal({ isOpen, onClose, onCreatePlaylist, isCreating = false }: CreatePlaylistModalProps) {
+export function CreatePlaylistModal({
+  isOpen,
+  onClose,
+  onCreatePlaylist,
+  isCreating = false,
+}: CreatePlaylistModalProps) {
   const [playlistName, setPlaylistName] = useState('');
+
+  // Esc key handler
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -21,7 +40,6 @@ export function CreatePlaylistModal({ isOpen, onClose, onCreatePlaylist, isCreat
         await onCreatePlaylist(playlistName.trim());
         setPlaylistName('');
       } catch (error) {
-        // Error handling is done in the parent component
         console.error('Erro ao criar playlist:', error);
       }
     }
@@ -39,32 +57,45 @@ export function CreatePlaylistModal({ isOpen, onClose, onCreatePlaylist, isCreat
       onClick={handleOverlayClick}
       data-testid="modal-backdrop"
     >
-      <div 
-        className="bg-gray-800 rounded-lg p-6 w-full max-w-sm mx-4 relative" 
-        role="dialog" 
-        aria-modal="true" 
+      <div
+        className="bg-gray-800 rounded-lg p-6 w-full max-w-sm mx-4 relative"
+        role="dialog"
+        aria-modal="true"
         aria-labelledby="playlist-name-title"
         data-testid="create-playlist-modal"
       >
-        {/* Close button */}
         <Button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors p-0"
           aria-label="Fechar modal"
+          data-testid="close-button"
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
           </svg>
         </Button>
 
-        {/* Modal content */}
         <div className="text-center mb-4">
-          <h2 id="playlist-name-title" className="text-gray-400 text-sm mb-3">{UI_TEXTS.nomePlaylist}</h2>
+          <h2 id="playlist-name-title" className="text-gray-400 text-sm mb-3">
+            {UI_TEXTS.nomePlaylist}
+          </h2>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="mb-6">
-            <label htmlFor="playlist-name" className="sr-only">Nome da Playlist</label>
+            <label htmlFor="playlist-name" className="sr-only">
+              Nome da Playlist
+            </label>
             <input
               id="playlist-name"
               type="text"
@@ -88,8 +119,19 @@ export function CreatePlaylistModal({ isOpen, onClose, onCreatePlaylist, isCreat
             >
               {isCreating && (
                 <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
                 </svg>
               )}
               {isCreating ? UI_TEXTS.criando : UI_TEXTS.criar}

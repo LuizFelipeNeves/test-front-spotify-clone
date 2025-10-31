@@ -2,12 +2,12 @@ import React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { SpotifyPlayerContext } from '@/contexts/SpotifyPlayerContext';
 
-const queryClient = new QueryClient({
+const queryClient: QueryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 5 * 60 * 1000, // 5 minutos
       gcTime: 10 * 60 * 1000, // 10 minutos
-      retry: (failureCount, error: any) => {
+      retry: (failureCount, error) => {
         // Não tenta novamente se for erro de rede (offline)
         if (error?.message?.includes('Failed to fetch') || !navigator.onLine) {
           return false;

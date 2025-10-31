@@ -170,7 +170,7 @@ describe('AlbumCard', () => {
   });
 
   it('formats release date correctly for different date formats', () => {
-    const { rerender } = render(<AlbumCard album={mockAlbum} />);
+    render(<AlbumCard album={mockAlbum} />);
     expect(screen.getByText('2023')).toBeInTheDocument();
   });
 

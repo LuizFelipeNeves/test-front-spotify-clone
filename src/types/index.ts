@@ -9,6 +9,7 @@ export interface User {
   images: Image[];
   followers: {
     total: number;
+    href?: string | null;
   };
   country: string;
   product: string;
@@ -22,10 +23,13 @@ export interface Artist {
   popularity: number;
   followers: {
     total: number;
+    href?: string | null;
   };
   external_urls: {
     spotify: string;
   };
+  href?: string;
+  type?: string;
   uri: string;
 }
 
@@ -92,6 +96,7 @@ export interface AuthState {
   user: User | null;
   accessToken: string | null;
   refreshToken: string | null;
+  expiresAt: number | null;
 }
 
 export interface PlayerState {
@@ -112,6 +117,12 @@ export interface SpotifyApiResponse<T> {
   offset: number;
   next: string | null;
   previous: string | null;
+}
+
+export interface ApiError {
+  message: string;
+  status: number;
+  code?: string;
 }
 
 // Component Props types

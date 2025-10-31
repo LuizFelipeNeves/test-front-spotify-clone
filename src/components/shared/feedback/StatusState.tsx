@@ -63,8 +63,8 @@ export const StatusState: React.FC<StatusStateProps> = ({
   };
 
   const defaultMessages = getDefaultMessages();
-  const displayMessage = message || defaultMessages.message;
-  const displayDescription = description || defaultMessages.description;
+  const showMessage = message && message.trim() !== '' ? message : (message === '' ? null : defaultMessages.message);
+  const showDescription = description && description.trim() !== '' ? description : (description === '' ? null : defaultMessages.description);
 
   return (
     <div className={`flex flex-col items-center justify-center text-center p-8 ${className}`}>
@@ -72,15 +72,15 @@ export const StatusState: React.FC<StatusStateProps> = ({
         {renderIcon()}
       </div>
 
-      {displayMessage && (
+      {showMessage && (
         <h3 className="text-white text-lg font-medium mb-2">
-          {displayMessage}
+          {showMessage}
         </h3>
       )}
 
-      {displayDescription && (
+      {showDescription && (
         <p className="text-gray-400 text-sm mb-4 max-w-md">
-          {displayDescription}
+          {showDescription}
         </p>
       )}
 

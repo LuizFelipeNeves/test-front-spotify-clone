@@ -145,7 +145,7 @@ export function useImageCache(
         URL.revokeObjectURL(imageUrl);
       }
     };
-  }, []);
+  }, [imageUrl]);
 
   return {
     imageUrl,

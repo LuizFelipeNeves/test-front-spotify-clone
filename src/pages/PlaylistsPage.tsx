@@ -33,10 +33,6 @@ export default function PlaylistsPage() {
     window.location.reload();
   };
 
-  const handleCreatePlaylist = () => {
-    setIsModalOpen(true);
-  };
-
   const handleCreatePlaylistSubmit = async (name: string) => {
     try {
       setIsCreating(true);

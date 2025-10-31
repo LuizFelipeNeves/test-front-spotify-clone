@@ -32,9 +32,11 @@ export const ArtistDetailHeader: React.FC<ArtistDetailHeaderProps> = ({ artist }
         )}
         <div>
           <h1 className="text-2xl font-bold mb-2">{artist.name}</h1>
-          <p className="text-gray-400 text-sm">
-            {artist.followers?.total?.toLocaleString()} seguidores
-          </p>
+          {artist.followers?.total !== undefined && (
+            <p className="text-gray-400 text-sm">
+              {artist.followers.total.toLocaleString()} seguidores
+            </p>
+          )}
           {artist.genres?.length > 0 && (
             <p className="text-gray-400 text-sm mt-1">
               {artist.genres.slice(0, 3).join(', ')}

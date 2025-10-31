@@ -10,6 +10,15 @@ export interface SpotifyTokenResponse {
   refresh_token: string;
 }
 
+export interface SpotifyUserData {
+  id: string;
+  display_name: string;
+  email: string;
+  country: string;
+  product: string;
+  images: Array<{ url: string }>;
+}
+
 export class AuthService {
   private static readonly SPOTIFY_SCOPES = [
     'user-read-private',
@@ -33,10 +42,10 @@ export class AuthService {
    */
   private static isTestEnvironment(): boolean {
     return (
-      typeof window !== 'undefined' && 
-      (window as any).Cypress !== undefined
-    ) || 
-    (typeof navigator !== 'undefined' && 
+      typeof window !== 'undefined' &&
+      (window as unknown as { Cypress?: unknown }).Cypress !== undefined
+    ) ||
+    (typeof navigator !== 'undefined' &&
      navigator.userAgent.includes('Cypress'));
   }
 
@@ -156,7 +165,7 @@ export class AuthService {
   static setAuthData(
     accessToken: string,
     refreshToken: string,
-    user: any,
+    user: SpotifyUserData,
     expiresIn: number
   ): void {
     const expiresAt = AuthService.calculateTokenExpiration(expiresIn);
@@ -170,7 +179,7 @@ export class AuthService {
   static getAuthData(): {
     accessToken: string | null;
     refreshToken: string | null;
-    user: any | null;
+    user: SpotifyUserData | null;
     expiresAt: number | null;
   } {
     const accessToken = localStorage.getItem(AuthService.STORAGE_KEYS.ACCESS_TOKEN);
@@ -190,7 +199,7 @@ export class AuthService {
     Object.values(AuthService.STORAGE_KEYS).forEach((key) => localStorage.removeItem(key));
   }
 
-  static updateUserData(user: any): void {
+  static updateUserData(user: SpotifyUserData): void {
     localStorage.setItem(AuthService.STORAGE_KEYS.USER, JSON.stringify(user));
   }
 }

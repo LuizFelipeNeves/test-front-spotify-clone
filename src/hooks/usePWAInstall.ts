@@ -35,7 +35,7 @@ export function usePWAInstall(): PWAInstallState & PWAInstallActions {
   // Verifica se o PWA já está instalado
   const checkInstallStatus = useCallback(() => {
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-    const isInWebAppiOS = (window.navigator as any).standalone === true;
+    const isInWebAppiOS = (window.navigator as unknown as { standalone?: boolean }).standalone === true;
     const isInstalled = isStandalone || isInWebAppiOS;
     
     setState(prev => ({ ...prev, isInstalled, isLoading: false }));

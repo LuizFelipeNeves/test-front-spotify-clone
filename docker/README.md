@@ -160,7 +160,7 @@ Execução de testes E2E
 ```env
 NODE_ENV=development
 VITE_SPOTIFY_CLIENT_ID=your_client_id
-VITE_SPOTIFY_REDIRECT_URI=http://localhost:5173/callback
+VITE_SPOTIFY_REDIRECT_URI=http://[::1]:5173/callback
 ```
 
 ### Produção

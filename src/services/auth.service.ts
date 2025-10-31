@@ -1,7 +1,7 @@
 const SPOTIFY_CLIENT_ID = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
 const SPOTIFY_CLIENT_SECRET = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
 const SPOTIFY_REDIRECT_URI =
-  import.meta.env.VITE_SPOTIFY_REDIRECT_URI || 'http://localhost:5174/callback';
+  import.meta.env.VITE_SPOTIFY_REDIRECT_URI || 'http://[::1]:5173/callback';
 
 export interface SpotifyTokenResponse {
   access_token: string;

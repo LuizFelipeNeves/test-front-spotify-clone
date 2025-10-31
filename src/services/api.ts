@@ -23,47 +23,90 @@ class ApiClient {
     return accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
   }
 
+  private async handleUnauthorizedResponse(): Promise<ApiError> {
+    const { refreshToken } = useAuthStore.getState();
+
+    if (!refreshToken) {
+      this.performLogoutIfNeeded();
+      return {
+        message: 'No refresh token available',
+        status: 401,
+      };
+    }
+
+    try {
+      return await this.handleTokenRefresh();
+    } catch (refreshError) {
+      this.handleRefreshError(refreshError);
+      return {
+        message: 'Token refresh failed',
+        status: 401,
+      };
+    }
+  }
+
+  private async handleTokenRefresh(): Promise<ApiError> {
+    const { refreshToken, setTokens } = useAuthStore.getState();
+
+    const { AuthService } = await import('./auth.service');
+    if (!refreshToken) {
+      throw new Error('No refresh token available');
+    }
+    const newTokenData = await AuthService.refreshAccessToken(refreshToken);
+
+    setTokens(
+      newTokenData.access_token,
+      newTokenData.refresh_token || refreshToken || undefined
+    );
+
+    return {
+      message: 'Token refreshed, please retry the request',
+      status: 401,
+      code: 'TOKEN_REFRESHED',
+    };
+  }
+
+  private handleRefreshError(refreshError: unknown): void {
+    console.warn('Falha ao renovar token:', refreshError);
+
+    if (!this.isNetworkError(refreshError) && navigator.onLine) {
+      this.performLogoutIfNeeded();
+    }
+  }
+
+  private isNetworkError(error: unknown): boolean {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    return errorMessage.includes('Failed to fetch');
+  }
+
+  private performLogoutIfNeeded(): void {
+    if (navigator.onLine) {
+      const { logout } = useAuthStore.getState();
+      logout();
+    }
+  }
+
+  private createSuccessResponse<T>(data: T, status: number): ApiResponse<T> {
+    return {
+      data,
+      status,
+    };
+  }
+
+  private async parseJsonResponse<T>(response: Response): Promise<ApiResponse<T>> {
+    try {
+      const data = await response.json();
+      return this.createSuccessResponse(data, response.status);
+    } catch (error) {
+      return this.createSuccessResponse(null as T, response.status);
+    }
+  }
+
   private async handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
     if (!response.ok) {
-      // Se o token expirou (401), tenta renovar automaticamente
       if (response.status === 401) {
-        const { refreshToken } = useAuthStore.getState();
-        if (refreshToken) {
-          try {
-            const { AuthService } = await import('./auth.service');
-            const newTokenData =
-              await AuthService.refreshAccessToken(refreshToken);
-
-            // Atualiza o token no store
-            const { setTokens } = useAuthStore.getState();
-            setTokens(newTokenData.access_token, newTokenData.refresh_token);
-
-            // Não tenta refazer a requisição aqui, deixa para o chamador tentar novamente
-            const error: ApiError = {
-              message: 'Token refreshed, please retry the request',
-              status: 401,
-              code: 'TOKEN_REFRESHED',
-            };
-            throw error;
-          } catch (refreshError) {
-            console.warn('Falha ao renovar token:', refreshError);
-            // Só faz logout se não for erro de rede
-            const errorMessage =
-              refreshError instanceof Error
-                ? refreshError.message
-                : String(refreshError);
-            if (!errorMessage.includes('Failed to fetch') && navigator.onLine) {
-              const { logout } = useAuthStore.getState();
-              logout();
-            }
-          }
-        } else {
-          // Se não tem refresh token, só faz logout se estiver online
-          if (navigator.onLine) {
-            const { logout } = useAuthStore.getState();
-            logout();
-          }
-        }
+        const error = await this.handleUnauthorizedResponse();
+        throw error;
       }
 
       const error: ApiError = {
@@ -73,43 +116,18 @@ class ApiClient {
       throw error;
     }
 
-    // Handle 204 No Content responses (common for successful DELETE/PUT operations)
     if (response.status === 204) {
       console.log('📄 API Response: 204 No Content - treating as success');
-      return {
-        data: null as T,
-        status: response.status,
-      };
+      return this.createSuccessResponse(null as T, response.status);
     }
 
-    // Check if response has content before trying to parse JSON
     const contentType = response.headers.get('content-type');
     if (!contentType || !contentType.includes('application/json')) {
       console.log('📄 API Response: Non-JSON response, treating as success');
-      return {
-        data: null as T,
-        status: response.status,
-      };
+      return this.createSuccessResponse(null as T, response.status);
     }
 
-    // Only parse JSON if we're confident it's JSON
-    try {
-      const data = await response.json();
-      console.log('📄 API Response: JSON parsed successfully');
-      return {
-        data,
-        status: response.status,
-      };
-    } catch (error) {
-      console.warn(
-        '📄 API Response: Failed to parse JSON, treating as success:',
-        error
-      );
-      return {
-        data: null as T,
-        status: response.status,
-      };
-    }
+    return this.parseJsonResponse<T>(response);
   }
 
   async get<T>(

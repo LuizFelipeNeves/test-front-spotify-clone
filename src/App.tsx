@@ -9,7 +9,7 @@ import {
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useAuthStore } from '@/store/authStore';
 import { SpotifyPlayerProvider } from '@/contexts/SpotifyPlayerContext';
-import { Layout } from '@/components';
+import { Layout, PWAUpdateNotification } from '@/components';
 import LoginPage from '@/pages/LoginPage';
 import CallbackPage from '@/pages/CallbackPage';
 import HomePage from '@/pages/HomePage';
@@ -17,7 +17,6 @@ import ArtistsPage from '@/pages/ArtistsPage';
 import { ArtistDetailPage } from '@/pages/ArtistDetailPage';
 import PlaylistsPage from '@/pages/PlaylistsPage';
 import ProfilePage from '@/pages/ProfilePage';
-import { PWAUpdateNotification } from '@/components';
 import { ROUTES } from '@/utils/constants';
 import { UI_TEXTS } from '@/constants/ui';
 import './App.css';
@@ -74,7 +73,7 @@ function RouteAnnouncer() {
     document.body.appendChild(announcer);
 
     setTimeout(() => {
-      document.body.removeChild(announcer);
+      announcer.remove();
     }, 1000);
   }, [location.pathname]);
 
@@ -82,7 +81,7 @@ function RouteAnnouncer() {
 }
 
 // Componente para proteger rotas autenticadas
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
+function ProtectedRoute({ children }: { readonly children: React.ReactNode }) {
   const { isAuthenticated } = useAuthStore();
 
   if (!isAuthenticated) {

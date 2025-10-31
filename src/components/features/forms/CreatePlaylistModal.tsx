@@ -3,10 +3,10 @@ import { Button } from '@/components/ui';
 import { UI_TEXTS } from '@/constants/ui';
 
 interface CreatePlaylistModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onCreatePlaylist: (name: string) => Promise<void>;
-  isCreating?: boolean;
+  readonly isOpen: boolean;
+  readonly onClose: () => void;
+  readonly onCreatePlaylist: (name: string) => Promise<void>;
+  readonly isCreating?: boolean;
 }
 
 export function CreatePlaylistModal({

@@ -40,9 +40,9 @@ describe('AlbumGrid Component', () => {
     render(<AlbumGrid title="Albums" albums={albums} onPlay={jest.fn()} />);
 
     expect(screen.getByText('Albums')).toBeInTheDocument();
-    albums.forEach(a => {
+    for (const a of albums) {
       expect(screen.getByText(a.name)).toBeInTheDocument();
-    });
+    }
   });
 
   it('renders album images with alt text', () => {

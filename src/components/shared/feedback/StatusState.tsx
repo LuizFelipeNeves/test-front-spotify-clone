@@ -50,7 +50,8 @@ export const StatusState: React.FC<StatusStateProps> = ({
       case 'error':
         return {
           message: 'Ops! Algo deu errado',
-          description: 'Ocorreu um erro ao carregar o conteúdo. Tente novamente.',
+          description:
+            'Ocorreu um erro ao carregar o conteúdo. Tente novamente.',
         };
       case 'empty':
         return {
@@ -63,25 +64,31 @@ export const StatusState: React.FC<StatusStateProps> = ({
   };
 
   const defaultMessages = getDefaultMessages();
-  const showMessage = message && message.trim() !== '' ? message : (message === '' ? null : defaultMessages.message);
-  const showDescription = description && description.trim() !== '' ? description : (description === '' ? null : defaultMessages.description);
+  const showMessage =
+    message && message.trim() !== ''
+      ? message
+      : message === ''
+        ? null
+        : defaultMessages.message;
+  const showDescription =
+    description && description.trim() !== ''
+      ? description
+      : description === ''
+        ? null
+        : defaultMessages.description;
 
   return (
-    <div className={`flex flex-col items-center justify-center text-center p-8 ${className}`}>
-      <div className="mb-4">
-        {renderIcon()}
-      </div>
+    <div
+      className={`flex flex-col items-center justify-center text-center p-8 ${className}`}
+    >
+      <div className="mb-4">{renderIcon()}</div>
 
       {showMessage && (
-        <h3 className="text-white text-lg font-medium mb-2">
-          {showMessage}
-        </h3>
+        <h3 className="text-white text-lg font-medium mb-2">{showMessage}</h3>
       )}
 
       {showDescription && (
-        <p className="text-gray-400 text-sm mb-4 max-w-md">
-          {showDescription}
-        </p>
+        <p className="text-gray-400 text-sm mb-4 max-w-md">{showDescription}</p>
       )}
 
       {type === 'error' && onRetry && (
@@ -98,14 +105,14 @@ export const StatusState: React.FC<StatusStateProps> = ({
 };
 
 // Especializações para facilitar o uso
-export const EmptyState: React.FC<Omit<StatusStateProps, 'type'>> = (props) => (
+export const EmptyState: React.FC<Omit<StatusStateProps, 'type'>> = props => (
   <StatusState type="empty" {...props} />
 );
 
-export const ErrorState: React.FC<Omit<StatusStateProps, 'type'>> = (props) => (
+export const ErrorState: React.FC<Omit<StatusStateProps, 'type'>> = props => (
   <StatusState type="error" {...props} />
 );
 
-export const LoadingState: React.FC<Omit<StatusStateProps, 'type'>> = (props) => (
+export const LoadingState: React.FC<Omit<StatusStateProps, 'type'>> = props => (
   <StatusState type="loading" {...props} />
 );

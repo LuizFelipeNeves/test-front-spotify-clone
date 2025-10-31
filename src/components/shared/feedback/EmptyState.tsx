@@ -8,15 +8,15 @@ interface EmptyStateProps {
   className?: string;
 }
 
-export function EmptyState({ 
-  icon, 
-  title, 
-  description, 
-  action, 
-  className = '' 
+export function EmptyState({
+  icon,
+  title,
+  description,
+  action,
+  className = '',
 }: EmptyStateProps) {
   return (
-    <div 
+    <div
       className={`flex flex-col items-center justify-center text-center py-12 px-4 sm:px-8 ${className}`}
       role="status"
       aria-live="polite"
@@ -26,22 +26,18 @@ export function EmptyState({
           {icon}
         </div>
       )}
-      
+
       <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold text-white mb-2 sm:mb-3">
         {title}
       </h2>
-      
+
       {description !== undefined && (
         <p className="text-sm sm:text-base text-gray-400 mb-6 max-w-md leading-relaxed">
           {description}
         </p>
       )}
-      
-      {action && (
-        <div className="mt-2">
-          {action}
-        </div>
-      )}
+
+      {action && <div className="mt-2">{action}</div>}
     </div>
   );
 }

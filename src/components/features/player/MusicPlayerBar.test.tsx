@@ -45,7 +45,6 @@ vi.mock('@/store/playerStore', () => ({
   })),
 }));
 
-
 // 🔧 Mock do hook de favoritos
 const mockToggleFavorite = vi.fn();
 
@@ -104,7 +103,11 @@ describe('MusicPlayerBar', () => {
 
   it('displays shuffle and repeat active states when enabled', async () => {
     const { usePlayerStore } = await import('@/store/playerStore');
-    (usePlayerStore as unknown as { mockReturnValueOnce: (value: unknown) => void }).mockReturnValueOnce({
+    (
+      usePlayerStore as unknown as {
+        mockReturnValueOnce: (value: unknown) => void;
+      }
+    ).mockReturnValueOnce({
       isPlaying: true,
       currentTrack: {
         id: 'track123',
@@ -131,7 +134,11 @@ describe('MusicPlayerBar', () => {
 
   it('renders repeat-one icon when repeat mode is "track"', async () => {
     const { usePlayerStore } = await import('@/store/playerStore');
-    (usePlayerStore as unknown as { mockReturnValueOnce: (value: unknown) => void }).mockReturnValueOnce({
+    (
+      usePlayerStore as unknown as {
+        mockReturnValueOnce: (value: unknown) => void;
+      }
+    ).mockReturnValueOnce({
       isPlaying: true,
       currentTrack: {
         id: 'track123',
@@ -149,6 +156,8 @@ describe('MusicPlayerBar', () => {
 
     render(<MusicPlayerBar />);
 
-    expect(screen.getByTestId('repeat-button').querySelector('svg')).toBeInTheDocument();
+    expect(
+      screen.getByTestId('repeat-button').querySelector('svg')
+    ).toBeInTheDocument();
   });
 });

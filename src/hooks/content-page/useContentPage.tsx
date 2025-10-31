@@ -8,20 +8,21 @@ interface UseContentPageProps {
 const EMPTY_STATES = {
   artists: {
     message: 'Nenhum artista encontrado',
-    description: 'Comece a ouvir música para ver seus artistas favoritos aqui!'
+    description: 'Comece a ouvir música para ver seus artistas favoritos aqui!',
   },
   playlists: {
     message: 'Nenhuma playlist encontrada',
-    description: 'Crie sua primeira playlist para começar a organizar suas músicas!'
+    description:
+      'Crie sua primeira playlist para começar a organizar suas músicas!',
   },
   albums: {
     message: 'Nenhum álbum encontrado',
-    description: 'Explore álbuns para expandir sua biblioteca musical!'
+    description: 'Explore álbuns para expandir sua biblioteca musical!',
   },
   tracks: {
     message: 'Nenhuma música encontrada',
-    description: 'Adicione músicas para começar a construir sua coleção!'
-  }
+    description: 'Adicione músicas para começar a construir sua coleção!',
+  },
 };
 
 export function useContentPage({ contentType }: UseContentPageProps) {
@@ -38,6 +39,6 @@ export function useContentPage({ contentType }: UseContentPageProps) {
   return {
     isOnline,
     getEmptyState,
-    handleRetry
+    handleRetry,
   };
 }

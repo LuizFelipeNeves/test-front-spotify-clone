@@ -20,7 +20,7 @@ export function PageContent({
   headerClassName = '',
   contentClassName = '',
   className = '',
-  children
+  children,
 }: PageContentProps) {
   return (
     <div className={`p-4 sm:p-8 lg:p-12 ${className}`}>
@@ -32,9 +32,7 @@ export function PageContent({
         className={headerClassName}
       />
 
-      <div className={contentClassName}>
-        {children}
-      </div>
+      <div className={contentClassName}>{children}</div>
     </div>
   );
 }

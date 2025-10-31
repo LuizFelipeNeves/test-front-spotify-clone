@@ -85,7 +85,7 @@ const CallbackPage = () => {
         </p>
 
         <Button
-          onClick={() => window.location.href = '/login'}
+          onClick={() => (window.location.href = '/login')}
           className="font-bold py-3 px-8 rounded-full text-lg"
           variant="spotify"
           data-testid="retry-button"

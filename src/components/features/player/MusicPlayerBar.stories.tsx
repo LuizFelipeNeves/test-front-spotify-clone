@@ -32,7 +32,7 @@ O componente MusicPlayerBar fornece controles de reprodução de música com:
   },
   tags: ['autodocs'],
   decorators: [
-    (Story) => (
+    Story => (
       <div className="h-screen bg-black flex flex-col">
         <div className="flex-1 bg-gray-900 p-6">
           <h2 className="text-white text-xl mb-4">Área Principal</h2>
@@ -51,15 +51,12 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   decorators: [
-    (Story) => {
-      
+    Story => {
       return (
         <div className="h-screen bg-black flex flex-col">
           <div className="flex-1 bg-gray-900 p-6">
             <h2 className="text-white text-xl mb-4">Player Vazio</h2>
-            <p className="text-gray-300">
-              Estado inicial sem música tocando.
-            </p>
+            <p className="text-gray-300">Estado inicial sem música tocando.</p>
           </div>
           <Story />
         </div>
@@ -70,15 +67,13 @@ export const Default: Story = {
 
 export const Playing: Story = {
   decorators: [
-    (Story) => {
+    Story => {
       // Simula estado tocando
       return (
         <div className="h-screen bg-black flex flex-col">
           <div className="flex-1 bg-gray-900 p-6">
             <h2 className="text-white text-xl mb-4">Música Tocando</h2>
-            <p className="text-gray-300">
-              Player com música em reprodução.
-            </p>
+            <p className="text-gray-300">Player com música em reprodução.</p>
           </div>
           <Story />
         </div>
@@ -89,14 +84,12 @@ export const Playing: Story = {
 
 export const Paused: Story = {
   decorators: [
-    (Story) => {
+    Story => {
       return (
         <div className="h-screen bg-black flex flex-col">
           <div className="flex-1 bg-gray-900 p-6">
             <h2 className="text-white text-xl mb-4">Música Pausada</h2>
-            <p className="text-gray-300">
-              Player com música pausada.
-            </p>
+            <p className="text-gray-300">Player com música pausada.</p>
           </div>
           <Story />
         </div>
@@ -107,14 +100,12 @@ export const Paused: Story = {
 
 export const WithShuffle: Story = {
   decorators: [
-    (Story) => {
+    Story => {
       return (
         <div className="h-screen bg-black flex flex-col">
           <div className="flex-1 bg-gray-900 p-6">
             <h2 className="text-white text-xl mb-4">Shuffle Ativo</h2>
-            <p className="text-gray-300">
-              Player com modo shuffle ativado.
-            </p>
+            <p className="text-gray-300">Player com modo shuffle ativado.</p>
           </div>
           <Story />
         </div>
@@ -125,14 +116,12 @@ export const WithShuffle: Story = {
 
 export const WithRepeat: Story = {
   decorators: [
-    (Story) => {
+    Story => {
       return (
         <div className="h-screen bg-black flex flex-col">
           <div className="flex-1 bg-gray-900 p-6">
             <h2 className="text-white text-xl mb-4">Repeat Ativo</h2>
-            <p className="text-gray-300">
-              Player com modo repeat ativado.
-            </p>
+            <p className="text-gray-300">Player com modo repeat ativado.</p>
           </div>
           <Story />
         </div>
@@ -148,7 +137,7 @@ export const MobileView: Story = {
     },
   },
   decorators: [
-    (Story) => (
+    Story => (
       <div className="h-screen bg-black flex flex-col">
         <div className="flex-1 bg-gray-900 p-4">
           <h2 className="text-white text-lg mb-4">Visualização Mobile</h2>

@@ -31,7 +31,7 @@ export function InfiniteScrollList<T>({
   fetchNextPage,
   onRetry,
   renderItem,
-  loadingText = 'Carregando mais itens...'
+  loadingText = 'Carregando mais itens...',
 }: InfiniteScrollListProps<T>) {
   // Infinite scroll with intersection observer
   const { ref: loadMoreRef, inView } = useInView({
@@ -70,8 +70,12 @@ export function InfiniteScrollList<T>({
     return (
       <div className="flex flex-col items-center justify-center min-h-64 text-center px-4">
         <div className="text-red-400 mb-4">
-          <svg className="w-12 h-12 mx-auto" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+          <svg
+            className="w-12 h-12 mx-auto"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
           </svg>
         </div>
         <h3 className="text-white text-lg font-semibold mb-2">
@@ -87,11 +91,17 @@ export function InfiniteScrollList<T>({
     return (
       <div className="flex flex-col items-center justify-center min-h-64 text-center px-4">
         <div className="text-gray-400 mb-4">
-          <svg className="w-16 h-16 mx-auto" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+          <svg
+            className="w-16 h-16 mx-auto"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
           </svg>
         </div>
-        <h3 className="text-white text-lg font-semibold mb-2">{emptyMessage}</h3>
+        <h3 className="text-white text-lg font-semibold mb-2">
+          {emptyMessage}
+        </h3>
         <p className="text-gray-400 text-sm">{emptyDescription}</p>
       </div>
     );
@@ -101,15 +111,16 @@ export function InfiniteScrollList<T>({
     <div className={className} data-testid="infinite-scroll">
       <div className={gridClassName}>
         {items.map((item, index) => (
-          <div key={index}>
-            {renderItem(item, index)}
-          </div>
+          <div key={index}>{renderItem(item, index)}</div>
         ))}
       </div>
 
       {/* Infinite scroll trigger */}
       {hasNextPage && (
-        <div ref={loadMoreRef} className="h-10 flex justify-center items-center mt-6">
+        <div
+          ref={loadMoreRef}
+          className="h-10 flex justify-center items-center mt-6"
+        >
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
           <span className="ml-3 text-gray-600">{loadingText}</span>
         </div>

@@ -48,7 +48,7 @@ O componente PlaylistCard exibe informações de uma playlist do Spotify com:
       control: { type: 'text' },
     },
   },
-  args: { 
+  args: {
     onClick: fn(),
   },
 } satisfies Meta<typeof PlaylistCard>;
@@ -59,7 +59,7 @@ type Story = StoryObj<typeof meta>;
 // Playlist de exemplo
 const samplePlaylist: Playlist = {
   id: '37i9dQZF1DXcBWIGoYBM5M',
-  name: 'Today\'s Top Hits',
+  name: "Today's Top Hits",
   description: 'The most played songs right now.',
   images: [
     {
@@ -131,7 +131,8 @@ export const LongTitle: Story = {
     playlist: {
       ...samplePlaylist,
       name: 'This Is a Very Long Playlist Name That Should Be Truncated Properly When Displayed',
-      description: 'This is also a very long description that should be handled properly by the component and truncated when necessary.',
+      description:
+        'This is also a very long description that should be handled properly by the component and truncated when necessary.',
       owner: {
         id: 'user789',
         display_name: 'User With Very Long Display Name',
@@ -270,48 +271,48 @@ Exemplo de como os PlaylistCards aparecem em um layout de lista:
       <h2 className="text-2xl font-bold mb-4 text-white">Suas Playlists</h2>
       <div className="space-y-2">
         <PlaylistCard playlist={samplePlaylist} onClick={fn()} />
-        <PlaylistCard 
-          playlist={{ 
-            ...samplePlaylist, 
-            name: 'Rock Classics', 
+        <PlaylistCard
+          playlist={{
+            ...samplePlaylist,
+            name: 'Rock Classics',
             description: 'The best rock songs of all time.',
             owner: { id: 'user1', display_name: 'Rock Fan' },
             tracks: { total: 127, items: [] },
-            public: false
-          }} 
-          onClick={fn()} 
+            public: false,
+          }}
+          onClick={fn()}
         />
-        <PlaylistCard 
-          playlist={{ 
-            ...samplePlaylist, 
-            name: 'Chill Vibes', 
+        <PlaylistCard
+          playlist={{
+            ...samplePlaylist,
+            name: 'Chill Vibes',
             description: 'Relaxing music for work and study.',
             owner: { id: 'user2', display_name: 'Chill Master' },
             tracks: { total: 89, items: [] },
-            collaborative: true
-          }} 
-          onClick={fn()} 
+            collaborative: true,
+          }}
+          onClick={fn()}
         />
-        <PlaylistCard 
-          playlist={{ 
-            ...samplePlaylist, 
-            name: 'Workout Mix', 
+        <PlaylistCard
+          playlist={{
+            ...samplePlaylist,
+            name: 'Workout Mix',
             description: 'High energy songs to keep you motivated.',
             owner: { id: 'user3', display_name: 'Fitness Guru' },
-            tracks: { total: 45, items: [] }
-          }} 
-          onClick={fn()} 
+            tracks: { total: 45, items: [] },
+          }}
+          onClick={fn()}
         />
-        <PlaylistCard 
-          playlist={{ 
-            ...samplePlaylist, 
-            name: 'Road Trip', 
+        <PlaylistCard
+          playlist={{
+            ...samplePlaylist,
+            name: 'Road Trip',
             description: '',
             owner: { id: 'user4', display_name: 'Traveler' },
             tracks: { total: 156, items: [] },
-            public: false
-          }} 
-          onClick={fn()} 
+            public: false,
+          }}
+          onClick={fn()}
         />
       </div>
     </div>

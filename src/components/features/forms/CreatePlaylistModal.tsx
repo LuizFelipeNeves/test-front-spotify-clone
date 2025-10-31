@@ -100,7 +100,7 @@ export function CreatePlaylistModal({
               id="playlist-name"
               type="text"
               value={playlistName}
-              onChange={(e) => setPlaylistName(e.target.value)}
+              onChange={e => setPlaylistName(e.target.value)}
               placeholder={UI_TEXTS.nomePlaylistPlaceholder}
               className="w-full bg-transparent border-b border-gray-600 text-white text-xl font-semibold text-center pb-2 focus:outline-none focus:border-green-500 transition-colors"
               autoFocus
@@ -118,7 +118,11 @@ export function CreatePlaylistModal({
               data-testid="create-button"
             >
               {isCreating && (
-                <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                <svg
+                  className="animate-spin h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
                   <circle
                     className="opacity-25"
                     cx="12"

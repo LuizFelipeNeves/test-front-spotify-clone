@@ -7,13 +7,17 @@ import type { Album } from '@/types';
 vi.mock('@/hooks/useImageCache', () => ({
   useImageCache: vi.fn(() => ({
     imageUrl: 'https://example.com/album-image.jpg',
-    isLoading: false
-  }))
+    isLoading: false,
+  })),
 }));
 
 // Mock do componente Button
 vi.mock('@/components/ui', () => ({
-  Button: ({ children, onClick, ...props }: {
+  Button: ({
+    children,
+    onClick,
+    ...props
+  }: {
     children: React.ReactNode;
     onClick?: () => void;
     [key: string]: unknown;
@@ -21,7 +25,7 @@ vi.mock('@/components/ui', () => ({
     <button onClick={onClick} {...props}>
       {children}
     </button>
-  )
+  ),
 }));
 
 const mockAlbum: Album = {
@@ -31,8 +35,8 @@ const mockAlbum: Album = {
     {
       url: 'https://example.com/album-image.jpg',
       height: 640,
-      width: 640
-    }
+      width: 640,
+    },
   ],
   artists: [
     {
@@ -43,16 +47,16 @@ const mockAlbum: Album = {
       popularity: 80,
       followers: { total: 1000 },
       external_urls: { spotify: 'https://open.spotify.com/artist/artist1' },
-      uri: 'artist:1'
-    }
+      uri: 'artist:1',
+    },
   ],
   release_date: '2023-01-15',
   total_tracks: 12,
   album_type: 'album',
   external_urls: {
-    spotify: 'https://open.spotify.com/album/1'
+    spotify: 'https://open.spotify.com/album/1',
   },
-  uri: 'artist:1'
+  uri: 'artist:1',
 };
 
 describe('AlbumCard', () => {
@@ -62,7 +66,7 @@ describe('AlbumCard', () => {
 
   it('renders album information correctly', () => {
     render(<AlbumCard album={mockAlbum} />);
-    
+
     expect(screen.getByText('Test Album')).toBeInTheDocument();
     expect(screen.getByText('Test Artist')).toBeInTheDocument();
     expect(screen.getByText('2023')).toBeInTheDocument();
@@ -71,7 +75,7 @@ describe('AlbumCard', () => {
 
   it('renders album image with correct alt text', () => {
     render(<AlbumCard album={mockAlbum} />);
-    
+
     const image = screen.getByAltText('Capa do álbum Test Album');
     expect(image).toBeInTheDocument();
     expect(image).toHaveAttribute('src', 'https://example.com/album-image.jpg');
@@ -80,10 +84,10 @@ describe('AlbumCard', () => {
   it('calls onClick when card is clicked', () => {
     const handleClick = vi.fn();
     render(<AlbumCard album={mockAlbum} onClick={handleClick} />);
-    
+
     const card = screen.getByRole('article');
     fireEvent.click(card);
-    
+
     expect(handleClick).toHaveBeenCalledTimes(1);
     expect(handleClick).toHaveBeenCalledWith(mockAlbum);
   });
@@ -91,10 +95,10 @@ describe('AlbumCard', () => {
   it('calls onPlay when play button is clicked', () => {
     const handlePlay = vi.fn();
     render(<AlbumCard album={mockAlbum} onPlay={handlePlay} />);
-    
+
     const playButton = screen.getByLabelText('Reproduzir Test Album');
     fireEvent.click(playButton);
-    
+
     expect(handlePlay).toHaveBeenCalledTimes(1);
     expect(handlePlay).toHaveBeenCalledWith(mockAlbum);
   });
@@ -102,30 +106,37 @@ describe('AlbumCard', () => {
   it('prevents card click when play button is clicked', () => {
     const handleClick = vi.fn();
     const handlePlay = vi.fn();
-    render(<AlbumCard album={mockAlbum} onClick={handleClick} onPlay={handlePlay} />);
-    
+    render(
+      <AlbumCard album={mockAlbum} onClick={handleClick} onPlay={handlePlay} />
+    );
+
     const playButton = screen.getByLabelText('Reproduzir Test Album');
     fireEvent.click(playButton);
-    
+
     expect(handlePlay).toHaveBeenCalledTimes(1);
     expect(handleClick).not.toHaveBeenCalled();
   });
 
   it('opens Spotify link when play button is clicked without onPlay handler', () => {
-    const windowOpenSpy = vi.spyOn(window, 'open').mockImplementation(() => null);
+    const windowOpenSpy = vi
+      .spyOn(window, 'open')
+      .mockImplementation(() => null);
     render(<AlbumCard album={mockAlbum} />);
-    
+
     const playButton = screen.getByLabelText('Reproduzir Test Album');
     fireEvent.click(playButton);
-    
-    expect(windowOpenSpy).toHaveBeenCalledWith('https://open.spotify.com/album/1', '_blank');
-    
+
+    expect(windowOpenSpy).toHaveBeenCalledWith(
+      'https://open.spotify.com/album/1',
+      '_blank'
+    );
+
     windowOpenSpy.mockRestore();
   });
 
   it('applies custom className', () => {
     render(<AlbumCard album={mockAlbum} className="custom-album-class" />);
-    
+
     const card = screen.getByRole('article');
     expect(card).toHaveClass('custom-album-class');
   });
@@ -133,7 +144,7 @@ describe('AlbumCard', () => {
   it('handles album without images', () => {
     const albumWithoutImages = { ...mockAlbum, images: [] };
     render(<AlbumCard album={albumWithoutImages} />);
-    
+
     const image = screen.getByAltText('Capa do álbum Test Album');
     expect(image).toBeInTheDocument();
   });
@@ -151,13 +162,13 @@ describe('AlbumCard', () => {
           popularity: 75,
           followers: { total: 500 },
           external_urls: { spotify: 'https://open.spotify.com/artist/artist2' },
-          uri: 'artist:2'
-        }
-      ]
+          uri: 'artist:2',
+        },
+      ],
     };
-    
+
     render(<AlbumCard album={albumWithMultipleArtists} />);
-    
+
     expect(screen.getByText('Test Artist, Second Artist')).toBeInTheDocument();
   });
 
@@ -180,10 +191,13 @@ describe('AlbumCard', () => {
 
   it('has correct accessibility attributes', () => {
     render(<AlbumCard album={mockAlbum} />);
-    
+
     const card = screen.getByRole('article');
-    expect(card).toHaveAttribute('aria-label', 'Álbum Test Album por Test Artist');
-    
+    expect(card).toHaveAttribute(
+      'aria-label',
+      'Álbum Test Album por Test Artist'
+    );
+
     const playButton = screen.getByLabelText('Reproduzir Test Album');
     expect(playButton).toHaveAttribute('aria-label', 'Reproduzir Test Album');
   });

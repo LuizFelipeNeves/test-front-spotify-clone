@@ -121,7 +121,7 @@ export const AllSizes: Story = {
           </div>
         </div>
       </div>
-      
+
       <div>
         <h3 className="text-white text-lg mb-4">Apenas Ícone</h3>
         <div className="flex items-end gap-8">
@@ -154,17 +154,17 @@ export const OnDifferentBackgrounds: Story = {
         <h4 className="text-white mb-4">Fundo Preto</h4>
         <SpotifyLogo size="lg" showText />
       </div>
-      
+
       <div className="bg-gray-800 p-6 rounded-lg">
         <h4 className="text-white mb-4">Fundo Cinza Escuro</h4>
         <SpotifyLogo size="lg" showText />
       </div>
-      
+
       <div className="bg-green-600 p-6 rounded-lg">
         <h4 className="text-white mb-4">Fundo Verde</h4>
         <SpotifyLogo size="lg" showText />
       </div>
-      
+
       <div className="bg-white p-6 rounded-lg">
         <h4 className="text-black mb-4">Fundo Branco</h4>
         <SpotifyLogo size="lg" showText className="text-black" />

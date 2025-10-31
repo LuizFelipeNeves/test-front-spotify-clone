@@ -23,21 +23,26 @@ interface PWAInstallActions {
 }
 
 export function usePWAInstall(): PWAInstallState & PWAInstallActions {
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [deferredPrompt, setDeferredPrompt] =
+    useState<BeforeInstallPromptEvent | null>(null);
   const [state, setState] = useState<PWAInstallState>({
     isInstallable: false,
     isInstalled: false,
     isInstalling: false,
     isLoading: true,
-    error: null
+    error: null,
   });
 
   // Verifica se o PWA já está instalado
   const checkInstallStatus = useCallback(() => {
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-    const isInWebAppiOS = (window.navigator as unknown as { standalone?: boolean }).standalone === true;
+    const isStandalone = window.matchMedia(
+      '(display-mode: standalone)'
+    ).matches;
+    const isInWebAppiOS =
+      (window.navigator as unknown as { standalone?: boolean }).standalone ===
+      true;
     const isInstalled = isStandalone || isInWebAppiOS;
-    
+
     setState(prev => ({ ...prev, isInstalled, isLoading: false }));
   }, []);
 
@@ -52,7 +57,12 @@ export function usePWAInstall(): PWAInstallState & PWAInstallActions {
       e.preventDefault();
       const promptEvent = e as BeforeInstallPromptEvent;
       setDeferredPrompt(promptEvent);
-      setState(prev => ({ ...prev, isInstallable: true, isLoading: false, error: null }));
+      setState(prev => ({
+        ...prev,
+        isInstallable: true,
+        isLoading: false,
+        error: null,
+      }));
     };
 
     // Listener para quando o app é instalado
@@ -63,7 +73,7 @@ export function usePWAInstall(): PWAInstallState & PWAInstallActions {
         isInstallable: false,
         isInstalled: true,
         isInstalling: false,
-        error: null
+        error: null,
       }));
     };
 
@@ -74,14 +84,17 @@ export function usePWAInstall(): PWAInstallState & PWAInstallActions {
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     window.addEventListener('appinstalled', handleAppInstalled);
-    
+
     // Monitora mudanças no display mode
     const mediaQuery = window.matchMedia('(display-mode: standalone)');
     mediaQuery.addEventListener('change', handleDisplayModeChange);
 
     return () => {
       clearTimeout(timer);
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener(
+        'beforeinstallprompt',
+        handleBeforeInstallPrompt
+      );
       window.removeEventListener('appinstalled', handleAppInstalled);
       mediaQuery.removeEventListener('change', handleDisplayModeChange);
     };
@@ -89,38 +102,39 @@ export function usePWAInstall(): PWAInstallState & PWAInstallActions {
 
   const install = useCallback(async () => {
     if (!deferredPrompt) {
-      setState(prev => ({ 
-        ...prev, 
-        error: 'Instalação não disponível. O PWA pode já estar instalado ou o navegador não suporta instalação.' 
+      setState(prev => ({
+        ...prev,
+        error:
+          'Instalação não disponível. O PWA pode já estar instalado ou o navegador não suporta instalação.',
       }));
       return;
     }
 
     try {
       setState(prev => ({ ...prev, isInstalling: true, error: null }));
-      
+
       // Mostra o prompt de instalação
       await deferredPrompt.prompt();
-      
+
       // Aguarda a escolha do usuário
       const { outcome } = await deferredPrompt.userChoice;
-      
+
       if (outcome === 'accepted') {
         console.log('PWA instalado com sucesso!');
       } else {
         console.log('Instalação do PWA cancelada pelo usuário');
         setState(prev => ({ ...prev, isInstalling: false }));
       }
-      
+
       setDeferredPrompt(null);
       setState(prev => ({ ...prev, isInstallable: false }));
-      
     } catch (error) {
       console.error('Erro ao instalar PWA:', error);
       setState(prev => ({
         ...prev,
         isInstalling: false,
-        error: error instanceof Error ? error.message : 'Erro ao instalar o PWA'
+        error:
+          error instanceof Error ? error.message : 'Erro ao instalar o PWA',
       }));
     }
   }, [deferredPrompt]);
@@ -128,6 +142,6 @@ export function usePWAInstall(): PWAInstallState & PWAInstallActions {
   return {
     ...state,
     install,
-    checkInstallStatus
+    checkInstallStatus,
   };
 }

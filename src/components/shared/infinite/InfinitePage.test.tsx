@@ -15,19 +15,19 @@ vi.mock('@/components/ui', () => ({
 }));
 
 vi.mock('@/components', () => ({
-  InfiniteScrollList: ({ 
-    items, 
-    loading, 
-    error, 
-    emptyMessage, 
-    emptyDescription, 
-    onRetry, 
-    gridClassName, 
-    hasNextPage, 
-    isFetchingNextPage, 
-    fetchNextPage, 
-    loadingText, 
-    renderItem 
+  InfiniteScrollList: ({
+    items,
+    loading,
+    error,
+    emptyMessage,
+    emptyDescription,
+    onRetry,
+    gridClassName,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+    loadingText,
+    renderItem,
   }: any) => (
     <div data-testid="infinite-scroll-list">
       <div data-testid="grid-class">{gridClassName}</div>
@@ -35,7 +35,11 @@ vi.mock('@/components', () => ({
       {error && (
         <div data-testid="error">
           {error}
-          {onRetry && <button onClick={onRetry} data-testid="retry-button">Retry</button>}
+          {onRetry && (
+            <button onClick={onRetry} data-testid="retry-button">
+              Retry
+            </button>
+          )}
         </div>
       )}
       {!loading && !error && items.length === 0 && (
@@ -65,7 +69,7 @@ vi.mock('@/hooks/content-page', () => ({
   useContentPage: vi.fn(() => ({
     getEmptyState: () => ({
       message: 'Nenhum item encontrado',
-      description: 'Descrição do estado vazio'
+      description: 'Descrição do estado vazio',
     }),
     handleRetry: vi.fn(),
   })),
@@ -102,10 +106,7 @@ const mockItems = [
 ];
 
 const mockData = {
-  pages: [
-    { items: mockItems.slice(0, 2) },
-    { items: mockItems.slice(2) },
-  ],
+  pages: [{ items: mockItems.slice(0, 2) }, { items: mockItems.slice(2) }],
 };
 
 const defaultProps = {
@@ -152,7 +153,9 @@ describe('InfinitePage', () => {
     );
 
     expect(screen.getByTestId('infinite-scroll-list')).toBeInTheDocument();
-    expect(screen.getByTestId('grid-class')).toHaveTextContent('grid-cols-2 gap-4');
+    expect(screen.getByTestId('grid-class')).toHaveTextContent(
+      'grid-cols-2 gap-4'
+    );
   });
 
   it('flattens pages data correctly', () => {
@@ -195,11 +198,7 @@ describe('InfinitePage', () => {
     const mockError = new Error('Test error');
     render(
       <TestWrapper>
-        <InfinitePage 
-          {...defaultProps} 
-          isError={true} 
-          error={mockError}
-        />
+        <InfinitePage {...defaultProps} isError={true} error={mockError} />
       </TestWrapper>
     );
 
@@ -211,24 +210,25 @@ describe('InfinitePage', () => {
   it('shows empty state when no items', () => {
     render(
       <TestWrapper>
-        <InfinitePage 
-          {...defaultProps} 
-          data={{ pages: [] }}
-        />
+        <InfinitePage {...defaultProps} data={{ pages: [] }} />
       </TestWrapper>
     );
 
     expect(screen.getByTestId('empty-state')).toBeInTheDocument();
-    expect(screen.getByTestId('empty-message')).toHaveTextContent('Nenhum item encontrado');
-    expect(screen.getByTestId('empty-description')).toHaveTextContent('Descrição do estado vazio');
+    expect(screen.getByTestId('empty-message')).toHaveTextContent(
+      'Nenhum item encontrado'
+    );
+    expect(screen.getByTestId('empty-description')).toHaveTextContent(
+      'Descrição do estado vazio'
+    );
   });
 
   it('handles pagination correctly', () => {
     const mockFetchNextPage = vi.fn();
     render(
       <TestWrapper>
-        <InfinitePage 
-          {...defaultProps} 
+        <InfinitePage
+          {...defaultProps}
           hasNextPage={true}
           fetchNextPage={mockFetchNextPage}
         />
@@ -236,7 +236,9 @@ describe('InfinitePage', () => {
     );
 
     expect(screen.getByTestId('load-more')).toBeInTheDocument();
-    expect(screen.getByTestId('loading-text')).toHaveTextContent('Carregando mais...');
+    expect(screen.getByTestId('loading-text')).toHaveTextContent(
+      'Carregando mais...'
+    );
 
     const fetchButton = screen.getByTestId('fetch-next-page');
     fireEvent.click(fetchButton);
@@ -247,8 +249,8 @@ describe('InfinitePage', () => {
   it('shows fetching next page state', () => {
     render(
       <TestWrapper>
-        <InfinitePage 
-          {...defaultProps} 
+        <InfinitePage
+          {...defaultProps}
           hasNextPage={true}
           isFetchingNextPage={true}
         />
@@ -261,23 +263,19 @@ describe('InfinitePage', () => {
   it('uses custom grid className when provided', () => {
     render(
       <TestWrapper>
-        <InfinitePage 
-          {...defaultProps} 
-          gridClassName="custom-grid-class"
-        />
+        <InfinitePage {...defaultProps} gridClassName="custom-grid-class" />
       </TestWrapper>
     );
 
-    expect(screen.getByTestId('grid-class')).toHaveTextContent('custom-grid-class');
+    expect(screen.getByTestId('grid-class')).toHaveTextContent(
+      'custom-grid-class'
+    );
   });
 
   it('handles undefined data gracefully', () => {
     render(
       <TestWrapper>
-        <InfinitePage 
-          {...defaultProps} 
-          data={undefined}
-        />
+        <InfinitePage {...defaultProps} data={undefined} />
       </TestWrapper>
     );
 
@@ -287,10 +285,7 @@ describe('InfinitePage', () => {
   it('handles data without pages gracefully', () => {
     render(
       <TestWrapper>
-        <InfinitePage 
-          {...defaultProps} 
-          data={{}}
-        />
+        <InfinitePage {...defaultProps} data={{}} />
       </TestWrapper>
     );
 
@@ -314,11 +309,7 @@ describe('InfinitePage', () => {
   it('passes error message correctly when error is null', () => {
     render(
       <TestWrapper>
-        <InfinitePage 
-          {...defaultProps} 
-          isError={true}
-          error={null}
-        />
+        <InfinitePage {...defaultProps} isError={true} error={null} />
       </TestWrapper>
     );
 
@@ -327,12 +318,13 @@ describe('InfinitePage', () => {
   });
 
   it('handles complex navigation paths', () => {
-    const complexGetNavigationPath = (item: any) => `/complex/path/${item.id}/details`;
-    
+    const complexGetNavigationPath = (item: any) =>
+      `/complex/path/${item.id}/details`;
+
     render(
       <TestWrapper>
-        <InfinitePage 
-          {...defaultProps} 
+        <InfinitePage
+          {...defaultProps}
           getNavigationPath={complexGetNavigationPath}
         />
       </TestWrapper>
@@ -353,10 +345,7 @@ describe('InfinitePage', () => {
 
     render(
       <TestWrapper>
-        <InfinitePage 
-          {...defaultProps} 
-          renderCard={customRenderCard}
-        />
+        <InfinitePage {...defaultProps} renderCard={customRenderCard} />
       </TestWrapper>
     );
 
@@ -374,7 +363,7 @@ describe('InfinitePage', () => {
     // Check that the main structure is maintained
     const pageContent = screen.getByTestId('page-content');
     const infiniteScrollList = screen.getByTestId('infinite-scroll-list');
-    
+
     expect(pageContent).toContainElement(infiniteScrollList);
   });
 });

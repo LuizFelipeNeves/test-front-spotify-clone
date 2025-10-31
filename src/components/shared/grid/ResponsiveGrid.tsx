@@ -21,9 +21,5 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
     return UI_CONFIG.grids[type] || UI_CONFIG.grids.artistas;
   };
 
-  return (
-    <div className={cn(getGridClass(), className)}>
-      {children}
-    </div>
-  );
+  return <div className={cn(getGridClass(), className)}>{children}</div>;
 };

@@ -54,7 +54,9 @@ export const InteractiveStatesComponent = () => {
   return (
     <div className="space-y-8 p-6 bg-gray-900 rounded-lg max-w-2xl">
       <div>
-        <h3 className="text-lg font-semibold text-white mb-4">Diferentes Volumes</h3>
+        <h3 className="text-lg font-semibold text-white mb-4">
+          Diferentes Volumes
+        </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="space-y-2">
             <p className="text-sm text-gray-400">Volume Baixo (30%)</p>
@@ -92,7 +94,9 @@ export const InteractiveStatesComponent = () => {
         <h3 className="text-lg font-semibold text-white mb-4">Estado Mudo</h3>
         <div className="flex items-center gap-6">
           <div className="space-y-2">
-            <p className="text-sm text-gray-400">Mudo: {isMuted ? 'Sim' : 'Não'}</p>
+            <p className="text-sm text-gray-400">
+              Mudo: {isMuted ? 'Sim' : 'Não'}
+            </p>
             <VolumeSlider
               volume={volume1}
               isMuted={isMuted}
@@ -112,7 +116,9 @@ export const CustomStylingComponent = () => {
   return (
     <div className="space-y-6 p-6 bg-gradient-to-br from-purple-900 to-blue-900 rounded-lg max-w-md">
       <div>
-        <h3 className="text-lg font-semibold text-white mb-2">Player Personalizado</h3>
+        <h3 className="text-lg font-semibold text-white mb-2">
+          Player Personalizado
+        </h3>
         <p className="text-sm text-gray-300 mb-4">
           Slider com cores personalizadas para combinar com o tema
         </p>
@@ -150,7 +156,9 @@ export const KeyboardNavigationComponent = () => {
             <span>Navega entre elementos</span>
           </div>
           <div className="flex items-center gap-2">
-            <kbd className="px-2 py-1 bg-gray-800 rounded text-xs">Enter/Space</kbd>
+            <kbd className="px-2 py-1 bg-gray-800 rounded text-xs">
+              Enter/Space
+            </kbd>
             <span>Ativa controles</span>
           </div>
           <div className="flex items-center gap-2">
@@ -158,7 +166,9 @@ export const KeyboardNavigationComponent = () => {
             <span>Ajusta volume no slider</span>
           </div>
           <div className="flex items-center gap-2">
-            <kbd className="px-2 py-1 bg-gray-800 rounded text-xs">Home/End</kbd>
+            <kbd className="px-2 py-1 bg-gray-800 rounded text-xs">
+              Home/End
+            </kbd>
             <span>Volume mínimo/máximo</span>
           </div>
           <div className="flex items-center gap-2">
@@ -179,7 +189,8 @@ export const KeyboardNavigationComponent = () => {
 
       <div className="text-center">
         <div className="text-white font-mono text-sm">
-          Estado atual: {Math.round(volume * 100)}% {isMuted ? '(Mudo)' : '(Ativo)'}
+          Estado atual: {Math.round(volume * 100)}%{' '}
+          {isMuted ? '(Mudo)' : '(Ativo)'}
         </div>
       </div>
     </div>

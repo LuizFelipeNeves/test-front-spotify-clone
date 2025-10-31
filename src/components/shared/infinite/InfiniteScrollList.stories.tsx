@@ -18,41 +18,41 @@ const meta: Meta<typeof InfiniteScrollList<MockItem>> = {
   argTypes: {
     items: {
       control: 'object',
-      description: 'Array de itens a serem renderizados'
+      description: 'Array de itens a serem renderizados',
     },
     loading: {
       control: 'boolean',
-      description: 'Estado de carregamento inicial'
+      description: 'Estado de carregamento inicial',
     },
     error: {
       control: 'text',
-      description: 'Mensagem de erro'
+      description: 'Mensagem de erro',
     },
     emptyMessage: {
       control: 'text',
-      description: 'Mensagem para estado vazio'
+      description: 'Mensagem para estado vazio',
     },
     emptyDescription: {
       control: 'text',
-      description: 'Descrição para estado vazio'
+      description: 'Descrição para estado vazio',
     },
     hasNextPage: {
       control: 'boolean',
-      description: 'Se há mais páginas para carregar'
+      description: 'Se há mais páginas para carregar',
     },
     isFetchingNextPage: {
       control: 'boolean',
-      description: 'Se está carregando a próxima página'
+      description: 'Se está carregando a próxima página',
     },
     loadingText: {
       control: 'text',
-      description: 'Texto exibido durante carregamento infinito'
+      description: 'Texto exibido durante carregamento infinito',
     },
     gridClassName: {
       control: 'text',
-      description: 'Classes CSS para o grid de itens'
-    }
-  }
+      description: 'Classes CSS para o grid de itens',
+    },
+  },
 };
 
 export default meta;
@@ -62,7 +62,7 @@ type Story = StoryObj<typeof InfiniteScrollList<MockItem>>;
 const mockItems: MockItem[] = Array.from({ length: 10 }, (_, i) => ({
   id: i + 1,
   name: `Item ${i + 1}`,
-  description: `Description for item ${i + 1}`
+  description: `Description for item ${i + 1}`,
 }));
 
 export const Default: Story = {
@@ -74,8 +74,8 @@ export const Default: Story = {
         <p className="text-gray-400 text-sm">{item.description}</p>
       </div>
     ),
-    gridClassName: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'
-  }
+    gridClassName: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4',
+  },
 };
 
 export const WithGrid: Story = {
@@ -87,21 +87,21 @@ export const WithGrid: Story = {
         <p className="text-gray-400 text-sm">{item.description}</p>
       </div>
     ),
-    gridClassName: 'grid grid-cols-2 gap-4'
-  }
+    gridClassName: 'grid grid-cols-2 gap-4',
+  },
 };
 
 export const Loading: Story = {
   args: {
     items: [],
     loading: true,
-    renderItem: (item) => (
+    renderItem: item => (
       <div className="p-4 border border-gray-700 rounded-lg bg-gray-800 text-white">
         <h3 className="font-semibold">{item.name}</h3>
         <p className="text-gray-400 text-sm">{item.description}</p>
       </div>
-    )
-  }
+    ),
+  },
 };
 
 export const Error: Story = {
@@ -109,13 +109,13 @@ export const Error: Story = {
     items: [],
     error: 'Falha ao carregar os itens. Tente novamente.',
     onRetry: () => console.log('Retry clicked'),
-    renderItem: (item) => (
+    renderItem: item => (
       <div className="p-4 border border-gray-700 rounded-lg bg-gray-800 text-white">
         <h3 className="font-semibold">{item.name}</h3>
         <p className="text-gray-400 text-sm">{item.description}</p>
       </div>
-    )
-  }
+    ),
+  },
 };
 
 export const Empty: Story = {
@@ -123,13 +123,13 @@ export const Empty: Story = {
     items: [],
     emptyMessage: 'Nenhum item encontrado',
     emptyDescription: 'Comece adicionando itens para ver algo aqui.',
-    renderItem: (item) => (
+    renderItem: item => (
       <div className="p-4 border border-gray-700 rounded-lg bg-gray-800 text-white">
         <h3 className="font-semibold">{item.name}</h3>
         <p className="text-gray-400 text-sm">{item.description}</p>
       </div>
-    )
-  }
+    ),
+  },
 };
 
 export const WithInfiniteScroll: Story = {
@@ -145,8 +145,8 @@ export const WithInfiniteScroll: Story = {
         <p className="text-gray-400 text-sm">{item.description}</p>
       </div>
     ),
-    gridClassName: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'
-  }
+    gridClassName: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4',
+  },
 };
 
 export const LoadingNextPage: Story = {
@@ -162,6 +162,6 @@ export const LoadingNextPage: Story = {
         <p className="text-gray-400 text-sm">{item.description}</p>
       </div>
     ),
-    gridClassName: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'
-  }
+    gridClassName: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4',
+  },
 };

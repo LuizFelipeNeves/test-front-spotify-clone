@@ -42,7 +42,13 @@ describe('ResponsiveGrid Component', () => {
     );
 
     const gridContainer = container.firstChild as HTMLElement;
-    expect(gridContainer).toHaveClass('grid', 'grid-cols-2', 'md:grid-cols-4', 'lg:grid-cols-6', 'gap-4');
+    expect(gridContainer).toHaveClass(
+      'grid',
+      'grid-cols-2',
+      'md:grid-cols-4',
+      'lg:grid-cols-6',
+      'gap-4'
+    );
   });
 
   it('should apply artistas grid type', () => {
@@ -53,7 +59,13 @@ describe('ResponsiveGrid Component', () => {
     );
 
     const gridContainer = container.firstChild as HTMLElement;
-    expect(gridContainer).toHaveClass('grid', 'grid-cols-2', 'md:grid-cols-4', 'lg:grid-cols-6', 'gap-4');
+    expect(gridContainer).toHaveClass(
+      'grid',
+      'grid-cols-2',
+      'md:grid-cols-4',
+      'lg:grid-cols-6',
+      'gap-4'
+    );
   });
 
   it('should apply albuns grid type', () => {
@@ -64,7 +76,13 @@ describe('ResponsiveGrid Component', () => {
     );
 
     const gridContainer = container.firstChild as HTMLElement;
-    expect(gridContainer).toHaveClass('grid', 'grid-cols-2', 'md:grid-cols-3', 'lg:grid-cols-5', 'gap-4');
+    expect(gridContainer).toHaveClass(
+      'grid',
+      'grid-cols-2',
+      'md:grid-cols-3',
+      'lg:grid-cols-5',
+      'gap-4'
+    );
   });
 
   it('should apply playlists grid type', () => {
@@ -75,11 +93,18 @@ describe('ResponsiveGrid Component', () => {
     );
 
     const gridContainer = container.firstChild as HTMLElement;
-    expect(gridContainer).toHaveClass('grid', 'grid-cols-1', 'md:grid-cols-2', 'lg:grid-cols-3', 'gap-4');
+    expect(gridContainer).toHaveClass(
+      'grid',
+      'grid-cols-1',
+      'md:grid-cols-2',
+      'lg:grid-cols-3',
+      'gap-4'
+    );
   });
 
   it('should apply custom grid when type is custom and customGrid is provided', () => {
-    const customGridClasses = 'grid grid-cols-3 md:grid-cols-6 lg:grid-cols-9 gap-2';
+    const customGridClasses =
+      'grid grid-cols-3 md:grid-cols-6 lg:grid-cols-9 gap-2';
     const { container } = render(
       <ResponsiveGrid type="custom" customGrid={customGridClasses}>
         <TestChild text="Item 1" />
@@ -87,7 +112,13 @@ describe('ResponsiveGrid Component', () => {
     );
 
     const gridContainer = container.firstChild as HTMLElement;
-    expect(gridContainer).toHaveClass('grid', 'grid-cols-3', 'md:grid-cols-6', 'lg:grid-cols-9', 'gap-2');
+    expect(gridContainer).toHaveClass(
+      'grid',
+      'grid-cols-3',
+      'md:grid-cols-6',
+      'lg:grid-cols-9',
+      'gap-2'
+    );
   });
 
   it('should fallback to artistas grid when type is custom but no customGrid provided', () => {
@@ -98,7 +129,13 @@ describe('ResponsiveGrid Component', () => {
     );
 
     const gridContainer = container.firstChild as HTMLElement;
-    expect(gridContainer).toHaveClass('grid', 'grid-cols-2', 'md:grid-cols-4', 'lg:grid-cols-6', 'gap-4');
+    expect(gridContainer).toHaveClass(
+      'grid',
+      'grid-cols-2',
+      'md:grid-cols-4',
+      'lg:grid-cols-6',
+      'gap-4'
+    );
   });
 
   it('should apply custom className along with grid classes', () => {
@@ -111,7 +148,13 @@ describe('ResponsiveGrid Component', () => {
 
     const gridContainer = container.firstChild as HTMLElement;
     expect(gridContainer).toHaveClass(customClass);
-    expect(gridContainer).toHaveClass('grid', 'grid-cols-2', 'md:grid-cols-4', 'lg:grid-cols-6', 'gap-4');
+    expect(gridContainer).toHaveClass(
+      'grid',
+      'grid-cols-2',
+      'md:grid-cols-4',
+      'lg:grid-cols-6',
+      'gap-4'
+    );
   });
 
   it('should prioritize customGrid over type when both are provided', () => {
@@ -124,7 +167,11 @@ describe('ResponsiveGrid Component', () => {
 
     const gridContainer = container.firstChild as HTMLElement;
     expect(gridContainer).toHaveClass('flex', 'flex-wrap', 'gap-8');
-    expect(gridContainer).not.toHaveClass('grid-cols-2', 'md:grid-cols-3', 'lg:grid-cols-5');
+    expect(gridContainer).not.toHaveClass(
+      'grid-cols-2',
+      'md:grid-cols-3',
+      'lg:grid-cols-5'
+    );
   });
 
   it('should handle empty children', () => {
@@ -170,7 +217,13 @@ describe('ResponsiveGrid Component', () => {
     );
 
     const gridContainer = container.firstChild as HTMLElement;
-    expect(gridContainer).toHaveClass('grid', 'grid-cols-2', 'md:grid-cols-4', 'lg:grid-cols-6', 'gap-4');
+    expect(gridContainer).toHaveClass(
+      'grid',
+      'grid-cols-2',
+      'md:grid-cols-4',
+      'lg:grid-cols-6',
+      'gap-4'
+    );
   });
 
   it('should maintain grid structure with complex children', () => {

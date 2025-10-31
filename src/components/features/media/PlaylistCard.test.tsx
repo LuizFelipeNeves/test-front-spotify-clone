@@ -9,7 +9,8 @@ vi.mock('@/contexts', () => ({
     isReady: true,
     deviceId: 'test-device-id',
   })),
-  SpotifyPlayerProvider: ({ children }: { children: React.ReactNode }) => children,
+  SpotifyPlayerProvider: ({ children }: { children: React.ReactNode }) =>
+    children,
 }));
 
 import { PlaylistCard } from './PlaylistCard';
@@ -66,7 +67,7 @@ vi.mock('@/hooks/useImageCache', () => {
 
 vi.mock('dompurify', () => ({
   default: {
-    sanitize: vi.fn((input) => input),
+    sanitize: vi.fn(input => input),
   },
 }));
 
@@ -120,11 +121,10 @@ describe('PlaylistCard', () => {
       isLoading: false,
     });
   });
- 
 
   it('renders playlist information correctly', () => {
     render(<PlaylistCard playlist={mockPlaylist} />);
-    
+
     expect(screen.getByText('Test Playlist')).toBeInTheDocument();
     expect(screen.getByText('Por Test User')).toBeInTheDocument();
     expect(screen.getByText('25 músicas')).toBeInTheDocument();
@@ -133,25 +133,28 @@ describe('PlaylistCard', () => {
 
   it('renders playlist image with correct alt text', () => {
     render(<PlaylistCard playlist={mockPlaylist} />);
-    
+
     const image = screen.getByAltText('Test Playlist');
     expect(image).toBeInTheDocument();
-    expect(image).toHaveAttribute('src', 'https://example.com/playlist-image.jpg');
+    expect(image).toHaveAttribute(
+      'src',
+      'https://example.com/playlist-image.jpg'
+    );
   });
 
   it('calls onClick when card is clicked', () => {
     const mockOnClick = vi.fn();
     render(<PlaylistCard playlist={mockPlaylist} onClick={mockOnClick} />);
-    
+
     const card = screen.getByTestId('playlist-card');
     fireEvent.click(card);
-    
+
     expect(mockOnClick).toHaveBeenCalledWith(mockPlaylist);
   });
 
   it('applies custom className', () => {
     render(<PlaylistCard playlist={mockPlaylist} className="custom-class" />);
-    
+
     const card = screen.getByTestId('playlist-card');
     expect(card).toHaveClass('custom-class');
   });
@@ -161,7 +164,7 @@ describe('PlaylistCard', () => {
       ...mockPlaylist,
       tracks: { total: 1, items: [] },
     };
-    
+
     render(<PlaylistCard playlist={singleTrackPlaylist} />);
     expect(screen.getByText('1 música')).toBeInTheDocument();
   });
@@ -184,21 +187,23 @@ describe('PlaylistCard', () => {
 
   it('handles playlist without images', () => {
     render(<PlaylistCard playlist={mockPlaylistWithoutImage} />);
-    
+
     const image = screen.getByAltText('Test Playlist');
     expect(image).toBeInTheDocument();
   });
 
   it('handles playlist without description', () => {
     render(<PlaylistCard playlist={mockPlaylistWithoutDescription} />);
-    
+
     expect(screen.getByText('Test Playlist')).toBeInTheDocument();
-    expect(screen.queryByText('A test playlist description')).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('A test playlist description')
+    ).not.toBeInTheDocument();
   });
 
   it('displays play button when playlist has tracks', () => {
     render(<PlaylistCard playlist={mockPlaylist} />);
-    
+
     const playButton = screen.getByLabelText('Reproduzir Test Playlist');
     expect(playButton).toBeInTheDocument();
   });
@@ -212,19 +217,25 @@ describe('PlaylistCard', () => {
     const { usePlayerStore } = await import('@/store/playerStore');
     const { useSpotifyPlayerContext } = await import('@/contexts');
 
-    (usePlayerStore as unknown as { mockReturnValue: (value: unknown) => void }).mockReturnValue({
+    (
+      usePlayerStore as unknown as { mockReturnValue: (value: unknown) => void }
+    ).mockReturnValue({
       setCurrentTrack: mockSetCurrentTrack,
       setQueue: mockSetQueue,
       setIsPlaying: mockSetIsPlaying,
     });
 
-    (useSpotifyPlayerContext as unknown as { mockReturnValue: (value: unknown) => void }).mockReturnValue({
+    (
+      useSpotifyPlayerContext as unknown as {
+        mockReturnValue: (value: unknown) => void;
+      }
+    ).mockReturnValue({
       playTrack: mockPlayTrack,
       isReady: true,
     });
 
     render(<PlaylistCard playlist={mockPlaylist} />);
-    
+
     const playButton = screen.getByLabelText('Reproduzir Test Playlist');
     fireEvent.click(playButton);
 
@@ -243,19 +254,25 @@ describe('PlaylistCard', () => {
     const { usePlayerStore } = await import('@/store/playerStore');
     const { useSpotifyPlayerContext } = await import('@/contexts');
 
-    (usePlayerStore as unknown as { mockReturnValue: (value: unknown) => void }).mockReturnValue({
+    (
+      usePlayerStore as unknown as { mockReturnValue: (value: unknown) => void }
+    ).mockReturnValue({
       setCurrentTrack: mockSetCurrentTrack,
       setQueue: mockSetQueue,
       setIsPlaying: mockSetIsPlaying,
     });
 
-    (useSpotifyPlayerContext as unknown as { mockReturnValue: (value: unknown) => void }).mockReturnValue({
+    (
+      useSpotifyPlayerContext as unknown as {
+        mockReturnValue: (value: unknown) => void;
+      }
+    ).mockReturnValue({
       playTrack: mockPlayTrack,
       isReady: false,
     });
 
     render(<PlaylistCard playlist={mockPlaylist} />);
-    
+
     const playButton = screen.getByLabelText('Reproduzir Test Playlist');
     fireEvent.click(playButton);
 
@@ -270,9 +287,11 @@ describe('PlaylistCard', () => {
     });
 
     render(<PlaylistCard playlist={mockPlaylist} />);
-    
+
     // Play button should not be visible when there are no tracks
-    expect(screen.queryByLabelText('Reproduzir Test Playlist')).not.toBeInTheDocument();
+    expect(
+      screen.queryByLabelText('Reproduzir Test Playlist')
+    ).not.toBeInTheDocument();
   });
 
   it('handles image loading state', async () => {
@@ -282,7 +301,7 @@ describe('PlaylistCard', () => {
     });
 
     render(<PlaylistCard playlist={mockPlaylist} />);
-    
+
     // Should show loading skeleton
     const loadingSkeleton = screen.getByRole('status', { name: /loading/i });
     expect(loadingSkeleton).toBeInTheDocument();
@@ -290,12 +309,14 @@ describe('PlaylistCard', () => {
 
   it('handles image error by setting fallback', async () => {
     render(<PlaylistCard playlist={mockPlaylist} />);
-    
-    const image = await screen.findByTestId(`playlist-image-${mockPlaylist.id}`) as HTMLImageElement;
-    
+
+    const image = (await screen.findByTestId(
+      `playlist-image-${mockPlaylist.id}`
+    )) as HTMLImageElement;
+
     // Simulate image error
     fireEvent.error(image);
-    
+
     // Should set fallback image
     expect(image.src).toContain('unsplash.com');
   });
@@ -308,13 +329,15 @@ describe('PlaylistCard', () => {
     };
 
     render(<PlaylistCard playlist={playlistWithHtml} />);
-    
-    expect(DOMPurify.sanitize).toHaveBeenCalledWith('<script>alert("xss")</script>Safe description');
+
+    expect(DOMPurify.sanitize).toHaveBeenCalledWith(
+      '<script>alert("xss")</script>Safe description'
+    );
   });
 
   it('has correct accessibility attributes', () => {
     render(<PlaylistCard playlist={mockPlaylist} />);
-    
+
     const card = screen.getByTestId('playlist-card');
     expect(card).toHaveAttribute('aria-label');
     expect(card.getAttribute('aria-label')).toContain('Playlist Test Playlist');
@@ -324,9 +347,9 @@ describe('PlaylistCard', () => {
 
   it('does not call onClick when onClick is not provided', () => {
     render(<PlaylistCard playlist={mockPlaylist} />);
-    
+
     const card = screen.getByTestId('playlist-card');
-    
+
     // Should not throw error when clicking without onClick
     expect(() => fireEvent.click(card)).not.toThrow();
   });
@@ -339,10 +362,10 @@ describe('PlaylistCard', () => {
 
     const mockOnClick = vi.fn();
     render(<PlaylistCard playlist={mockPlaylist} onClick={mockOnClick} />);
-    
+
     const playButton = await screen.findByLabelText('Reproduzir Test Playlist');
     fireEvent.click(playButton);
-    
+
     // onClick should not be called when play button is clicked
     expect(mockOnClick).not.toHaveBeenCalled();
   });

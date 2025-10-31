@@ -4,7 +4,10 @@
 
 export interface SpotifyPlayer {
   addListener: (event: string, callback: (...args: unknown[]) => void) => void;
-  removeListener: (event: string, callback?: (...args: unknown[]) => void) => void;
+  removeListener: (
+    event: string,
+    callback?: (...args: unknown[]) => void
+  ) => void;
   connect: () => Promise<boolean>;
   disconnect: () => void;
   getCurrentState: () => Promise<SpotifyPlayerState | null>;

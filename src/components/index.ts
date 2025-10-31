@@ -6,15 +6,13 @@ export { CreateButton } from './ui/Controls/CreateButton';
 export { PageContent } from './ui/Layout/PageContent';
 
 // Feedback Components - Estados e feedback visual
-export {
-  ProgressBar
-} from './ui/Feedback/ProgressBar';
+export { ProgressBar } from './ui/Feedback/ProgressBar';
 
 export {
   StatusState,
   EmptyState,
   ErrorState,
-  LoadingState
+  LoadingState,
 } from './shared/feedback/StatusState';
 
 export { EmptyState as OriginalEmptyState } from './shared/feedback/EmptyState';
@@ -34,11 +32,7 @@ export { AuthLayout } from './shared/layout/AuthLayout';
 export { ContentPage } from './shared/layout/ContentPage';
 
 // Media Components - Cards e componentes de mídia
-export {
-  MediaCard,
-  AlbumCard,
-  PlaylistCard
-} from './shared/media/MediaCard';
+export { MediaCard, AlbumCard, PlaylistCard } from './shared/media/MediaCard';
 
 export { ArtistCard } from './shared/media/ArtistCard';
 export { UserAvatar } from './shared/media/UserAvatar';

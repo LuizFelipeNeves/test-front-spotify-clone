@@ -52,15 +52,21 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
     setIsDragging(true);
   };
 
-  const handleProgressMouseMove = useCallback((e: MouseEvent) => {
-    if (!isDragging || !progressBarRef.current || !duration) return;
+  const handleProgressMouseMove = useCallback(
+    (e: MouseEvent) => {
+      if (!isDragging || !progressBarRef.current || !duration) return;
 
-    const rect = progressBarRef.current.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const newProgress = Math.max(0, Math.min(duration, (clickX / rect.width) * duration));
-    
-    setLocalProgress(newProgress);
-  }, [isDragging, progressBarRef, duration]);
+      const rect = progressBarRef.current.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const newProgress = Math.max(
+        0,
+        Math.min(duration, (clickX / rect.width) * duration)
+      );
+
+      setLocalProgress(newProgress);
+    },
+    [isDragging, progressBarRef, duration]
+  );
 
   const handleProgressMouseUp = useCallback(() => {
     if (isDragging) {
@@ -145,7 +151,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
       tabIndex={0}
       onMouseDown={handleProgressMouseDown}
       onClick={handleProgressClick}
-      onKeyDown={(e) => {
+      onKeyDown={e => {
         handleKeyDown(e);
         if (onKeyDown) {
           onKeyDown(e);

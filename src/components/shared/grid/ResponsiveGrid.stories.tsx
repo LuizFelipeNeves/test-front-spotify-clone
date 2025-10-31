@@ -59,7 +59,9 @@ const MockCard = ({ title, type }: { title: string; type: string }) => (
       <span className="text-gray-400 text-sm">{type}</span>
     </div>
     <h3 className="text-white font-medium truncate">{title}</h3>
-    <p className="text-gray-400 text-sm mt-1">Descrição do {type.toLowerCase()}</p>
+    <p className="text-gray-400 text-sm mt-1">
+      Descrição do {type.toLowerCase()}
+    </p>
   </div>
 );
 
@@ -73,11 +75,11 @@ export const Artistas: Story = {
     type: 'artistas',
     children: null,
   },
-  render: (args) => (
+  render: args => (
     <div className="p-6 bg-gray-900 min-h-screen">
       <h2 className="text-white text-2xl font-bold mb-6">Grid de Artistas</h2>
       <ResponsiveGrid {...args}>
-        {mockItems.map((item) => (
+        {mockItems.map(item => (
           <MockCard key={item.id} title={`Artista ${item.id}`} type="Artista" />
         ))}
       </ResponsiveGrid>
@@ -90,11 +92,11 @@ export const Albuns: Story = {
     type: 'albuns',
     children: null,
   },
-  render: (args) => (
+  render: args => (
     <div className="p-6 bg-gray-900 min-h-screen">
       <h2 className="text-white text-2xl font-bold mb-6">Grid de Álbuns</h2>
       <ResponsiveGrid {...args}>
-        {mockItems.map((item) => (
+        {mockItems.map(item => (
           <MockCard key={item.id} title={`Álbum ${item.id}`} type="Álbum" />
         ))}
       </ResponsiveGrid>
@@ -107,12 +109,16 @@ export const Playlists: Story = {
     type: 'playlists',
     children: null,
   },
-  render: (args) => (
+  render: args => (
     <div className="p-6 bg-gray-900 min-h-screen">
       <h2 className="text-white text-2xl font-bold mb-6">Grid de Playlists</h2>
       <ResponsiveGrid {...args}>
-        {mockItems.map((item) => (
-          <MockCard key={item.id} title={`Playlist ${item.id}`} type="Playlist" />
+        {mockItems.map(item => (
+          <MockCard
+            key={item.id}
+            title={`Playlist ${item.id}`}
+            type="Playlist"
+          />
         ))}
       </ResponsiveGrid>
     </div>
@@ -125,11 +131,13 @@ export const CustomGrid: Story = {
     customGrid: 'grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4',
     children: null,
   },
-  render: (args) => (
+  render: args => (
     <div className="p-6 bg-gray-900 min-h-screen">
-      <h2 className="text-white text-2xl font-bold mb-6">Grid Customizado (6 colunas)</h2>
+      <h2 className="text-white text-2xl font-bold mb-6">
+        Grid Customizado (6 colunas)
+      </h2>
       <ResponsiveGrid {...args}>
-        {mockItems.map((item) => (
+        {mockItems.map(item => (
           <MockCard key={item.id} title={`Item ${item.id}`} type="Custom" />
         ))}
       </ResponsiveGrid>
@@ -145,33 +153,51 @@ export const ResponsiveComparison: Story = {
   render: () => (
     <div className="p-6 bg-gray-900 min-h-screen space-y-12">
       <div>
-        <h2 className="text-white text-2xl font-bold mb-6">Comparação de Grids Responsivos</h2>
-        <p className="text-gray-400 mb-8">Redimensione a janela para ver como cada grid se adapta</p>
+        <h2 className="text-white text-2xl font-bold mb-6">
+          Comparação de Grids Responsivos
+        </h2>
+        <p className="text-gray-400 mb-8">
+          Redimensione a janela para ver como cada grid se adapta
+        </p>
       </div>
-      
+
       <div>
-        <h3 className="text-white text-xl font-semibold mb-4">Grid de Artistas</h3>
+        <h3 className="text-white text-xl font-semibold mb-4">
+          Grid de Artistas
+        </h3>
         <ResponsiveGrid type="artistas">
-          {mockItems.slice(0, 8).map((item) => (
-            <MockCard key={item.id} title={`Artista ${item.id}`} type="Artista" />
+          {mockItems.slice(0, 8).map(item => (
+            <MockCard
+              key={item.id}
+              title={`Artista ${item.id}`}
+              type="Artista"
+            />
           ))}
         </ResponsiveGrid>
       </div>
-      
+
       <div>
-        <h3 className="text-white text-xl font-semibold mb-4">Grid de Álbuns</h3>
+        <h3 className="text-white text-xl font-semibold mb-4">
+          Grid de Álbuns
+        </h3>
         <ResponsiveGrid type="albuns">
-          {mockItems.slice(0, 8).map((item) => (
+          {mockItems.slice(0, 8).map(item => (
             <MockCard key={item.id} title={`Álbum ${item.id}`} type="Álbum" />
           ))}
         </ResponsiveGrid>
       </div>
-      
+
       <div>
-        <h3 className="text-white text-xl font-semibold mb-4">Grid de Playlists</h3>
+        <h3 className="text-white text-xl font-semibold mb-4">
+          Grid de Playlists
+        </h3>
         <ResponsiveGrid type="playlists">
-          {mockItems.slice(0, 8).map((item) => (
-            <MockCard key={item.id} title={`Playlist ${item.id}`} type="Playlist" />
+          {mockItems.slice(0, 8).map(item => (
+            <MockCard
+              key={item.id}
+              title={`Playlist ${item.id}`}
+              type="Playlist"
+            />
           ))}
         </ResponsiveGrid>
       </div>
@@ -186,17 +212,19 @@ export const WithDifferentContent: Story = {
   },
   render: () => (
     <div className="p-6 bg-gray-900 min-h-screen">
-      <h2 className="text-white text-2xl font-bold mb-6">Grid com Conteúdo Variado</h2>
+      <h2 className="text-white text-2xl font-bold mb-6">
+        Grid com Conteúdo Variado
+      </h2>
       <ResponsiveGrid type="artistas">
         <div className="bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg p-6 text-white">
           <h3 className="font-bold text-lg">Card Especial</h3>
           <p className="text-sm opacity-90">Conteúdo diferenciado</p>
         </div>
-        
-        {mockItems.slice(0, 7).map((item) => (
+
+        {mockItems.slice(0, 7).map(item => (
           <MockCard key={item.id} title={`Item ${item.id}`} type="Normal" />
         ))}
-        
+
         <div className="bg-green-600 rounded-lg p-6 text-white flex items-center justify-center">
           <div className="text-center">
             <div className="text-3xl mb-2">+</div>

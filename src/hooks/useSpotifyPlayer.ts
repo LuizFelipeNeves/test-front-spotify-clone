@@ -42,11 +42,16 @@ export const useSpotifyPlayer = () => {
 
   // Load Spotify Web Playback SDK only once
   useEffect(() => {
-    console.log('SpotifyPlayerProvider useEffect called:', { accessToken: !!accessToken, sdkLoaded: sdkLoadedRef.current });
-    
+    console.log('SpotifyPlayerProvider useEffect called:', {
+      accessToken: !!accessToken,
+      sdkLoaded: sdkLoadedRef.current,
+    });
+
     if (!accessToken || sdkLoadedRef.current) return;
 
-    const existingScript = document.querySelector('script[src="https://sdk.scdn.co/spotify-player.js"]');
+    const existingScript = document.querySelector(
+      'script[src="https://sdk.scdn.co/spotify-player.js"]'
+    );
     if (existingScript) {
       console.log('Spotify SDK script already exists');
       sdkLoadedRef.current = true;
@@ -70,13 +75,15 @@ export const useSpotifyPlayer = () => {
       if (!window.Spotify) {
         console.error('🚨 Spotify SDK failed to load after 10 seconds');
       } else if (!player) {
-        console.warn('⚠️ Spotify SDK loaded but player not created after 10 seconds');
+        console.warn(
+          '⚠️ Spotify SDK loaded but player not created after 10 seconds'
+        );
       }
     }, 10000);
 
     window.onSpotifyWebPlaybackSDKReady = () => {
       console.log('Spotify Web Playback SDK Ready callback called');
-      
+
       if (player) {
         console.log('Player already exists, skipping creation');
         return; // Prevent multiple player instances
@@ -85,7 +92,7 @@ export const useSpotifyPlayer = () => {
       console.log('Creating new Spotify Player');
       const spotifyPlayer = new window.Spotify.Player({
         name: 'Magalu Spotify Player',
-        getOAuthToken: (cb) => {
+        getOAuthToken: cb => {
           console.log('getOAuthToken callback called');
           cb(accessToken);
         },
@@ -93,131 +100,172 @@ export const useSpotifyPlayer = () => {
       });
 
       // Error handling
-      spotifyPlayer.addListener('initialization_error', (...args: unknown[]) => {
-        const error = args[0] as { message?: string };
-        console.error('🚨 Spotify Player initialization error:', error?.message || 'Unknown error');
-      });
+      spotifyPlayer.addListener(
+        'initialization_error',
+        (...args: unknown[]) => {
+          const error = args[0] as { message?: string };
+          console.error(
+            '🚨 Spotify Player initialization error:',
+            error?.message || 'Unknown error'
+          );
+        }
+      );
 
-      spotifyPlayer.addListener('authentication_error', (...args: unknown[]) => {
-        const error = args[0] as { message?: string };
-        console.error('🚨 Spotify Player authentication error:', error?.message || 'Unknown error');
-        console.error('🔑 Current access token:', accessToken ? 'Present' : 'Missing');
-      });
+      spotifyPlayer.addListener(
+        'authentication_error',
+        (...args: unknown[]) => {
+          const error = args[0] as { message?: string };
+          console.error(
+            '🚨 Spotify Player authentication error:',
+            error?.message || 'Unknown error'
+          );
+          console.error(
+            '🔑 Current access token:',
+            accessToken ? 'Present' : 'Missing'
+          );
+        }
+      );
 
       spotifyPlayer.addListener('account_error', (...args: unknown[]) => {
         const error = args[0] as { message?: string };
-        console.error('Spotify Player account error:', error?.message || 'Unknown error');
+        console.error(
+          'Spotify Player account error:',
+          error?.message || 'Unknown error'
+        );
       });
 
       spotifyPlayer.addListener('playback_error', (...args: unknown[]) => {
         const error = args[0] as { message?: string };
-        console.error('Spotify Player playback error:', error?.message || 'Unknown error');
+        console.error(
+          'Spotify Player playback error:',
+          error?.message || 'Unknown error'
+        );
       });
 
       // Playback status updates
-      spotifyPlayer.addListener('player_state_changed', (...args: unknown[]) => {
-        const state = args[0] as {
-          paused?: boolean;
-          position?: number;
-          track_window?: {
-            current_track: {
-              id: string;
-              name: string;
-              duration_ms: number;
-              uri: string;
-              album: {
+      spotifyPlayer.addListener(
+        'player_state_changed',
+        (...args: unknown[]) => {
+          const state = args[0] as {
+            paused?: boolean;
+            position?: number;
+            track_window?: {
+              current_track: {
                 id: string;
                 name: string;
+                duration_ms: number;
                 uri: string;
-                images: Array<{ url: string; height: number | null; width: number | null }>;
-                release_date?: string;
-                total_tracks?: number;
+                album: {
+                  id: string;
+                  name: string;
+                  uri: string;
+                  images: Array<{
+                    url: string;
+                    height: number | null;
+                    width: number | null;
+                  }>;
+                  release_date?: string;
+                  total_tracks?: number;
+                  external_urls?: { spotify?: string };
+                };
+                artists: Array<{
+                  id: string;
+                  name: string;
+                  uri: string;
+                }>;
+                preview_url?: string | null;
                 external_urls?: { spotify?: string };
+                popularity?: number;
               };
-              artists: Array<{
-                id: string;
-                name: string;
-                uri: string;
-              }>;
-              preview_url?: string | null;
-              external_urls?: { spotify?: string };
-              popularity?: number;
+              previous_tracks: unknown[];
+              next_tracks: unknown[];
             };
-            previous_tracks: unknown[];
-            next_tracks: unknown[];
-          };
-          context?: {
-            uri?: string;
-          };
-          shuffle?: boolean;
-          repeat_mode?: number;
-        } | null;
+            context?: {
+              uri?: string;
+            };
+            shuffle?: boolean;
+            repeat_mode?: number;
+          } | null;
 
-        console.log('🎵 Player state changed:', {
-          paused: state?.paused,
-          position: state?.position,
-          track: state?.track_window?.current_track?.name,
-          context: state?.context?.uri
-        });
+          console.log('🎵 Player state changed:', {
+            paused: state?.paused,
+            position: state?.position,
+            track: state?.track_window?.current_track?.name,
+            context: state?.context?.uri,
+          });
 
-        if (!state) return;
+          if (!state) return;
 
-        const track = state.track_window?.current_track;
+          const track = state.track_window?.current_track;
 
-        if (!track) return;
+          if (!track) return;
 
-        // Only update the current track if it's actually different to avoid showing old tracks during transitions
-        const currentTrackInStore = usePlayerStore.getState().currentTrack;
-        const isNewTrack = !currentTrackInStore || currentTrackInStore.id !== track.id;
+          // Only update the current track if it's actually different to avoid showing old tracks during transitions
+          const currentTrackInStore = usePlayerStore.getState().currentTrack;
+          const isNewTrack =
+            !currentTrackInStore || currentTrackInStore.id !== track.id;
 
-        if (isNewTrack) {
-          console.log('🔄 Track changed from', currentTrackInStore?.name, 'to', track.name);
+          if (isNewTrack) {
+            console.log(
+              '🔄 Track changed from',
+              currentTrackInStore?.name,
+              'to',
+              track.name
+            );
 
-          const convertedTrack = {
-            id: track.id,
-            name: track.name,
-            duration_ms: track.duration_ms,
-            artists: track.artists.map((artist: { name: string; uri: string }) => ({
-              id: artist.uri.split(':')[2],
-              name: artist.name,
-              images: [],
-              genres: [],
+            const convertedTrack = {
+              id: track.id,
+              name: track.name,
+              duration_ms: track.duration_ms,
+              artists: track.artists.map(
+                (artist: { name: string; uri: string }) => ({
+                  id: artist.uri.split(':')[2],
+                  name: artist.name,
+                  images: [],
+                  genres: [],
+                  popularity: 0,
+                  followers: { total: 0 },
+                  external_urls: { spotify: '' },
+                  uri: artist.uri,
+                })
+              ),
+              album: {
+                id: track.album.uri.split(':')[2],
+                name: track.album.name,
+                images: track.album.images,
+                artists: [],
+                release_date: '',
+                total_tracks: 0,
+                album_type: 'album' as const,
+                external_urls: { spotify: '' },
+                uri: track.album.uri,
+              },
               popularity: 0,
-              followers: { total: 0 },
+              preview_url: null,
               external_urls: { spotify: '' },
-              uri: artist.uri,
-            })),
-            album: {
-              id: track.album.uri.split(':')[2],
-              name: track.album.name,
-              images: track.album.images,
-              artists: [],
-              release_date: '',
-              total_tracks: 0,
-              album_type: 'album' as const,
-              external_urls: { spotify: '' },
-              uri: track.album.uri,
-            },
-            popularity: 0,
-            preview_url: null,
-            external_urls: { spotify: '' },
-          };
+            };
 
-          setCurrentTrack(convertedTrack);
-        } else {
-          console.log('🔄 Same track, only updating playback state');
+            setCurrentTrack(convertedTrack);
+          } else {
+            console.log('🔄 Same track, only updating playback state');
+          }
+
+          // Update player store state to sync with Spotify
+          setIsPlaying(!state.paused);
+          setProgress(state.position || 0);
+          setDuration(track.duration_ms);
+          setShuffle(state.shuffle || false);
+
+          // Convert Spotify repeat mode to our format
+          const repeatMode =
+            state.repeat_mode === 0
+              ? 'off'
+              : state.repeat_mode === 1
+                ? 'context'
+                : 'track';
+          setRepeat(repeatMode);
         }
-
-        // Update player store state to sync with Spotify
-        setIsPlaying(!state.paused);
-        setProgress(state.position || 0);
-        setDuration(track.duration_ms);
-        setShuffle(state.shuffle || false);
-
-        // Convert Spotify repeat mode to our format
-        const repeatMode = state.repeat_mode === 0 ? 'off' : state.repeat_mode === 1 ? 'context' : 'track';
-        setRepeat(repeatMode);
-      });
+      );
 
       // Ready
       spotifyPlayer.addListener('ready', (...args: unknown[]) => {
@@ -233,7 +281,10 @@ export const useSpotifyPlayer = () => {
       // Not Ready
       spotifyPlayer.addListener('not_ready', (...args: unknown[]) => {
         const data = args[0] as { device_id?: string };
-        console.log('❌ Spotify Player Device ID has gone offline:', data?.device_id);
+        console.log(
+          '❌ Spotify Player Device ID has gone offline:',
+          data?.device_id
+        );
         setIsReady(false);
         console.log('❌ isReady set to false');
       });
@@ -252,7 +303,17 @@ export const useSpotifyPlayer = () => {
         player.disconnect();
       }
     };
-  }, [accessToken, volume, player, setCurrentTrack, setDuration, setIsPlaying, setProgress, setRepeat, setShuffle]);
+  }, [
+    accessToken,
+    volume,
+    player,
+    setCurrentTrack,
+    setDuration,
+    setIsPlaying,
+    setProgress,
+    setRepeat,
+    setShuffle,
+  ]);
 
   // Update progress every second
   useEffect(() => {
@@ -300,17 +361,28 @@ export const useSpotifyPlayer = () => {
               duration_ms: data.item.duration_ms,
               popularity: data.item.popularity || 0,
               preview_url: data.item.preview_url,
-              external_urls: { spotify: data.item.external_urls?.spotify || '' },
-              artists: data.item.artists.map((artist: { id: string; name: string; external_urls?: { spotify?: string }, uri?: string }) => ({
-                id: artist.id,
-                name: artist.name,
-                images: [],
-                genres: [],
-                popularity: 0,
-                followers: { total: 0 },
-                external_urls: { spotify: artist.external_urls?.spotify || '' },
-                uri: artist.uri || `spotify:artist:${artist.id}`,
-              })),
+              external_urls: {
+                spotify: data.item.external_urls?.spotify || '',
+              },
+              artists: data.item.artists.map(
+                (artist: {
+                  id: string;
+                  name: string;
+                  external_urls?: { spotify?: string };
+                  uri?: string;
+                }) => ({
+                  id: artist.id,
+                  name: artist.name,
+                  images: [],
+                  genres: [],
+                  popularity: 0,
+                  followers: { total: 0 },
+                  external_urls: {
+                    spotify: artist.external_urls?.spotify || '',
+                  },
+                  uri: artist.uri || `spotify:artist:${artist.id}`,
+                })
+              ),
               album: {
                 id: data.item.album.id,
                 name: data.item.album.name,
@@ -319,7 +391,9 @@ export const useSpotifyPlayer = () => {
                 release_date: data.item.album.release_date || '',
                 total_tracks: data.item.album.total_tracks || 0,
                 album_type: 'album' as const,
-                external_urls: { spotify: data.item.album.external_urls?.spotify || '' },
+                external_urls: {
+                  spotify: data.item.album.external_urls?.spotify || '',
+                },
                 uri: data.item.album.uri,
               },
             };
@@ -333,7 +407,12 @@ export const useSpotifyPlayer = () => {
             // Update shuffle and repeat state
             setShuffle(data.shuffle_state);
 
-            const newRepeatState = data.repeat_state === 'track' ? 'track' : data.repeat_state === 'context' ? 'context' : 'off';
+            const newRepeatState =
+              data.repeat_state === 'track'
+                ? 'track'
+                : data.repeat_state === 'context'
+                  ? 'context'
+                  : 'off';
             setRepeat(newRepeatState);
           }
         } catch (error) {
@@ -352,11 +431,24 @@ export const useSpotifyPlayer = () => {
         syncIntervalRef.current = null;
       }
     };
-  }, [accessToken, setCurrentTrack, setIsPlaying, setProgress, setDuration, setShuffle, setRepeat]);
+  }, [
+    accessToken,
+    setCurrentTrack,
+    setIsPlaying,
+    setProgress,
+    setDuration,
+    setShuffle,
+    setRepeat,
+  ]);
 
   // Player control functions
   const play = async () => {
-    console.log('▶️ play called', { player: !!player, isReady, deviceId, accessToken: !!accessToken });
+    console.log('▶️ play called', {
+      player: !!player,
+      isReady,
+      deviceId,
+      accessToken: !!accessToken,
+    });
 
     if (!accessToken) {
       console.warn('⚠️ play: No access token available');
@@ -373,7 +465,12 @@ export const useSpotifyPlayer = () => {
   };
 
   const pause = async () => {
-    console.log('⏸️ pause called', { player: !!player, isReady, deviceId, accessToken: !!accessToken });
+    console.log('⏸️ pause called', {
+      player: !!player,
+      isReady,
+      deviceId,
+      accessToken: !!accessToken,
+    });
 
     if (!accessToken) {
       console.warn('⚠️ pause: No access token available');
@@ -390,8 +487,12 @@ export const useSpotifyPlayer = () => {
   };
 
   const togglePlay = async () => {
-    console.log('🎵 togglePlay called', { player: !!player, isReady, isPlaying });
-    
+    console.log('🎵 togglePlay called', {
+      player: !!player,
+      isReady,
+      isPlaying,
+    });
+
     if (isPlaying) {
       await pause();
     } else {
@@ -400,7 +501,12 @@ export const useSpotifyPlayer = () => {
   };
 
   const nextTrack = async () => {
-    console.log('⏭️ nextTrack called', { player: !!player, isReady, deviceId, accessToken: !!accessToken });
+    console.log('⏭️ nextTrack called', {
+      player: !!player,
+      isReady,
+      deviceId,
+      accessToken: !!accessToken,
+    });
 
     if (!accessToken) {
       console.warn('⚠️ nextTrack: No access token available');
@@ -416,7 +522,12 @@ export const useSpotifyPlayer = () => {
   };
 
   const previousTrack = async () => {
-    console.log('⏮️ previousTrack called', { player: !!player, isReady, deviceId, accessToken: !!accessToken });
+    console.log('⏮️ previousTrack called', {
+      player: !!player,
+      isReady,
+      deviceId,
+      accessToken: !!accessToken,
+    });
 
     if (!accessToken) {
       console.warn('⚠️ previousTrack: No access token available');
@@ -432,7 +543,13 @@ export const useSpotifyPlayer = () => {
   };
 
   const seek = (position: number) => {
-    console.log('⏩ seek called', { position, player: !!player, isReady, deviceId, accessToken: !!accessToken });
+    console.log('⏩ seek called', {
+      position,
+      player: !!player,
+      isReady,
+      deviceId,
+      accessToken: !!accessToken,
+    });
 
     if (!accessToken) {
       console.warn('⚠️ seek: No access token available');
@@ -442,7 +559,8 @@ export const useSpotifyPlayer = () => {
     // Update the local progress immediately to provide instant feedback
     setProgress(position);
 
-    spotifyService.seek(Math.round(position), deviceId || undefined)
+    spotifyService
+      .seek(Math.round(position), deviceId || undefined)
       .then(() => {
         console.log('✅ seek successful');
       })
@@ -463,13 +581,18 @@ export const useSpotifyPlayer = () => {
   };
 
   const playTrack = async (trackUri: string, contextUri?: string) => {
-    console.log('playTrack called with:', { trackUri, contextUri, deviceId, isReady });
+    console.log('playTrack called with:', {
+      trackUri,
+      contextUri,
+      deviceId,
+      isReady,
+    });
 
     if (!player || !deviceId || !accessToken) {
       console.warn('Player not ready or missing credentials:', {
         player: !!player,
         deviceId,
-        accessToken: !!accessToken
+        accessToken: !!accessToken,
       });
       return;
     }

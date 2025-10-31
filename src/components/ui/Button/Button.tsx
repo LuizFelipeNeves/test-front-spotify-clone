@@ -3,7 +3,6 @@ import { type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from './buttonVariants';
 
-
 export interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
@@ -11,7 +10,10 @@ export interface ButtonProps
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, type = 'button', ...props }, ref) => {
+  (
+    { className, variant, size, asChild = false, type = 'button', ...props },
+    ref
+  ) => {
     return (
       <button
         type={type}
@@ -20,7 +22,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {asChild ? props.children : props.children}
-        </button>
+      </button>
     );
   }
 );

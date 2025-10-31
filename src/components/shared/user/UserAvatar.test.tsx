@@ -10,7 +10,9 @@ vi.mock('@/hooks/useImageCache', () => ({
 
 const mockUseImageCache = useImageCache as MockedFunction<typeof useImageCache>;
 
-const createMockReturn = (overrides: Partial<ReturnType<typeof useImageCache>> = {}) => ({
+const createMockReturn = (
+  overrides: Partial<ReturnType<typeof useImageCache>> = {}
+) => ({
   imageUrl: 'https://example.com/avatar.jpg',
   isLoading: false,
   error: null,
@@ -64,19 +66,25 @@ describe('UserAvatar Component', () => {
   });
 
   it('should apply custom className', () => {
-    const { container } = render(<UserAvatar {...defaultProps} className="custom-class" />);
+    const { container } = render(
+      <UserAvatar {...defaultProps} className="custom-class" />
+    );
 
     const avatarContainer = container.firstChild as HTMLElement;
     expect(avatarContainer).toHaveClass('custom-class');
   });
 
   it('should show loading state when isLoading prop is true', () => {
-    mockUseImageCache.mockReturnValue(createMockReturn({
-      imageUrl: 'https://example.com/avatar.jpg',
-      isLoading: false,
-    }));
+    mockUseImageCache.mockReturnValue(
+      createMockReturn({
+        imageUrl: 'https://example.com/avatar.jpg',
+        isLoading: false,
+      })
+    );
 
-    const { container } = render(<UserAvatar {...defaultProps} isLoading={true} />);
+    const { container } = render(
+      <UserAvatar {...defaultProps} isLoading={true} />
+    );
 
     const loadingContainer = container.querySelector('.animate-pulse');
     expect(loadingContainer).toBeInTheDocument();
@@ -84,10 +92,12 @@ describe('UserAvatar Component', () => {
   });
 
   it('should show loading state when image is loading', () => {
-    mockUseImageCache.mockReturnValue(createMockReturn({
-      imageUrl: null,
-      isLoading: true,
-    }));
+    mockUseImageCache.mockReturnValue(
+      createMockReturn({
+        imageUrl: null,
+        isLoading: true,
+      })
+    );
 
     const { container } = render(<UserAvatar {...defaultProps} />);
 
@@ -97,10 +107,12 @@ describe('UserAvatar Component', () => {
   });
 
   it('should show loading state when no image URL and loading', () => {
-    mockUseImageCache.mockReturnValue(createMockReturn({
-      imageUrl: null,
-      isLoading: true,
-    }));
+    mockUseImageCache.mockReturnValue(
+      createMockReturn({
+        imageUrl: null,
+        isLoading: true,
+      })
+    );
 
     const { container } = render(<UserAvatar {...defaultProps} />);
 
@@ -124,34 +136,48 @@ describe('UserAvatar Component', () => {
   });
 
   it('should handle empty display name', () => {
-    mockUseImageCache.mockReturnValue(createMockReturn({
-      imageUrl: 'https://example.com/avatar.jpg',
-      isLoading: false,
-    }));
+    mockUseImageCache.mockReturnValue(
+      createMockReturn({
+        imageUrl: 'https://example.com/avatar.jpg',
+        isLoading: false,
+      })
+    );
 
-    const { container } = render(<UserAvatar imageUrl="https://example.com/avatar.jpg" displayName="" />);
+    const { container } = render(
+      <UserAvatar imageUrl="https://example.com/avatar.jpg" displayName="" />
+    );
 
-    const img = container.querySelector('img[src="https://example.com/avatar.jpg"]');
+    const img = container.querySelector(
+      'img[src="https://example.com/avatar.jpg"]'
+    );
     expect(img).toHaveAttribute('alt', '');
   });
 
   it('should handle undefined display name', () => {
-    mockUseImageCache.mockReturnValue(createMockReturn({
-      imageUrl: 'https://example.com/avatar.jpg',
-      isLoading: false,
-    }));
+    mockUseImageCache.mockReturnValue(
+      createMockReturn({
+        imageUrl: 'https://example.com/avatar.jpg',
+        isLoading: false,
+      })
+    );
 
-    const { container } = render(<UserAvatar imageUrl="https://example.com/avatar.jpg" />);
+    const { container } = render(
+      <UserAvatar imageUrl="https://example.com/avatar.jpg" />
+    );
 
-    const img = container.querySelector('img[src="https://example.com/avatar.jpg"]');
+    const img = container.querySelector(
+      'img[src="https://example.com/avatar.jpg"]'
+    );
     expect(img).toHaveAttribute('alt', '');
   });
 
   it('should show fallback when no image available', () => {
-    mockUseImageCache.mockReturnValue(createMockReturn({
-      imageUrl: null,
-      isLoading: false,
-    }));
+    mockUseImageCache.mockReturnValue(
+      createMockReturn({
+        imageUrl: null,
+        isLoading: false,
+      })
+    );
 
     const { container } = render(<UserAvatar {...defaultProps} />);
 
@@ -162,10 +188,12 @@ describe('UserAvatar Component', () => {
 
   it('should use cached image from hook', () => {
     const cachedUrl = 'https://cached.example.com/avatar.jpg';
-    mockUseImageCache.mockReturnValue(createMockReturn({
-      imageUrl: cachedUrl,
-      isLoading: false,
-    }));
+    mockUseImageCache.mockReturnValue(
+      createMockReturn({
+        imageUrl: cachedUrl,
+        isLoading: false,
+      })
+    );
 
     render(<UserAvatar {...defaultProps} />);
 
@@ -188,10 +216,12 @@ describe('UserAvatar Component', () => {
   });
 
   it('should show fallback design when no cached image', () => {
-    mockUseImageCache.mockReturnValue(createMockReturn({
-      imageUrl: null,
-      isLoading: false,
-    }));
+    mockUseImageCache.mockReturnValue(
+      createMockReturn({
+        imageUrl: null,
+        isLoading: false,
+      })
+    );
 
     const { container } = render(<UserAvatar displayName="No Image User" />);
 
@@ -213,16 +243,22 @@ describe('UserAvatar Component', () => {
     expect(mockUseImageCache).toHaveBeenCalledWith(
       'https://example.com/avatar.jpg',
       'user',
-      { fallbackUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop' }
+      {
+        fallbackUrl:
+          'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop',
+      }
     );
   });
 
   it('should handle different image URLs', () => {
-    const specialUrl = 'https://example.com/avatar%20with%20spaces.jpg?param=value';
-    mockUseImageCache.mockReturnValue(createMockReturn({
-      imageUrl: specialUrl,
-      isLoading: false,
-    }));
+    const specialUrl =
+      'https://example.com/avatar%20with%20spaces.jpg?param=value';
+    mockUseImageCache.mockReturnValue(
+      createMockReturn({
+        imageUrl: specialUrl,
+        isLoading: false,
+      })
+    );
 
     render(<UserAvatar imageUrl={specialUrl} displayName="Special User" />);
 
@@ -231,15 +267,25 @@ describe('UserAvatar Component', () => {
   });
 
   it('should show loading skeleton with proper styling', () => {
-    mockUseImageCache.mockReturnValue(createMockReturn({
-      imageUrl: null,
-      isLoading: true,
-    }));
+    mockUseImageCache.mockReturnValue(
+      createMockReturn({
+        imageUrl: null,
+        isLoading: true,
+      })
+    );
 
-    const { container } = render(<UserAvatar {...defaultProps} isLoading={true} size="md" />);
+    const { container } = render(
+      <UserAvatar {...defaultProps} isLoading={true} size="md" />
+    );
 
     const loadingContainer = container.querySelector('.animate-pulse');
     expect(loadingContainer).toBeInTheDocument();
-    expect(loadingContainer).toHaveClass('w-28', 'h-28', 'bg-gray-700', 'rounded-full', 'animate-pulse');
+    expect(loadingContainer).toHaveClass(
+      'w-28',
+      'h-28',
+      'bg-gray-700',
+      'rounded-full',
+      'animate-pulse'
+    );
   });
 });

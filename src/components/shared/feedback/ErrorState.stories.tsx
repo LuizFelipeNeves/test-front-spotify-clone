@@ -72,7 +72,7 @@ export const WithAction: Story = {
     title: 'Falha ao Carregar',
     message: 'Não foi possível conectar com o Spotify.',
     action: (
-      <button 
+      <button
         onClick={fn()}
         className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors"
       >
@@ -88,13 +88,13 @@ export const NetworkError: Story = {
     message: 'Verifique sua conexão com a internet e tente novamente.',
     action: (
       <div className="flex flex-col sm:flex-row gap-3">
-        <button 
+        <button
           onClick={fn()}
           className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors"
         >
           Tentar Novamente
         </button>
-        <button 
+        <button
           onClick={fn()}
           className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-md transition-colors"
         >
@@ -108,9 +108,10 @@ export const NetworkError: Story = {
 export const SpotifyError: Story = {
   args: {
     title: 'Erro do Spotify',
-    message: 'O Spotify está temporariamente indisponível. Tente novamente em alguns minutos.',
+    message:
+      'O Spotify está temporariamente indisponível. Tente novamente em alguns minutos.',
     action: (
-      <button 
+      <button
         onClick={fn()}
         className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors"
       >
@@ -125,7 +126,7 @@ export const AuthenticationError: Story = {
     title: 'Sessão Expirada',
     message: 'Sua sessão expirou. Faça login novamente para continuar.',
     action: (
-      <button 
+      <button
         onClick={fn()}
         className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors"
       >
@@ -138,16 +139,17 @@ export const AuthenticationError: Story = {
 export const LongMessage: Story = {
   args: {
     title: 'Erro Detalhado',
-    message: 'Ocorreu um erro inesperado ao tentar sincronizar sua biblioteca musical com o Spotify. Isso pode acontecer devido a problemas temporários no servidor ou limitações da API. Recomendamos aguardar alguns minutos antes de tentar novamente.',
+    message:
+      'Ocorreu um erro inesperado ao tentar sincronizar sua biblioteca musical com o Spotify. Isso pode acontecer devido a problemas temporários no servidor ou limitações da API. Recomendamos aguardar alguns minutos antes de tentar novamente.',
     action: (
       <div className="flex flex-col sm:flex-row gap-3">
-        <button 
+        <button
           onClick={fn()}
           className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors"
         >
           Tentar Novamente
         </button>
-        <button 
+        <button
           onClick={fn()}
           className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-md transition-colors"
         >
@@ -172,7 +174,7 @@ export const WithJSXMessage: Story = {
       </div>
     ),
     action: (
-      <button 
+      <button
         onClick={fn()}
         className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors"
       >
@@ -195,7 +197,7 @@ export const CustomStyling: Story = {
     message: 'Este é um exemplo com estilização customizada.',
     className: 'bg-red-900/20 border border-red-500/30 rounded-lg',
     action: (
-      <button 
+      <button
         onClick={fn()}
         className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors"
       >
@@ -222,11 +224,11 @@ Exemplo de como o ErrorState aparece dentro de um card ou container:
   },
   render: () => (
     <div className="w-96 h-64 bg-gray-900 rounded-lg border border-gray-700 flex items-center justify-center">
-      <ErrorState 
+      <ErrorState
         title="Falha ao Carregar"
         message="Não foi possível carregar a playlist."
         action={
-          <button 
+          <button
             onClick={fn()}
             className="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-sm rounded-md transition-colors"
           >
@@ -256,18 +258,18 @@ Exemplo de como o ErrorState aparece como estado de erro de uma página inteira:
   },
   render: () => (
     <div className="min-h-screen bg-gray-950 flex items-center justify-center">
-      <ErrorState 
+      <ErrorState
         title="Página Não Encontrada"
         message="A página que você está procurando não existe ou foi movida."
         action={
           <div className="flex gap-3">
-            <button 
+            <button
               onClick={fn()}
               className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors"
             >
               Voltar ao Início
             </button>
-            <button 
+            <button
               onClick={fn()}
               className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-md transition-colors"
             >
@@ -308,9 +310,10 @@ Este exemplo demonstra as funcionalidades de acessibilidade do ErrorState:
   },
   args: {
     title: 'Erro de Acessibilidade',
-    message: 'Este exemplo demonstra como o ErrorState é acessível para usuários de leitores de tela.',
+    message:
+      'Este exemplo demonstra como o ErrorState é acessível para usuários de leitores de tela.',
     action: (
-      <button 
+      <button
         onClick={fn()}
         className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-950"
         aria-describedby="error-description"
@@ -340,11 +343,11 @@ Exemplos de diferentes tipos de erro que podem ocorrer na aplicação:
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6 bg-gray-950 max-w-6xl">
       {/* Erro de Rede */}
       <div className="bg-gray-900 rounded-lg p-4 border border-gray-700">
-        <ErrorState 
+        <ErrorState
           title="Erro de Rede"
           message="Sem conexão com a internet."
           action={
-            <button 
+            <button
               onClick={fn()}
               className="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-sm rounded-md transition-colors"
             >
@@ -353,14 +356,14 @@ Exemplos de diferentes tipos de erro que podem ocorrer na aplicação:
           }
         />
       </div>
-      
+
       {/* Erro de Autenticação */}
       <div className="bg-gray-900 rounded-lg p-4 border border-gray-700">
-        <ErrorState 
+        <ErrorState
           title="Sessão Expirada"
           message="Faça login novamente."
           action={
-            <button 
+            <button
               onClick={fn()}
               className="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-sm rounded-md transition-colors"
             >
@@ -369,14 +372,14 @@ Exemplos de diferentes tipos de erro que podem ocorrer na aplicação:
           }
         />
       </div>
-      
+
       {/* Erro de Servidor */}
       <div className="bg-gray-900 rounded-lg p-4 border border-gray-700">
-        <ErrorState 
+        <ErrorState
           title="Erro do Servidor"
           message="Problema temporário no servidor."
           action={
-            <button 
+            <button
               onClick={fn()}
               className="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-sm rounded-md transition-colors"
             >
@@ -385,14 +388,14 @@ Exemplos de diferentes tipos de erro que podem ocorrer na aplicação:
           }
         />
       </div>
-      
+
       {/* Erro de Permissão */}
       <div className="bg-gray-900 rounded-lg p-4 border border-gray-700">
-        <ErrorState 
+        <ErrorState
           title="Acesso Negado"
           message="Você não tem permissão para este recurso."
           action={
-            <button 
+            <button
               onClick={fn()}
               className="px-3 py-1.5 bg-gray-600 hover:bg-gray-700 text-white text-sm rounded-md transition-colors"
             >

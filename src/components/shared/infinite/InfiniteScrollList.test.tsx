@@ -48,13 +48,7 @@ describe('InfiniteScrollList', () => {
   });
 
   it('shows loading state when loading and no items', () => {
-    render(
-      <InfiniteScrollList
-        {...defaultProps}
-        items={[]}
-        loading={true}
-      />
-    );
+    render(<InfiniteScrollList {...defaultProps} items={[]} loading={true} />);
 
     const loadingSpinner = document.querySelector('.animate-spin');
     expect(loadingSpinner).toBeInTheDocument();
@@ -62,14 +56,12 @@ describe('InfiniteScrollList', () => {
   });
 
   it('shows error state with React node error', () => {
-    const errorNode = <div data-testid="custom-error">Custom error component</div>;
-    
+    const errorNode = (
+      <div data-testid="custom-error">Custom error component</div>
+    );
+
     render(
-      <InfiniteScrollList 
-        {...defaultProps} 
-        items={[]} 
-        error={errorNode} 
-      />
+      <InfiniteScrollList {...defaultProps} items={[]} error={errorNode} />
     );
 
     expect(screen.getByText('Ocorreu um erro inesperado')).toBeInTheDocument();
@@ -78,54 +70,51 @@ describe('InfiniteScrollList', () => {
 
   it('shows retry button when onRetry is provided', () => {
     const mockRetry = vi.fn();
-    
+
     render(
-      <InfiniteScrollList 
-        {...defaultProps} 
-        items={[]} 
-        error="Test error" 
+      <InfiniteScrollList
+        {...defaultProps}
+        items={[]}
+        error="Test error"
         onRetry={mockRetry}
       />
     );
 
-    const retryButton = screen.getByRole('button', { name: /tentar carregar novamente/i });
+    const retryButton = screen.getByRole('button', {
+      name: /tentar carregar novamente/i,
+    });
     expect(retryButton).toBeInTheDocument();
-    
+
     fireEvent.click(retryButton);
     expect(mockRetry).toHaveBeenCalledTimes(1);
   });
 
   it('does not show retry button when onRetry is not provided', () => {
     render(
-      <InfiniteScrollList 
-        {...defaultProps} 
-        items={[]} 
-        error="Test error" 
-      />
+      <InfiniteScrollList {...defaultProps} items={[]} error="Test error" />
     );
 
-    expect(screen.queryByRole('button', { name: /tentar carregar novamente/i })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: /tentar carregar novamente/i })
+    ).not.toBeInTheDocument();
   });
 
   it('shows empty state when no items', () => {
-    render(
-      <InfiniteScrollList 
-        {...defaultProps} 
-        items={[]} 
-      />
-    );
+    render(<InfiniteScrollList {...defaultProps} items={[]} />);
 
     expect(screen.getByText('Nenhum item encontrado')).toBeInTheDocument();
-    expect(screen.getByText('Não há itens para exibir no momento.')).toBeInTheDocument();
+    expect(
+      screen.getByText('Não há itens para exibir no momento.')
+    ).toBeInTheDocument();
     expect(document.querySelector('svg')).toBeInTheDocument(); // SVG icon
     expect(screen.queryByTestId('infinite-scroll')).not.toBeInTheDocument();
   });
 
   it('shows custom empty state messages', () => {
     render(
-      <InfiniteScrollList 
-        {...defaultProps} 
-        items={[]} 
+      <InfiniteScrollList
+        {...defaultProps}
+        items={[]}
         emptyMessage="Custom empty message"
         emptyDescription="Custom empty description"
       />
@@ -137,8 +126,8 @@ describe('InfiniteScrollList', () => {
 
   it('applies custom className and gridClassName', () => {
     render(
-      <InfiniteScrollList 
-        {...defaultProps} 
+      <InfiniteScrollList
+        {...defaultProps}
         className="custom-container-class"
         gridClassName="custom-grid-class"
       />
@@ -146,36 +135,33 @@ describe('InfiniteScrollList', () => {
 
     const container = screen.getByTestId('infinite-scroll');
     expect(container).toHaveClass('custom-container-class');
-    
+
     const gridContainer = container.firstChild;
     expect(gridContainer).toHaveClass('custom-grid-class');
   });
 
   it('shows infinite scroll trigger when hasNextPage is true', () => {
     render(
-      <InfiniteScrollList 
-        {...defaultProps} 
+      <InfiniteScrollList
+        {...defaultProps}
         hasNextPage={true}
         loadingText="Loading more items..."
       />
     );
 
     expect(screen.getByText('Loading more items...')).toBeInTheDocument();
-    const loadingSpinner = screen.getAllByRole('generic').find(el => 
-      el.classList.contains('animate-spin')
-    );
+    const loadingSpinner = screen
+      .getAllByRole('generic')
+      .find(el => el.classList.contains('animate-spin'));
     expect(loadingSpinner).toBeInTheDocument();
   });
 
   it('does not show infinite scroll trigger when hasNextPage is false', () => {
-    render(
-      <InfiniteScrollList 
-        {...defaultProps} 
-        hasNextPage={false}
-      />
-    );
+    render(<InfiniteScrollList {...defaultProps} hasNextPage={false} />);
 
-    expect(screen.queryByText('Carregando mais itens...')).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('Carregando mais itens...')
+    ).not.toBeInTheDocument();
   });
 
   it('calls fetchNextPage when in view and has next page', async () => {
@@ -183,8 +169,8 @@ describe('InfiniteScrollList', () => {
     mockInView.mockReturnValue(true);
 
     render(
-      <InfiniteScrollList 
-        {...defaultProps} 
+      <InfiniteScrollList
+        {...defaultProps}
         hasNextPage={true}
         fetchNextPage={mockFetchNextPage}
       />
@@ -200,16 +186,19 @@ describe('InfiniteScrollList', () => {
     mockInView.mockReturnValue(false);
 
     render(
-      <InfiniteScrollList 
-        {...defaultProps} 
+      <InfiniteScrollList
+        {...defaultProps}
         hasNextPage={true}
         fetchNextPage={mockFetchNextPage}
       />
     );
 
-    await waitFor(() => {
-      expect(mockFetchNextPage).not.toHaveBeenCalled();
-    }, { timeout: 1000 });
+    await waitFor(
+      () => {
+        expect(mockFetchNextPage).not.toHaveBeenCalled();
+      },
+      { timeout: 1000 }
+    );
   });
 
   it('does not call fetchNextPage when isFetchingNextPage is true', async () => {
@@ -217,17 +206,20 @@ describe('InfiniteScrollList', () => {
     mockInView.mockReturnValue(true);
 
     render(
-      <InfiniteScrollList 
-        {...defaultProps} 
+      <InfiniteScrollList
+        {...defaultProps}
         hasNextPage={true}
         isFetchingNextPage={true}
         fetchNextPage={mockFetchNextPage}
       />
     );
 
-    await waitFor(() => {
-      expect(mockFetchNextPage).not.toHaveBeenCalled();
-    }, { timeout: 1000 });
+    await waitFor(
+      () => {
+        expect(mockFetchNextPage).not.toHaveBeenCalled();
+      },
+      { timeout: 1000 }
+    );
   });
 
   it('does not call fetchNextPage when hasNextPage is false', async () => {
@@ -235,27 +227,25 @@ describe('InfiniteScrollList', () => {
     mockInView.mockReturnValue(true);
 
     render(
-      <InfiniteScrollList 
-        {...defaultProps} 
+      <InfiniteScrollList
+        {...defaultProps}
         hasNextPage={false}
         fetchNextPage={mockFetchNextPage}
       />
     );
 
-    await waitFor(() => {
-      expect(mockFetchNextPage).not.toHaveBeenCalled();
-    }, { timeout: 1000 });
+    await waitFor(
+      () => {
+        expect(mockFetchNextPage).not.toHaveBeenCalled();
+      },
+      { timeout: 1000 }
+    );
   });
 
   it('does not call fetchNextPage when fetchNextPage is not provided', async () => {
     mockInView.mockReturnValue(true);
 
-    render(
-      <InfiniteScrollList 
-        {...defaultProps} 
-        hasNextPage={true}
-      />
-    );
+    render(<InfiniteScrollList {...defaultProps} hasNextPage={true} />);
 
     // Should not throw any errors
     expect(screen.getByTestId('infinite-scroll')).toBeInTheDocument();
@@ -269,10 +259,7 @@ describe('InfiniteScrollList', () => {
     );
 
     render(
-      <InfiniteScrollList 
-        {...defaultProps} 
-        renderItem={customRenderItem}
-      />
+      <InfiniteScrollList {...defaultProps} renderItem={customRenderItem} />
     );
 
     expect(screen.getByTestId('custom-item-0')).toBeInTheDocument();
@@ -282,23 +269,13 @@ describe('InfiniteScrollList', () => {
   });
 
   it('handles null and undefined items gracefully', () => {
-    render(
-      <InfiniteScrollList 
-        {...defaultProps} 
-        items={null as any}
-      />
-    );
+    render(<InfiniteScrollList {...defaultProps} items={null as any} />);
 
     expect(screen.getByText('Nenhum item encontrado')).toBeInTheDocument();
   });
 
   it('shows loading state even when items exist but loading is true', () => {
-    render(
-      <InfiniteScrollList 
-        {...defaultProps} 
-        loading={true}
-      />
-    );
+    render(<InfiniteScrollList {...defaultProps} loading={true} />);
 
     // Should show items, not loading state, because items.length > 0
     expect(screen.getByTestId('infinite-scroll')).toBeInTheDocument();
@@ -307,15 +284,13 @@ describe('InfiniteScrollList', () => {
 
   it('prioritizes error state over empty state', () => {
     render(
-      <InfiniteScrollList 
-        {...defaultProps} 
-        items={[]}
-        error="Test error"
-      />
+      <InfiniteScrollList {...defaultProps} items={[]} error="Test error" />
     );
 
     expect(screen.getByText('Test error')).toBeInTheDocument();
-    expect(screen.queryByText('Nenhum item encontrado')).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('Nenhum item encontrado')
+    ).not.toBeInTheDocument();
   });
 
   it('prioritizes error state over loading state', () => {
@@ -333,30 +308,30 @@ describe('InfiniteScrollList', () => {
   });
 
   it('uses default loading text when not provided', () => {
-    render(
-      <InfiniteScrollList 
-        {...defaultProps} 
-        hasNextPage={true}
-      />
-    );
+    render(<InfiniteScrollList {...defaultProps} hasNextPage={true} />);
 
     expect(screen.getByText('Carregando mais itens...')).toBeInTheDocument();
   });
 
   it('maintains accessibility attributes', () => {
     const mockRetry = vi.fn();
-    
+
     render(
-      <InfiniteScrollList 
-        {...defaultProps} 
+      <InfiniteScrollList
+        {...defaultProps}
         items={[]}
         error="Test error"
         onRetry={mockRetry}
       />
     );
 
-    const retryButton = screen.getByRole('button', { name: /tentar carregar novamente/i });
-    expect(retryButton).toHaveAttribute('aria-label', 'Tentar carregar novamente');
+    const retryButton = screen.getByRole('button', {
+      name: /tentar carregar novamente/i,
+    });
+    expect(retryButton).toHaveAttribute(
+      'aria-label',
+      'Tentar carregar novamente'
+    );
   });
 
   it('handles complex item structures', () => {
@@ -373,10 +348,7 @@ describe('InfiniteScrollList', () => {
     );
 
     render(
-      <InfiniteScrollList 
-        items={complexItems}
-        renderItem={complexRenderItem}
-      />
+      <InfiniteScrollList items={complexItems} renderItem={complexRenderItem} />
     );
 
     expect(screen.getByTestId('complex-item-0')).toBeInTheDocument();
@@ -387,16 +359,12 @@ describe('InfiniteScrollList', () => {
 
   it('handles empty className and gridClassName', () => {
     render(
-      <InfiniteScrollList
-        {...defaultProps}
-        className=""
-        gridClassName=""
-      />
+      <InfiniteScrollList {...defaultProps} className="" gridClassName="" />
     );
 
     const container = screen.getByTestId('infinite-scroll');
     expect(container).not.toHaveClass('non-existent-class');
-    
+
     const gridContainer = container.firstChild as HTMLElement;
     expect(gridContainer).not.toHaveClass('non-existent-grid-class');
   });

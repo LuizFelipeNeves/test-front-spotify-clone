@@ -25,7 +25,12 @@ export const useAuth = () => {
   }, []);
 
   const login = useCallback(
-    (accessToken: string, refreshToken: string, user: User, expiresIn: number) => {
+    (
+      accessToken: string,
+      refreshToken: string,
+      user: User,
+      expiresIn: number
+    ) => {
       AuthService.setAuthData(accessToken, refreshToken, user, expiresIn);
 
       setAuthState({
@@ -43,15 +48,19 @@ export const useAuth = () => {
 
   const updateUser = useCallback((user: User) => {
     AuthService.updateUserData(user);
-    setAuthState((prev) => ({ ...prev, user }));
+    setAuthState(prev => ({ ...prev, user }));
   }, []);
 
   const refreshToken = useCallback(async () => {
     if (!authState.refreshToken) return logout();
 
     try {
-      const newTokens = await AuthService.refreshAccessToken(authState.refreshToken);
-      const newExpiresAt = AuthService.calculateTokenExpiration(newTokens.expires_in);
+      const newTokens = await AuthService.refreshAccessToken(
+        authState.refreshToken
+      );
+      const newExpiresAt = AuthService.calculateTokenExpiration(
+        newTokens.expires_in
+      );
 
       if (authState.user) {
         AuthService.setAuthData(
@@ -62,7 +71,7 @@ export const useAuth = () => {
         );
       }
 
-      setAuthState((prev) => ({
+      setAuthState(prev => ({
         ...prev,
         accessToken: newTokens.access_token,
         refreshToken: newTokens.refresh_token || prev.refreshToken,
@@ -75,7 +84,8 @@ export const useAuth = () => {
   }, [authState.refreshToken, logout, authState.user]);
 
   useEffect(() => {
-    const { accessToken, user, refreshToken, expiresAt } = AuthService.getAuthData();
+    const { accessToken, user, refreshToken, expiresAt } =
+      AuthService.getAuthData();
 
     if (accessToken && user && refreshToken && expiresAt) {
       if (!AuthService.isTokenExpired(expiresAt)) {
@@ -105,9 +115,12 @@ export const useAuth = () => {
       return;
     }
 
-    const timeout = setTimeout(() => {
-      refreshToken();
-    }, Math.max(expiresInMs - refreshBuffer, 0));
+    const timeout = setTimeout(
+      () => {
+        refreshToken();
+      },
+      Math.max(expiresInMs - refreshBuffer, 0)
+    );
 
     return () => clearTimeout(timeout);
   }, [authState.expiresAt, authState.isAuthenticated, refreshToken, logout]);

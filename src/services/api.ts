@@ -11,8 +11,6 @@ export interface ApiResponse<T> {
   message?: string;
 }
 
-
-
 class ApiClient {
   private baseURL: string;
 
@@ -33,7 +31,8 @@ class ApiClient {
         if (refreshToken) {
           try {
             const { AuthService } = await import('./auth.service');
-            const newTokenData = await AuthService.refreshAccessToken(refreshToken);
+            const newTokenData =
+              await AuthService.refreshAccessToken(refreshToken);
 
             // Atualiza o token no store
             const { setTokens } = useAuthStore.getState();
@@ -49,7 +48,10 @@ class ApiClient {
           } catch (refreshError) {
             console.warn('Falha ao renovar token:', refreshError);
             // Só faz logout se não for erro de rede
-            const errorMessage = refreshError instanceof Error ? refreshError.message : String(refreshError);
+            const errorMessage =
+              refreshError instanceof Error
+                ? refreshError.message
+                : String(refreshError);
             if (!errorMessage.includes('Failed to fetch') && navigator.onLine) {
               const { logout } = useAuthStore.getState();
               logout();
@@ -99,7 +101,10 @@ class ApiClient {
         status: response.status,
       };
     } catch (error) {
-      console.warn('📄 API Response: Failed to parse JSON, treating as success:', error);
+      console.warn(
+        '📄 API Response: Failed to parse JSON, treating as success:',
+        error
+      );
       return {
         data: null as T,
         status: response.status,

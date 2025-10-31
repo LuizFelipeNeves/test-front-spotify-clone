@@ -28,7 +28,12 @@ export const VolumeSlider: React.FC<VolumeSliderProps> = ({
     };
 
     const handleClickOutside = (e: MouseEvent) => {
-      if (showVolumeSlider && volumeSliderRef.current && !volumeSliderRef.current.contains(e.target as Node) && !volumeButtonRef.current?.contains(e.target as Node)) {
+      if (
+        showVolumeSlider &&
+        volumeSliderRef.current &&
+        !volumeSliderRef.current.contains(e.target as Node) &&
+        !volumeButtonRef.current?.contains(e.target as Node)
+      ) {
         setShowVolumeSlider(false);
       }
     };
@@ -111,7 +116,7 @@ export const VolumeSlider: React.FC<VolumeSliderProps> = ({
         onMouseEnter={() => setShowVolumeSlider(true)}
         onFocus={() => setShowVolumeSlider(true)}
         className="text-gray-400 hover:text-white transition-colors p-1 rounded focus:outline-none focus:ring-2 focus:ring-green-500"
-        aria-label={isMuted || volume === 0 ? "Ativar som" : "Desativar som"}
+        aria-label={isMuted || volume === 0 ? 'Ativar som' : 'Desativar som'}
         aria-pressed={isMuted || volume === 0}
       >
         {isMuted || volume === 0 ? (

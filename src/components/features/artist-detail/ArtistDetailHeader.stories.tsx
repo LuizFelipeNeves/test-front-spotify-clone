@@ -1,4 +1,3 @@
-
 import { ArtistDetailHeader } from './ArtistDetailHeader';
 import type { StoryFn, Meta } from '@storybook/react';
 import type { Artist } from '@/types';
@@ -7,7 +6,13 @@ import { MemoryRouter } from 'react-router-dom';
 export default {
   title: 'Components/ArtistDetailHeader',
   component: ArtistDetailHeader,
-  decorators: [(Story) => <MemoryRouter><Story /></MemoryRouter>],
+  decorators: [
+    Story => (
+      <MemoryRouter>
+        <Story />
+      </MemoryRouter>
+    ),
+  ],
 } as Meta;
 
 const mockArtist: Artist = {
@@ -23,7 +28,9 @@ const mockArtist: Artist = {
   uri: '',
 };
 
-const Template: StoryFn<{ artist: Artist }> = (args) => <ArtistDetailHeader {...args} />;
+const Template: StoryFn<{ artist: Artist }> = args => (
+  <ArtistDetailHeader {...args} />
+);
 
 export const Default = Template.bind({});
 Default.args = {

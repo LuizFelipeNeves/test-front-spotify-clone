@@ -13,7 +13,14 @@ interface SidebarProps {
 
 export function Sidebar({ className, isOpen = true, onClose }: SidebarProps) {
   const location = useLocation();
-  const { isInstallable, isInstalled, isInstalling, isLoading, install, error } = usePWAInstall();
+  const {
+    isInstallable,
+    isInstalled,
+    isInstalling,
+    isLoading,
+    install,
+    error,
+  } = usePWAInstall();
 
   const navItems = [
     { label: 'Home', icon: Home, route: ROUTES.HOME },

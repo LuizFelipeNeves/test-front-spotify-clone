@@ -2,14 +2,17 @@ import type { ApiError } from '@/types';
 
 const ERROR_MESSAGES = {
   OFFLINE: 'Você está offline. Verifique sua conexão com a internet.',
-  REQUEST_FAILED: 'A requisição falhou. Verifique sua conexão ou tente novamente.',
+  REQUEST_FAILED:
+    'A requisição falhou. Verifique sua conexão ou tente novamente.',
   ARTIST_NOT_FOUND: 'Artista não encontrado.',
   SESSION_EXPIRED: 'Sessão expirada. Faça login novamente.',
   GENERIC_ARTIST_ERROR: 'Erro ao carregar dados do artista.',
   GENERIC_ERROR: 'Ocorreu um erro inesperado.',
 };
 
-export const toApiError = (error: Error | null | undefined): ApiError | undefined => {
+export const toApiError = (
+  error: Error | null | undefined
+): ApiError | undefined => {
   if (!error) return undefined;
   if ('status' in error && typeof (error as ApiError).status === 'number') {
     return error as ApiError;
@@ -21,7 +24,11 @@ export const toApiError = (error: Error | null | undefined): ApiError | undefine
   };
 };
 
-export const getArtistErrorMessage = (isOnline: boolean, artistErrorData: ApiError | undefined, albumsErrorData: ApiError | undefined): string => {
+export const getArtistErrorMessage = (
+  isOnline: boolean,
+  artistErrorData: ApiError | undefined,
+  albumsErrorData: ApiError | undefined
+): string => {
   if (!isOnline) {
     return ERROR_MESSAGES.OFFLINE;
   }

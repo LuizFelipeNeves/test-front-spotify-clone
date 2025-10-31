@@ -30,7 +30,7 @@ O componente Layout fornece a estrutura principal da aplicação com:
   },
   tags: ['autodocs'],
   decorators: [
-    (Story) => (
+    Story => (
       <MemoryRouter initialEntries={['/']}>
         <div className="h-screen">
           <Story />
@@ -55,14 +55,16 @@ export const Default: Story = {
       <div className="p-6">
         <h1 className="text-2xl font-bold mb-4">Página Principal</h1>
         <p className="text-gray-300">
-          Este é o conteúdo principal da aplicação. O layout inclui sidebar (desktop), 
-          navegação mobile e player de música.
+          Este é o conteúdo principal da aplicação. O layout inclui sidebar
+          (desktop), navegação mobile e player de música.
         </p>
         <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {Array.from({ length: 6 }, (_, i) => (
             <div key={i} className="bg-gray-800 p-4 rounded-lg">
               <h3 className="font-semibold mb-2">Card {i + 1}</h3>
-              <p className="text-sm text-gray-400">Conteúdo do card de exemplo</p>
+              <p className="text-sm text-gray-400">
+                Conteúdo do card de exemplo
+              </p>
             </div>
           ))}
         </div>
@@ -81,9 +83,9 @@ export const WithLongContent: Story = {
             <div key={i} className="bg-gray-800 p-6 rounded-lg">
               <h3 className="font-semibold mb-2">Seção {i + 1}</h3>
               <p className="text-gray-300 mb-4">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod 
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
-                quis nostrud exercitation ullamco laboris.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-gray-700 p-3 rounded">Item A</div>

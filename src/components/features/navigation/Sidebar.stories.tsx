@@ -32,7 +32,7 @@ O componente Sidebar fornece navegação principal da aplicação com:
   },
   tags: ['autodocs'],
   decorators: [
-    (Story) => (
+    Story => (
       <MemoryRouter initialEntries={['/']}>
         <div className="h-screen bg-black flex">
           <Story />
@@ -90,12 +90,12 @@ export const WithCustomClass: Story = {
 // Story específica para mostrar diferentes estados de rota
 export const DifferentRoutes: Story = {
   decorators: [
-    (Story) => (
+    Story => (
       <div className="space-y-4">
         <div className="text-white mb-4">
           <h3 className="font-semibold">Diferentes Estados de Rota:</h3>
         </div>
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div>
             <h4 className="text-white text-sm mb-2">Home Ativa</h4>
@@ -105,7 +105,7 @@ export const DifferentRoutes: Story = {
               </div>
             </MemoryRouter>
           </div>
-          
+
           <div>
             <h4 className="text-white text-sm mb-2">Artistas Ativa</h4>
             <MemoryRouter initialEntries={['/artists']}>
@@ -114,7 +114,7 @@ export const DifferentRoutes: Story = {
               </div>
             </MemoryRouter>
           </div>
-          
+
           <div>
             <h4 className="text-white text-sm mb-2">Playlists Ativa</h4>
             <MemoryRouter initialEntries={['/playlists']}>
@@ -123,7 +123,7 @@ export const DifferentRoutes: Story = {
               </div>
             </MemoryRouter>
           </div>
-          
+
           <div>
             <h4 className="text-white text-sm mb-2">Perfil Ativo</h4>
             <MemoryRouter initialEntries={['/profile']}>

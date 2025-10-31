@@ -22,10 +22,7 @@ export default function ProfilePage() {
 
   return (
     <div className="p-4 sm:p-8 lg:p-12">
-      <PageHeader 
-        title="Perfil" 
-        description="Suas informações pessoais"
-      />
+      <PageHeader title="Perfil" description="Suas informações pessoais" />
 
       {/* Conteúdo central */}
       <div className="flex items-center justify-center min-h-[50vh]">
@@ -43,11 +40,7 @@ export default function ProfilePage() {
           </h1>
 
           {/* Botão de logout */}
-          <Button
-            onClick={handleLogout}
-            variant="spotify"
-            size="lg"
-          >
+          <Button onClick={handleLogout} variant="spotify" size="lg">
             {UI_TEXTS.sair}
           </Button>
         </div>

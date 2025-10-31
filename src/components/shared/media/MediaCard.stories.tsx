@@ -62,7 +62,11 @@ const mockAlbum: AlbumType = {
   id: '1',
   name: 'Midnights',
   images: [
-    { url: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=300&h=300&fit=crop', width: 300, height: 300 }
+    {
+      url: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=300&h=300&fit=crop',
+      width: 300,
+      height: 300,
+    },
   ],
   uri: 'spotify:album:1',
   artists: [
@@ -74,10 +78,14 @@ const mockAlbum: AlbumType = {
       followers: { total: 82345678 },
       genres: ['pop', 'country'],
       images: [
-        { url: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=300&h=300&fit=crop', width: 300, height: 300 }
+        {
+          url: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=300&h=300&fit=crop',
+          width: 300,
+          height: 300,
+        },
       ],
       popularity: 95,
-    }
+    },
   ],
   release_date: '2022-10-21',
   total_tracks: 13,
@@ -119,8 +127,8 @@ export const ArtistCardStory: Story = {
     <div className="flex gap-6">
       <ArtistCard
         artist={mockArtist}
-        onClick={(artist) => console.log('Navigate to:', artist.id)}
-        onPlay={(artist) => console.log('Play artist:', artist.name)}
+        onClick={artist => console.log('Navigate to:', artist.id)}
+        onPlay={artist => console.log('Play artist:', artist.name)}
       />
     </div>
   ),
@@ -138,8 +146,8 @@ export const Album: Story = {
     <div className="flex gap-6">
       <AlbumCard
         item={mockAlbum}
-        onPlay={(album) => console.log('Play album:', album.name)}
-        onClick={(album) => console.log('Navigate to:', album.id)}
+        onPlay={album => console.log('Play album:', album.name)}
+        onClick={album => console.log('Navigate to:', album.id)}
       />
     </div>
   ),
@@ -157,8 +165,8 @@ export const Playlist: Story = {
     <div className="flex gap-6">
       <PlaylistCard
         item={mockPlaylist}
-        onPlay={(playlist) => console.log('Play playlist:', playlist.name)}
-        onClick={(playlist) => console.log('Navigate to:', playlist.id)}
+        onPlay={playlist => console.log('Play playlist:', playlist.name)}
+        onClick={playlist => console.log('Navigate to:', playlist.id)}
       />
     </div>
   ),
@@ -175,8 +183,16 @@ export const Loading: Story = {
   render: () => (
     <div className="flex gap-6">
       <MediaCard item={mockAlbum} type="album" isLoading />
-      <MediaCard item={mockArtist as unknown as MediaItemBase} type="artist" isLoading />
-      <MediaCard item={mockPlaylist as unknown as MediaItemBase} type="playlist" isLoading />
+      <MediaCard
+        item={mockArtist as unknown as MediaItemBase}
+        type="artist"
+        isLoading
+      />
+      <MediaCard
+        item={mockPlaylist as unknown as MediaItemBase}
+        type="playlist"
+        isLoading
+      />
     </div>
   ),
   parameters: {
@@ -199,7 +215,7 @@ export const Grid: Story = {
 
     return (
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        {artists.map((artist) => (
+        {artists.map(artist => (
           <ArtistCard
             key={artist.id}
             artist={artist}
@@ -213,7 +229,8 @@ export const Grid: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Grid responsivo de cards demonstrando layout real de aplicação.',
+        story:
+          'Grid responsivo de cards demonstrando layout real de aplicação.',
       },
     },
   },
@@ -230,13 +247,13 @@ export const Accessibility: Story = {
         <div className="flex gap-6">
           <ArtistCard
             artist={mockArtist}
-            onClick={(artist) => console.log('Navigate to:', artist.id)}
-            onPlay={(artist) => console.log('Play artist:', artist.name)}
+            onClick={artist => console.log('Navigate to:', artist.id)}
+            onPlay={artist => console.log('Play artist:', artist.name)}
           />
           <AlbumCard
             item={mockAlbum}
-            onPlay={(album) => console.log('Play album:', album.name)}
-            onClick={(album) => console.log('Navigate to:', album.id)}
+            onPlay={album => console.log('Play album:', album.name)}
+            onClick={album => console.log('Navigate to:', album.id)}
           />
         </div>
       </div>
@@ -244,7 +261,8 @@ export const Accessibility: Story = {
       <div>
         <h2 className="text-lg font-semibold mb-2">Screen Reader Support</h2>
         <p className="text-sm text-gray-600">
-          Cards possuem aria-labels descritivas e estruturas semânticas adequadas.
+          Cards possuem aria-labels descritivas e estruturas semânticas
+          adequadas.
         </p>
       </div>
     </div>
@@ -252,7 +270,8 @@ export const Accessibility: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Demonstração das funcionalidades de acessibilidade implementadas.',
+        story:
+          'Demonstração das funcionalidades de acessibilidade implementadas.',
       },
     },
   },

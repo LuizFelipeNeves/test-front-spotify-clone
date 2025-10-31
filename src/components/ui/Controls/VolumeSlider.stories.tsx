@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { VolumeSlider } from './VolumeSlider';
 import {
   AccessibilityDemoComponent,
-  KeyboardNavigationComponent
+  KeyboardNavigationComponent,
 } from './VolumeSlider.stories.components';
 
 const meta: Meta<typeof VolumeSlider> = {
@@ -161,7 +161,9 @@ export const ScreenReaderDemo: Story = {
 
         <div className="space-y-3">
           <div className="text-sm text-gray-300">
-            <p className="mb-2">Este componente suporta completamente screen readers:</p>
+            <p className="mb-2">
+              Este componente suporta completamente screen readers:
+            </p>
             <ul className="list-disc list-inside space-y-1 text-xs">
               <li>Labels descritivos em português</li>
               <li>Anúncio de mudanças de volume via aria-live</li>
@@ -180,7 +182,8 @@ export const ScreenReaderDemo: Story = {
           </div>
 
           <div className="text-xs text-gray-400 bg-gray-800 p-3 rounded">
-            <strong>Para testar:</strong> Ative seu screen reader e navegue pelo componente.
+            <strong>Para testar:</strong> Ative seu screen reader e navegue pelo
+            componente.
           </div>
         </div>
       </div>
@@ -201,7 +204,8 @@ export const KeyboardNavigation: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Demonstração completa das funcionalidades de navegação por teclado.',
+        story:
+          'Demonstração completa das funcionalidades de navegação por teclado.',
       },
     },
   },

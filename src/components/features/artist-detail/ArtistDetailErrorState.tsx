@@ -1,7 +1,5 @@
-
 import React from 'react';
 import { Wifi, WifiOff } from 'lucide-react';
-
 
 interface ArtistDetailErrorStateProps {
   isOnline: boolean;

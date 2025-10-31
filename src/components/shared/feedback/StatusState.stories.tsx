@@ -1,5 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { StatusState, EmptyState, ErrorState, LoadingState } from './StatusState';
+import {
+  StatusState,
+  EmptyState,
+  ErrorState,
+  LoadingState,
+} from './StatusState';
 
 const meta: Meta<typeof StatusState> = {
   title: 'Shared/Feedback/StatusState',
@@ -125,9 +130,24 @@ export const Loading: Story = {
 export const Small: Story = {
   render: () => (
     <div className="space-y-4">
-      <StatusState type="empty" iconSize="sm" message="Vazio" description="Descrição curta" />
-      <StatusState type="error" iconSize="sm" message="Erro" description="Algo deu errado" />
-      <StatusState type="loading" iconSize="sm" message="Carregando" description="Aguarde" />
+      <StatusState
+        type="empty"
+        iconSize="sm"
+        message="Vazio"
+        description="Descrição curta"
+      />
+      <StatusState
+        type="error"
+        iconSize="sm"
+        message="Erro"
+        description="Algo deu errado"
+      />
+      <StatusState
+        type="loading"
+        iconSize="sm"
+        message="Carregando"
+        description="Aguarde"
+      />
     </div>
   ),
   parameters: {
@@ -142,9 +162,24 @@ export const Small: Story = {
 export const Large: Story = {
   render: () => (
     <div className="space-y-4">
-      <StatusState type="empty" iconSize="lg" message="Nenhum resultado encontrado" description="Sua busca não retornou resultados. Tente usar termos diferentes." />
-      <StatusState type="error" iconSize="lg" message="Falha na conexão" description="Não foi possível conectar ao servidor. Verifique sua conexão com a internet." />
-      <StatusState type="loading" iconSize="lg" message="Processando solicitação" description="Isso pode levar alguns segundos. Por favor, aguarde." />
+      <StatusState
+        type="empty"
+        iconSize="lg"
+        message="Nenhum resultado encontrado"
+        description="Sua busca não retornou resultados. Tente usar termos diferentes."
+      />
+      <StatusState
+        type="error"
+        iconSize="lg"
+        message="Falha na conexão"
+        description="Não foi possível conectar ao servidor. Verifique sua conexão com a internet."
+      />
+      <StatusState
+        type="loading"
+        iconSize="lg"
+        message="Processando solicitação"
+        description="Isso pode levar alguns segundos. Por favor, aguarde."
+      />
     </div>
   ),
   parameters: {
@@ -247,7 +282,8 @@ export const Accessibility: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Demonstração das funcionalidades de acessibilidade implementadas.',
+        story:
+          'Demonstração das funcionalidades de acessibilidade implementadas.',
       },
     },
   },

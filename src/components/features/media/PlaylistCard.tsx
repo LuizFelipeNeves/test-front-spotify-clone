@@ -15,16 +15,25 @@ interface PlaylistCardProps {
   className?: string;
 }
 
-export function PlaylistCard({ playlist, onClick, className }: PlaylistCardProps) {
-  const fallbackImage = 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=300&h=300&fit=crop';
+export function PlaylistCard({
+  playlist,
+  onClick,
+  className,
+}: PlaylistCardProps) {
+  const fallbackImage =
+    'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=300&h=300&fit=crop';
 
   const bestImageUrl = useMemo(() => {
     if (!playlist.images?.length) return null;
-    const medium = playlist.images.find((img) => img.height && img.height >= 200 && img.height <= 400);
+    const medium = playlist.images.find(
+      img => img.height && img.height >= 200 && img.height <= 400
+    );
     return medium?.url ?? playlist.images[0]?.url ?? null;
   }, [playlist.images]);
 
-  const { imageUrl, isLoading } = useImageCache(bestImageUrl, 'playlist', { fallbackUrl: fallbackImage });
+  const { imageUrl, isLoading } = useImageCache(bestImageUrl, 'playlist', {
+    fallbackUrl: fallbackImage,
+  });
   const { data: playlistTracksData } = usePlaylistTracks(playlist.id);
   const { setCurrentTrack, setQueue, setIsPlaying } = usePlayerStore();
   const { playTrack, isReady } = useSpotifyPlayerContext();
@@ -32,8 +41,10 @@ export function PlaylistCard({ playlist, onClick, className }: PlaylistCardProps
   const handlePlay = useCallback(
     async (e: React.MouseEvent) => {
       e.stopPropagation();
-      const tracks = playlistTracksData?.items?.map((i) => i.track).filter(Boolean) ?? [];
-      if (!tracks.length) return console.warn('Nenhuma faixa disponível na playlist.');
+      const tracks =
+        playlistTracksData?.items?.map(i => i.track).filter(Boolean) ?? [];
+      if (!tracks.length)
+        return console.warn('Nenhuma faixa disponível na playlist.');
       const firstTrack = tracks[0];
       setCurrentTrack(firstTrack);
       setQueue(tracks);
@@ -51,17 +62,31 @@ export function PlaylistCard({ playlist, onClick, className }: PlaylistCardProps
         }
       }
     },
-    [playlist.id, playlistTracksData, isReady, setCurrentTrack, setQueue, setIsPlaying, playTrack]
+    [
+      playlist.id,
+      playlistTracksData,
+      isReady,
+      setCurrentTrack,
+      setQueue,
+      setIsPlaying,
+      playTrack,
+    ]
   );
 
-  const handleClick = useCallback(() => onClick?.(playlist), [onClick, playlist]);
+  const handleClick = useCallback(
+    () => onClick?.(playlist),
+    [onClick, playlist]
+  );
   const formatTrackCount = useCallback(
-    (count: number) => (count === 1 ? '1 música' : `${count.toLocaleString()} músicas`),
+    (count: number) =>
+      count === 1 ? '1 música' : `${count.toLocaleString()} músicas`,
     []
   );
 
   const hasTracks = Boolean(playlistTracksData?.items?.length);
-  const safeDescription = playlist.description ? DOMPurify.sanitize(playlist.description) : '';
+  const safeDescription = playlist.description
+    ? DOMPurify.sanitize(playlist.description)
+    : '';
 
   return (
     <div
@@ -76,8 +101,16 @@ export function PlaylistCard({ playlist, onClick, className }: PlaylistCardProps
       <div className="flex items-center gap-4">
         <div className="relative flex-shrink-0">
           {isLoading ? (
-            <div className="w-16 h-16 rounded-lg bg-gray-700 animate-pulse flex items-center justify-center" role="status" aria-label="loading">
-              <svg className="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+            <div
+              className="w-16 h-16 rounded-lg bg-gray-700 animate-pulse flex items-center justify-center"
+              role="status"
+              aria-label="loading"
+            >
+              <svg
+                className="w-6 h-6 text-gray-500"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
               </svg>
             </div>
@@ -87,7 +120,9 @@ export function PlaylistCard({ playlist, onClick, className }: PlaylistCardProps
               alt={playlist.name}
               className="w-16 h-16 rounded-lg object-cover"
               data-testid={`playlist-image-${playlist.id}`}
-              onError={(e) => ((e.target as HTMLImageElement).src = fallbackImage)}
+              onError={e =>
+                ((e.target as HTMLImageElement).src = fallbackImage)
+              }
             />
           )}
 
@@ -99,7 +134,11 @@ export function PlaylistCard({ playlist, onClick, className }: PlaylistCardProps
               variant="spotify"
               size="icon"
             >
-              <svg className="w-4 h-4 text-black ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+              <svg
+                className="w-4 h-4 text-black ml-0.5"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path d="M8 5v14l11-7z" />
               </svg>
             </Button>
@@ -131,7 +170,9 @@ export function PlaylistCard({ playlist, onClick, className }: PlaylistCardProps
           ) : (
             <Indicator label="Privada" color="gray" icon="lock" />
           )}
-          {playlist.collaborative && <Indicator label="Colaborativa" color="green" icon="group" />}
+          {playlist.collaborative && (
+            <Indicator label="Colaborativa" color="green" icon="group" />
+          )}
         </div>
       </div>
     </div>

@@ -9,7 +9,8 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'SkipLink is an accessibility component that allows keyboard users to quickly navigate to the main content of a page. It is hidden by default and becomes visible when focused.',
+        component:
+          'SkipLink is an accessibility component that allows keyboard users to quickly navigate to the main content of a page. It is hidden by default and becomes visible when focused.',
       },
     },
   },
@@ -69,7 +70,8 @@ export const MultipleTargets: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Multiple skip links can be used on the same page to provide quick access to different sections.',
+        story:
+          'Multiple skip links can be used on the same page to provide quick access to different sections.',
       },
     },
   },
@@ -114,16 +116,21 @@ The SkipLink component implements WCAG 2.1 AA compliant skip navigation:
   render: () => (
     <div style={{ textAlign: 'center' }}>
       <SkipLink href="#content">Pular para conteúdo demonstrativo</SkipLink>
-      <div style={{
-        marginTop: '20px',
-        padding: '2rem',
-        border: '1px solid #ccc',
-        borderRadius: '8px',
-        backgroundColor: '#f9f9f9'
-      }}>
+      <div
+        style={{
+          marginTop: '20px',
+          padding: '2rem',
+          border: '1px solid #ccc',
+          borderRadius: '8px',
+          backgroundColor: '#f9f9f9',
+        }}
+      >
         <h2>Conteúdo Demonstrativo</h2>
         <p>Este é o conteúdo para onde o skip link leva quando ativado.</p>
-        <p>Teste usando a tecla Tab para navegar até o link skip e pressionar Enter para pular para cá.</p>
+        <p>
+          Teste usando a tecla Tab para navegar até o link skip e pressionar
+          Enter para pular para cá.
+        </p>
       </div>
     </div>
   ),
@@ -159,29 +166,39 @@ This story demonstrates keyboard navigation capabilities:
   },
   render: () => (
     <div style={{ textAlign: 'center', minHeight: '300px' }}>
-      <div style={{
-        marginBottom: '20px',
-        padding: '1rem',
-        backgroundColor: '#e8f5e8',
-        borderRadius: '8px',
-        border: '2px solid #28a745'
-      }}>
-        <p><strong>Instructions:</strong></p>
+      <div
+        style={{
+          marginBottom: '20px',
+          padding: '1rem',
+          backgroundColor: '#e8f5e8',
+          borderRadius: '8px',
+          border: '2px solid #28a745',
+        }}
+      >
+        <p>
+          <strong>Instructions:</strong>
+        </p>
         <p>1. Press Tab to focus the SkipLink below</p>
         <p>2. Press Enter to test navigation</p>
       </div>
 
       <SkipLink href="#target-content">Pular para conteúdo alvo</SkipLink>
 
-      <div style={{
-        marginTop: '40px',
-        padding: '2rem',
-        border: '2px dashed #007bff',
-        borderRadius: '8px'
-      }} id="target-content">
+      <div
+        style={{
+          marginTop: '40px',
+          padding: '2rem',
+          border: '2px dashed #007bff',
+          borderRadius: '8px',
+        }}
+        id="target-content"
+      >
         <h2>Conteúdo Alvo</h2>
         <p>Você deve ter pulado para cá usando o SkipLink!</p>
-        <p>O SkipLink ajuda usuários de leitores de tela e usuários de teclado a pular navegação repetitiva.</p>
+        <p>
+          O SkipLink ajuda usuários de leitores de tela e usuários de teclado a
+          pular navegação repetitiva.
+        </p>
       </div>
     </div>
   ),
@@ -237,16 +254,20 @@ export const ScreenReaderTest: Story = {
         Pular para conteúdo de teste
       </SkipLink>
 
-      <div style={{
-        marginTop: '20px',
-        padding: '2rem',
-        backgroundColor: '#f8f9fa',
-        border: '1px solid #dee2e6',
-        borderRadius: '8px'
-      }}>
+      <div
+        style={{
+          marginTop: '20px',
+          padding: '2rem',
+          backgroundColor: '#f8f9fa',
+          border: '1px solid #dee2e6',
+          borderRadius: '8px',
+        }}
+      >
         <h2>Área de Conteúdo</h2>
         <p>Este conteúdo é projetado para testes com leitores de tela.</p>
-        <p>Os leitores de tela devem anunciar o link skip quando ele recebe foco.</p>
+        <p>
+          Os leitores de tela devem anunciar o link skip quando ele recebe foco.
+        </p>
         <div id="screen-reader-content">
           <h3>Conteúdo Alvo</h3>
           <p>Este é o conteúdo para onde o link skip leva.</p>
@@ -258,7 +279,14 @@ export const ScreenReaderTest: Story = {
 
 export const DesignVariations: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', alignItems: 'center' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '2rem',
+        alignItems: 'center',
+      }}
+    >
       <div>
         <h3>Default Styling</h3>
         <SkipLink href="#default">Link Padrão</SkipLink>
@@ -280,7 +308,8 @@ export const DesignVariations: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Different styling variations of the SkipLink component while maintaining accessibility features.',
+        story:
+          'Different styling variations of the SkipLink component while maintaining accessibility features.',
       },
     },
   },

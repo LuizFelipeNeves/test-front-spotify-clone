@@ -1,6 +1,13 @@
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { ContentPage, CreateButton, FeaturePlaylistCard, CreatePlaylistModal, SkipLink, MainContent } from '@/components';
+import {
+  ContentPage,
+  CreateButton,
+  FeaturePlaylistCard,
+  CreatePlaylistModal,
+  SkipLink,
+  MainContent,
+} from '@/components';
 import { useSpotifyIntegration } from '@/hooks/useSpotifyIntegration';
 import { useInfiniteUserPlaylists } from '@/hooks/useSpotifyQueries';
 import { UI_TEXTS } from '@/constants/ui';
@@ -39,7 +46,7 @@ export default function PlaylistsPage() {
       await createPlaylist(name, '');
 
       queryClient.invalidateQueries({
-        queryKey: ['userPlaylists']
+        queryKey: ['userPlaylists'],
       });
 
       setIsModalOpen(false);
@@ -63,7 +70,9 @@ export default function PlaylistsPage() {
           description={UI_TEXTS.colecaoPlaylists}
           items={playlists}
           loading={isLoading}
-          error={isError ? error?.message || 'Erro ao carregar playlists' : null}
+          error={
+            isError ? error?.message || 'Erro ao carregar playlists' : null
+          }
           emptyMessage="Nenhuma playlist encontrada"
           emptyDescription="Crie sua primeira playlist para começar a organizar suas músicas!"
           onRetry={handleRetry}
@@ -79,7 +88,7 @@ export default function PlaylistsPage() {
               ariaLabel="Criar nova playlist"
             />
           }
-          renderItem={(playlist) => (
+          renderItem={playlist => (
             <FeaturePlaylistCard
               key={playlist.id}
               playlist={playlist}

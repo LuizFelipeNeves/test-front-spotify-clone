@@ -45,11 +45,11 @@ class SpotifyService {
    */
   private isTestEnvironment(): boolean {
     return (
-      typeof window !== 'undefined' &&
-      (window as unknown as { Cypress?: unknown }).Cypress !== undefined
-    ) ||
-    (typeof navigator !== 'undefined' &&
-     navigator.userAgent.includes('Cypress'));
+      (typeof window !== 'undefined' &&
+        (window as unknown as { Cypress?: unknown }).Cypress !== undefined) ||
+      (typeof navigator !== 'undefined' &&
+        navigator.userAgent.includes('Cypress'))
+    );
   }
 
   /**
@@ -69,12 +69,12 @@ class SpotifyService {
           {
             url: 'https://i.scdn.co/image/ab67616d0000b2732c6f9b7d4b1e7c9a2c8d5e6f',
             height: 300,
-            width: 300
-          }
+            width: 300,
+          },
         ],
         followers: {
-          total: 42
-        }
+          total: 42,
+        },
       };
     }
 
@@ -85,20 +85,30 @@ class SpotifyService {
   /**
    * Get user's top artists
    */
-  async getTopArtists(limit = 20, offset = 0): Promise<{ items: Artist[]; total: number; next: string | null }> {
-    const response = await apiClient.get<{ items: Artist[]; total: number; next: string | null }>(
-      `${this.baseURL}/me/top/artists?limit=${limit}&offset=${offset}`
-    );
+  async getTopArtists(
+    limit = 20,
+    offset = 0
+  ): Promise<{ items: Artist[]; total: number; next: string | null }> {
+    const response = await apiClient.get<{
+      items: Artist[];
+      total: number;
+      next: string | null;
+    }>(`${this.baseURL}/me/top/artists?limit=${limit}&offset=${offset}`);
     return response.data;
   }
 
   /**
    * Get user playlists
    */
-  async getUserPlaylists(limit = 50, offset = 0): Promise<{ items: Playlist[]; total: number; next: string | null }> {
-    const response = await apiClient.get<{ items: Playlist[]; total: number; next: string | null }>(
-      `${this.baseURL}/me/playlists?limit=${limit}&offset=${offset}`
-    );
+  async getUserPlaylists(
+    limit = 50,
+    offset = 0
+  ): Promise<{ items: Playlist[]; total: number; next: string | null }> {
+    const response = await apiClient.get<{
+      items: Playlist[];
+      total: number;
+      next: string | null;
+    }>(`${this.baseURL}/me/playlists?limit=${limit}&offset=${offset}`);
     return response.data;
   }
 
@@ -115,21 +125,29 @@ class SpotifyService {
   /**
    * Get artist's albums
    */
-  async getArtistAlbums(artistId: string, limit = 20, offset = 0): Promise<{ items: Album[]; total: number; next: string | null }> {
-    const response = await apiClient.get<{ items: Album[]; total: number; next: string | null }>(
+  async getArtistAlbums(
+    artistId: string,
+    limit = 20,
+    offset = 0
+  ): Promise<{ items: Album[]; total: number; next: string | null }> {
+    const response = await apiClient.get<{
+      items: Album[];
+      total: number;
+      next: string | null;
+    }>(
       `${this.baseURL}/artists/${artistId}/albums?include_groups=album,single,compilation&market=BR&limit=${limit}&offset=${offset}`
     );
-    
+
     // Sort albums by release date (newest first)
     const sortedItems = response.data.items.sort((a, b) => {
       const dateA = new Date(a.release_date);
       const dateB = new Date(b.release_date);
       return dateB.getTime() - dateA.getTime();
     });
-    
+
     return {
       ...response.data,
-      items: sortedItems
+      items: sortedItems,
     };
   }
 
@@ -165,7 +183,10 @@ class SpotifyService {
   /**
    * Get artist's top tracks
    */
-  async getArtistTopTracks(artistId: string, market = 'BR'): Promise<{ tracks: Track[] }> {
+  async getArtistTopTracks(
+    artistId: string,
+    market = 'BR'
+  ): Promise<{ tracks: Track[] }> {
     const response = await apiClient.get<{ tracks: Track[] }>(
       `${this.baseURL}/artists/${artistId}/top-tracks?market=${market}`
     );
@@ -175,8 +196,20 @@ class SpotifyService {
   /**
    * Get playlist tracks
    */
-  async getPlaylistTracks(playlistId: string, limit = 50, offset = 0): Promise<{ items: { track: Track }[]; total: number; next: string | null }> {
-    const response = await apiClient.get<{ items: { track: Track }[]; total: number; next: string | null }>(
+  async getPlaylistTracks(
+    playlistId: string,
+    limit = 50,
+    offset = 0
+  ): Promise<{
+    items: { track: Track }[];
+    total: number;
+    next: string | null;
+  }> {
+    const response = await apiClient.get<{
+      items: { track: Track }[];
+      total: number;
+      next: string | null;
+    }>(
       `${this.baseURL}/playlists/${playlistId}/tracks?limit=${limit}&offset=${offset}&market=BR`
     );
     return response.data;
@@ -187,8 +220,14 @@ class SpotifyService {
   /**
    * Play track/album/playlist or resume current playback
    */
-  async play(deviceId?: string, trackUri?: string, contextUri?: string): Promise<void> {
-    const url = deviceId ? `${this.baseURL}/me/player/play?device_id=${deviceId}` : `${this.baseURL}/me/player/play`;
+  async play(
+    deviceId?: string,
+    trackUri?: string,
+    contextUri?: string
+  ): Promise<void> {
+    const url = deviceId
+      ? `${this.baseURL}/me/player/play?device_id=${deviceId}`
+      : `${this.baseURL}/me/player/play`;
 
     const body: Record<string, unknown> = {};
     if (contextUri) {
@@ -212,7 +251,9 @@ class SpotifyService {
    * Skip to next track
    */
   async nextTrack(deviceId?: string): Promise<void> {
-    const url = deviceId ? `${this.baseURL}/me/player/next?device_id=${deviceId}` : `${this.baseURL}/me/player/next`;
+    const url = deviceId
+      ? `${this.baseURL}/me/player/next?device_id=${deviceId}`
+      : `${this.baseURL}/me/player/next`;
     await apiClient.post(url);
   }
 
@@ -220,7 +261,9 @@ class SpotifyService {
    * Skip to previous track
    */
   async previousTrack(deviceId?: string): Promise<void> {
-    const url = deviceId ? `${this.baseURL}/me/player/previous?device_id=${deviceId}` : `${this.baseURL}/me/player/previous`;
+    const url = deviceId
+      ? `${this.baseURL}/me/player/previous?device_id=${deviceId}`
+      : `${this.baseURL}/me/player/previous`;
     await apiClient.post(url);
   }
 
@@ -257,7 +300,10 @@ class SpotifyService {
   /**
    * Toggle repeat mode
    */
-  async toggleRepeat(repeat: 'track' | 'context' | 'off', deviceId?: string): Promise<void> {
+  async toggleRepeat(
+    repeat: 'track' | 'context' | 'off',
+    deviceId?: string
+  ): Promise<void> {
     const url = deviceId
       ? `${this.baseURL}/me/player/repeat?state=${repeat}&device_id=${deviceId}`
       : `${this.baseURL}/me/player/repeat?state=${repeat}`;
@@ -297,7 +343,9 @@ class SpotifyService {
    */
   async addTracksFavorites(trackIds: string[]): Promise<void> {
     console.log('🎵 Adding tracks to favorites:', trackIds);
-    const response = await apiClient.put(`${this.baseURL}/me/tracks?ids=${trackIds.join(',')}`);
+    const response = await apiClient.put(
+      `${this.baseURL}/me/tracks?ids=${trackIds.join(',')}`
+    );
     console.log('✅ Add favorites response:', response);
   }
 
@@ -306,7 +354,9 @@ class SpotifyService {
    */
   async removeTracksFavorites(trackIds: string[]): Promise<void> {
     console.log('🗑️ Removing tracks from favorites:', trackIds);
-    const response = await apiClient.delete(`${this.baseURL}/me/tracks?ids=${trackIds.join(',')}`);
+    const response = await apiClient.delete(
+      `${this.baseURL}/me/tracks?ids=${trackIds.join(',')}`
+    );
     console.log('✅ Remove favorites response:', response);
   }
 }

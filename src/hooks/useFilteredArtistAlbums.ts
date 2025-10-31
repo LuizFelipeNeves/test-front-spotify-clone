@@ -5,7 +5,9 @@ interface UseFilteredArtistAlbumsProps {
   albums: Album[];
 }
 
-export const useFilteredArtistAlbums = ({ albums }: UseFilteredArtistAlbumsProps) => {
+export const useFilteredArtistAlbums = ({
+  albums,
+}: UseFilteredArtistAlbumsProps) => {
   const removeDuplicates = (items: Album[]) => {
     const seen = new Set();
     return items.filter(item => {
@@ -29,7 +31,9 @@ export const useFilteredArtistAlbums = ({ albums }: UseFilteredArtistAlbumsProps
   }, [albums]);
 
   const visibleCompilations = useMemo(() => {
-    const compilationsOnly = albums.filter(album => album.album_type === 'compilation');
+    const compilationsOnly = albums.filter(
+      album => album.album_type === 'compilation'
+    );
     return removeDuplicates(compilationsOnly);
   }, [albums]);
 

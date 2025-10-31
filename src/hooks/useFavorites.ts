@@ -17,7 +17,9 @@ export const useFavorites = (trackId?: string) => {
     queryFn: async () => {
       if (!trackId || !accessToken) return false;
 
-      const [isFavorited] = await spotifyService.checkTracksFavorites([trackId]);
+      const [isFavorited] = await spotifyService.checkTracksFavorites([
+        trackId,
+      ]);
       return isFavorited;
     },
     enabled: !!trackId && !!accessToken,
@@ -40,27 +42,40 @@ export const useFavorites = (trackId?: string) => {
         return true;
       }
     },
-    onMutate: async (isCurrentlyFavorited) => {
+    onMutate: async isCurrentlyFavorited => {
       // Cancelar qualquer query em andamento
-      await queryClient.cancelQueries({ queryKey: ['track-favorite', trackId] });
+      await queryClient.cancelQueries({
+        queryKey: ['track-favorite', trackId],
+      });
 
       // Snapshot do estado anterior
-      const previousState = queryClient.getQueryData(['track-favorite', trackId]);
+      const previousState = queryClient.getQueryData([
+        'track-favorite',
+        trackId,
+      ]);
 
       // Update otimista
-      queryClient.setQueryData(['track-favorite', trackId], !isCurrentlyFavorited);
+      queryClient.setQueryData(
+        ['track-favorite', trackId],
+        !isCurrentlyFavorited
+      );
 
       return { previousState };
     },
     onError: (error, _isCurrentlyFavorited, context) => {
       // Reverter para estado anterior em caso de erro
       if (context?.previousState !== undefined) {
-        queryClient.setQueryData(['track-favorite', trackId], context.previousState);
+        queryClient.setQueryData(
+          ['track-favorite', trackId],
+          context.previousState
+        );
       }
       console.error('❌ Error toggling favorite:', error);
     },
-    onSuccess: (newState) => {
-      console.log(`✅ Successfully ${newState ? 'added to' : 'removed from'} favorites`);
+    onSuccess: newState => {
+      console.log(
+        `✅ Successfully ${newState ? 'added to' : 'removed from'} favorites`
+      );
 
       // Atualizar o cache com o novo estado
       queryClient.setQueryData(['track-favorite', trackId], newState);
@@ -68,7 +83,7 @@ export const useFavorites = (trackId?: string) => {
       // Invalidar queries relacionadas para sincronizar outras instâncias
       queryClient.invalidateQueries({
         queryKey: ['track-favorite'],
-        refetchType: 'active'
+        refetchType: 'active',
       });
     },
   });

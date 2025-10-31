@@ -25,7 +25,7 @@ export const ArtistDetailPage: React.FC = () => {
     data: artist,
     isLoading: artistLoading,
     isError: artistError,
-    error: artistErrorData
+    error: artistErrorData,
   } = useArtist(artistId || '');
 
   // Fetch artist albums with infinite scroll
@@ -42,7 +42,8 @@ export const ArtistDetailPage: React.FC = () => {
   // Flatten all pages into a single array of albums
   const albums = albumsData?.pages.flatMap(page => page.items) ?? [];
 
-  const { visibleAlbums, visibleSingles, visibleCompilations } = useFilteredArtistAlbums({ albums });
+  const { visibleAlbums, visibleSingles, visibleCompilations } =
+    useFilteredArtistAlbums({ albums });
 
   const loading = artistLoading || albumsLoading;
   const error = artistError || albumsError;
@@ -65,7 +66,11 @@ export const ArtistDetailPage: React.FC = () => {
   };
 
   // Função para determinar a mensagem de erro apropriada
-  const errorMessage = getArtistErrorMessage(isOnline, toApiError(artistErrorData), toApiError(albumsErrorData));
+  const errorMessage = getArtistErrorMessage(
+    isOnline,
+    toApiError(artistErrorData),
+    toApiError(albumsErrorData)
+  );
 
   // Infinite scroll with intersection observer
   const { ref: loadMoreRef, inView } = useInView({
@@ -109,14 +114,32 @@ export const ArtistDetailPage: React.FC = () => {
           />
         ) : (
           <>
-            <AlbumGrid title="Álbuns" albums={visibleAlbums} onPlay={handlePlayAlbum} />
-            <AlbumGrid title="Singles e EPs" albums={visibleSingles} onPlay={handlePlayAlbum} />
-            <AlbumGrid title="Compilações" albums={visibleCompilations} onPlay={handlePlayAlbum} />
+            <AlbumGrid
+              title="Álbuns"
+              albums={visibleAlbums}
+              onPlay={handlePlayAlbum}
+            />
+            <AlbumGrid
+              title="Singles e EPs"
+              albums={visibleSingles}
+              onPlay={handlePlayAlbum}
+            />
+            <AlbumGrid
+              title="Compilações"
+              albums={visibleCompilations}
+              onPlay={handlePlayAlbum}
+            />
 
             {/* Infinite scroll trigger */}
             {hasNextPage && (
-              <div ref={loadMoreRef} className="h-10 flex justify-center items-center">
-                <LoadingSpinner size="sm" message="Carregando mais conteúdo..." />
+              <div
+                ref={loadMoreRef}
+                className="h-10 flex justify-center items-center"
+              >
+                <LoadingSpinner
+                  size="sm"
+                  message="Carregando mais conteúdo..."
+                />
               </div>
             )}
           </>

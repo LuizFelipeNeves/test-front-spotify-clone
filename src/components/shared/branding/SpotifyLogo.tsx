@@ -4,31 +4,42 @@ interface SpotifyLogoProps {
   className?: string;
 }
 
-const SpotifyLogo = ({ size = 'md', showText = true, className = '' }: SpotifyLogoProps) => {
+const SpotifyLogo = ({
+  size = 'md',
+  showText = true,
+  className = '',
+}: SpotifyLogoProps) => {
   const sizeClasses = {
     sm: 'w-6 h-6',
     md: 'w-12 h-12',
     lg: 'w-16 h-16',
-    xl: 'w-20 h-20'
+    xl: 'w-20 h-20',
   };
 
   const textSizeClasses = {
     sm: 'text-lg',
     md: 'text-4xl',
     lg: 'text-5xl',
-    xl: 'text-6xl'
+    xl: 'text-6xl',
   };
 
   const iconSizeClasses = {
     sm: 'w-4 h-4',
     md: 'w-8 h-8',
     lg: 'w-10 h-10',
-    xl: 'w-12 h-12'
+    xl: 'w-12 h-12',
   };
 
   return (
-    <div className={`flex items-center gap-2 ${className}`} role="img" aria-label="Spotify">
-      <div className={`${sizeClasses[size]} bg-white rounded-full flex items-center justify-center`} aria-hidden="true">
+    <div
+      className={`flex items-center gap-2 ${className}`}
+      role="img"
+      aria-label="Spotify"
+    >
+      <div
+        className={`${sizeClasses[size]} bg-white rounded-full flex items-center justify-center`}
+        aria-hidden="true"
+      >
         <svg viewBox="0 0 24 24" className={iconSizeClasses[size]}>
           <path
             fill="black"
@@ -37,7 +48,10 @@ const SpotifyLogo = ({ size = 'md', showText = true, className = '' }: SpotifyLo
         </svg>
       </div>
       {showText && (
-        <span className={`text-white ${textSizeClasses[size]} font-bold`} aria-hidden="true">
+        <span
+          className={`text-white ${textSizeClasses[size]} font-bold`}
+          aria-hidden="true"
+        >
           Spotify
         </span>
       )}

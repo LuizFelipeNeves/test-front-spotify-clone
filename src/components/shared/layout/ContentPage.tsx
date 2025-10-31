@@ -35,12 +35,16 @@ export function ContentPage<T>({
   isFetchingNextPage,
   fetchNextPage,
   loadingText,
-  gridClassName = "grid grid-cols-2 gap-4 md:gap-6",
-  actionButton
+  gridClassName = 'grid grid-cols-2 gap-4 md:gap-6',
+  actionButton,
 }: ContentPageProps<T>) {
   if (loading && items.length === 0) {
     return (
-      <PageContent title={title} description={description} actionButton={actionButton}>
+      <PageContent
+        title={title}
+        description={description}
+        actionButton={actionButton}
+      >
         <LoadingSpinner message="Carregando..." />
       </PageContent>
     );
@@ -48,7 +52,11 @@ export function ContentPage<T>({
 
   if (error && items.length === 0) {
     return (
-      <PageContent title={title} description={description} actionButton={actionButton}>
+      <PageContent
+        title={title}
+        description={description}
+        actionButton={actionButton}
+      >
         <div className="text-center py-12">
           <p className="text-red-400 mb-4">{error}</p>
           {onRetry && (
@@ -65,7 +73,11 @@ export function ContentPage<T>({
   }
 
   return (
-    <PageContent title={title} description={description} actionButton={actionButton}>
+    <PageContent
+      title={title}
+      description={description}
+      actionButton={actionButton}
+    >
       <InfiniteScrollList
         items={items}
         loading={loading}

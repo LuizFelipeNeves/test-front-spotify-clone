@@ -8,7 +8,8 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'MainContent is a semantic wrapper component that provides proper accessibility structure with the main role and appropriate focus management.',
+        component:
+          'MainContent is a semantic wrapper component that provides proper accessibility structure with the main role and appropriate focus management.',
       },
     },
   },
@@ -72,23 +73,43 @@ export const ComplexContent: Story = {
   render: () => (
     <MainContent className="p-6 max-w-4xl mx-auto">
       <header className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Cabeçalho do Conteúdo</h1>
-        <p className="text-gray-600">Este é o cabeçalho dentro do conteúdo principal.</p>
+        <h1 className="text-3xl font-bold text-gray-900">
+          Cabeçalho do Conteúdo
+        </h1>
+        <p className="text-gray-600">
+          Este é o cabeçalho dentro do conteúdo principal.
+        </p>
       </header>
 
       <nav className="mb-8">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">Navegação Secundária</h2>
+        <h2 className="text-xl font-semibold text-gray-800 mb-4">
+          Navegação Secundária
+        </h2>
         <ul className="flex gap-4">
-          <li><a href="#section1" className="text-blue-600 hover:text-blue-800">Seção 1</a></li>
-          <li><a href="#section2" className="text-blue-600 hover:text-blue-800">Seção 2</a></li>
-          <li><a href="#section3" className="text-blue-600 hover:text-blue-800">Seção 3</a></li>
+          <li>
+            <a href="#section1" className="text-blue-600 hover:text-blue-800">
+              Seção 1
+            </a>
+          </li>
+          <li>
+            <a href="#section2" className="text-blue-600 hover:text-blue-800">
+              Seção 2
+            </a>
+          </li>
+          <li>
+            <a href="#section3" className="text-blue-600 hover:text-blue-800">
+              Seção 3
+            </a>
+          </li>
         </ul>
       </nav>
 
       <main>
         <section id="section1" className="mb-12">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Seção 1</h2>
-          <p className="text-gray-700 mb-4">Conteúdo da primeira seção com informações importantes.</p>
+          <p className="text-gray-700 mb-4">
+            Conteúdo da primeira seção com informações importantes.
+          </p>
           <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
             Botão de Interação
           </button>
@@ -96,7 +117,9 @@ export const ComplexContent: Story = {
 
         <section id="section2" className="mb-12">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Seção 2</h2>
-          <p className="text-gray-700 mb-4">Conteúdo da segunda seção com elementos interativos.</p>
+          <p className="text-gray-700 mb-4">
+            Conteúdo da segunda seção com elementos interativos.
+          </p>
           <input
             type="text"
             placeholder="Digite algo..."
@@ -106,7 +129,9 @@ export const ComplexContent: Story = {
 
         <section id="section3">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Seção 3</h2>
-          <p className="text-gray-700 mb-4">Conteúdo da terceira seção com mais informações.</p>
+          <p className="text-gray-700 mb-4">
+            Conteúdo da terceira seção com mais informações.
+          </p>
           <div className="grid grid-cols-3 gap-4">
             <div className="bg-gray-100 p-4 rounded">Card 1</div>
             <div className="bg-gray-100 p-4 rounded">Card 2</div>
@@ -116,14 +141,17 @@ export const ComplexContent: Story = {
       </main>
 
       <footer className="mt-12 pt-8 border-t border-gray-200">
-        <p className="text-gray-600 text-center">Rodapé do conteúdo principal</p>
+        <p className="text-gray-600 text-center">
+          Rodapé do conteúdo principal
+        </p>
       </footer>
     </MainContent>
   ),
   parameters: {
     docs: {
       description: {
-        story: 'Example of complex content structure within MainContent, including navigation, sections, forms, and interactive elements.',
+        story:
+          'Example of complex content structure within MainContent, including navigation, sections, forms, and interactive elements.',
       },
     },
   },
@@ -172,7 +200,9 @@ The MainContent component provides comprehensive accessibility support:
     <div className="p-8">
       <div className="max-w-2xl mx-auto mb-8 text-center">
         <div className="bg-green-100 border border-green-300 rounded-lg p-4 mb-6">
-          <h3 className="text-green-800 font-bold mb-2">✅ Recursos de Acessibilidade</h3>
+          <h3 className="text-green-800 font-bold mb-2">
+            ✅ Recursos de Acessibilidade
+          </h3>
           <ul className="text-green-700 text-left list-disc list-inside">
             <li>Elemento &lt;main&gt; semântico</li>
             <li>Atributo role="main" correto</li>
@@ -184,16 +214,20 @@ The MainContent component provides comprehensive accessibility support:
       </div>
 
       <MainContent className="bg-white border border-gray-200 rounded-lg p-6">
-        <h1 className="text-2xl font-bold mb-4">Demonstração de Acessibilidade</h1>
+        <h1 className="text-2xl font-bold mb-4">
+          Demonstração de Acessibilidade
+        </h1>
         <p className="text-gray-600 mb-6">
-          Este componente demonstra como implementar acessibilidade em áreas de conteúdo principais.
+          Este componente demonstra como implementar acessibilidade em áreas de
+          conteúdo principais.
         </p>
 
         <div className="space-y-6">
           <section>
             <h2 className="text-xl font-semibold mb-2">Conteúdo Navegável</h2>
             <p className="text-gray-700">
-              Teste a navegação por teclado e com leitores de tela neste conteúdo.
+              Teste a navegação por teclado e com leitores de tela neste
+              conteúdo.
             </p>
             <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
               Teste Botão
@@ -204,7 +238,10 @@ The MainContent component provides comprehensive accessibility support:
             <h2 className="text-xl font-semibold mb-2">Formulário</h2>
             <form className="space-y-4">
               <div>
-                <label htmlFor="test-input" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="test-input"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Campo de Teste
                 </label>
                 <input
@@ -214,7 +251,10 @@ The MainContent component provides comprehensive accessibility support:
                   placeholder="Digite para testar"
                 />
               </div>
-              <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+              <button
+                type="submit"
+                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+              >
                 Enviar
               </button>
             </form>
@@ -265,13 +305,17 @@ This story demonstrates how MainContent works with SkipLink components:
         <h1 className="text-3xl font-bold mb-6">Página com SkipLink</h1>
 
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-semibold text-blue-900 mb-3">Funcionalidade SkipLink</h2>
+          <h2 className="text-xl font-semibold text-blue-900 mb-3">
+            Funcionalidade SkipLink
+          </h2>
           <p className="text-blue-700 mb-4">
-            Você pode usar Tab para navegar até o link "Pular para conteúdo principal" e pressionar Enter para pular diretamente para cá.
+            Você pode usar Tab para navegar até o link "Pular para conteúdo
+            principal" e pressionar Enter para pular diretamente para cá.
           </p>
           <div className="bg-blue-100 rounded p-3">
             <p className="text-blue-800 text-sm">
-              <strong>Dica:</strong> Teste com Tab → Enter para verificar o funcionamento.
+              <strong>Dica:</strong> Teste com Tab → Enter para verificar o
+              funcionamento.
             </p>
           </div>
         </div>
@@ -279,7 +323,8 @@ This story demonstrates how MainContent works with SkipLink components:
         <section className="mb-8">
           <h2 className="text-2xl font-bold mb-4">Conteúdo Principal</h2>
           <p className="text-gray-700 mb-4">
-            Este é o conteúdo principal da página. Quando você usa o SkipLink, deve pular diretamente para esta área.
+            Este é o conteúdo principal da página. Quando você usa o SkipLink,
+            deve pular diretamente para esta área.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-gray-100 p-6 rounded-lg">
@@ -306,7 +351,9 @@ export const ResponsiveDesign: Story = {
     <MainContent className="container mx-auto px-4 py-8 max-w-6xl">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
-          <h1 className="text-3xl lg:text-4xl font-bold mb-6">Layout Responsivo</h1>
+          <h1 className="text-3xl lg:text-4xl font-bold mb-6">
+            Layout Responsivo
+          </h1>
           <p className="text-gray-600 mb-6 text-lg">
             O MainContent funciona perfeitamente com layouts responsivos,
             mantendo a acessibilidade em todos os tamanhos de tela.
@@ -315,7 +362,9 @@ export const ResponsiveDesign: Story = {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-white border border-gray-200 rounded-lg p-6">
               <h3 className="text-xl font-semibold mb-3">Card Mobile</h3>
-              <p className="text-gray-600">Layout otimizado para dispositivos móveis.</p>
+              <p className="text-gray-600">
+                Layout otimizado para dispositivos móveis.
+              </p>
             </div>
 
             <div className="bg-white border border-gray-200 rounded-lg p-6">
@@ -344,7 +393,8 @@ export const ResponsiveDesign: Story = {
   ),
   parameters: {
     docs: {
-      description: 'Responsive design example showing MainContent working with adaptive layouts.',
+      description:
+        'Responsive design example showing MainContent working with adaptive layouts.',
     },
   },
 };

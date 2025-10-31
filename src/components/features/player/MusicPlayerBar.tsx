@@ -29,7 +29,11 @@ const MusicPlayerBar: React.FC = () => {
   } = usePlayerStore();
 
   // Hook de favoritos com React Query
-  const { isFavorited, toggleFavorite, isLoading: isFavoriteLoading } = useFavorites(currentTrack?.id);
+  const {
+    isFavorited,
+    toggleFavorite,
+    isLoading: isFavoriteLoading,
+  } = useFavorites(currentTrack?.id);
 
   const {
     togglePlay: spotifyTogglePlay,
@@ -55,9 +59,7 @@ const MusicPlayerBar: React.FC = () => {
     }
   };
 
-
   // Handle volume control
-
 
   const toggleMute = () => {
     if (isMuted) {
@@ -85,8 +87,6 @@ const MusicPlayerBar: React.FC = () => {
       spotifyToggleRepeat('off');
     }
   };
-
-
 
   // Don't render if no current track
   if (!currentTrack) {
@@ -122,7 +122,9 @@ const MusicPlayerBar: React.FC = () => {
                   disabled={isFavoriteLoading}
                   data-testid="favorite-button"
                   className={`ml-2 transition-colors flex-shrink-0 ${
-                    isFavorited ? 'text-green-500' : 'text-gray-400 hover:text-white'
+                    isFavorited
+                      ? 'text-green-500'
+                      : 'text-gray-400 hover:text-white'
                   } ${isFavoriteLoading ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'}`}
                 >
                   {isFavorited ? (
@@ -222,7 +224,9 @@ const MusicPlayerBar: React.FC = () => {
               disabled={isFavoriteLoading}
               data-testid="favorite-button-desktop"
               className={`transition-colors flex-shrink-0 ${
-                isFavorited ? 'text-green-500' : 'text-gray-400 hover:text-white'
+                isFavorited
+                  ? 'text-green-500'
+                  : 'text-gray-400 hover:text-white'
               } ${isFavoriteLoading ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'}`}
             >
               {isFavorited ? (
@@ -282,7 +286,9 @@ const MusicPlayerBar: React.FC = () => {
                 onClick={handleToggleRepeat}
                 data-testid="repeat-button"
                 className={`transition-colors ${
-                  repeat !== 'off' ? 'text-green-500' : 'text-gray-400 hover:text-white'
+                  repeat !== 'off'
+                    ? 'text-green-500'
+                    : 'text-gray-400 hover:text-white'
                 }`}
               >
                 {repeat === 'track' ? (

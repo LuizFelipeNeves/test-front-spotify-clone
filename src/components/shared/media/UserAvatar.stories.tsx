@@ -67,7 +67,8 @@ export const Default: Story = {
 
 export const WithImage: Story = {
   args: {
-    imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop',
+    imageUrl:
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop',
     displayName: 'João Silva',
     size: 'lg',
   },
@@ -83,7 +84,8 @@ export const Loading: Story = {
 
 export const Small: Story = {
   args: {
-    imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop',
+    imageUrl:
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop',
     displayName: 'João Silva',
     size: 'sm',
   },
@@ -91,7 +93,8 @@ export const Small: Story = {
 
 export const Medium: Story = {
   args: {
-    imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop',
+    imageUrl:
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop',
     displayName: 'João Silva',
     size: 'md',
   },
@@ -99,7 +102,8 @@ export const Medium: Story = {
 
 export const Large: Story = {
   args: {
-    imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop',
+    imageUrl:
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop',
     displayName: 'João Silva',
     size: 'lg',
   },
@@ -128,7 +132,7 @@ export const AllSizes: Story = {
         <h3 className="text-white text-lg mb-4">Com Imagem</h3>
         <div className="flex items-end gap-8">
           <div className="text-center">
-            <UserAvatar 
+            <UserAvatar
               imageUrl="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop"
               displayName="João Silva"
               size="sm"
@@ -136,7 +140,7 @@ export const AllSizes: Story = {
             <p className="text-gray-400 text-xs mt-2">Small</p>
           </div>
           <div className="text-center">
-            <UserAvatar 
+            <UserAvatar
               imageUrl="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop"
               displayName="João Silva"
               size="md"
@@ -144,7 +148,7 @@ export const AllSizes: Story = {
             <p className="text-gray-400 text-xs mt-2">Medium</p>
           </div>
           <div className="text-center">
-            <UserAvatar 
+            <UserAvatar
               imageUrl="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop"
               displayName="João Silva"
               size="lg"
@@ -153,59 +157,38 @@ export const AllSizes: Story = {
           </div>
         </div>
       </div>
-      
+
       <div>
         <h3 className="text-white text-lg mb-4">Sem Imagem (Fallback)</h3>
         <div className="flex items-end gap-8">
           <div className="text-center">
-            <UserAvatar 
-              displayName="Usuário 1"
-              size="sm"
-            />
+            <UserAvatar displayName="Usuário 1" size="sm" />
             <p className="text-gray-400 text-xs mt-2">Small</p>
           </div>
           <div className="text-center">
-            <UserAvatar 
-              displayName="Usuário 2"
-              size="md"
-            />
+            <UserAvatar displayName="Usuário 2" size="md" />
             <p className="text-gray-400 text-xs mt-2">Medium</p>
           </div>
           <div className="text-center">
-            <UserAvatar 
-              displayName="Usuário 3"
-              size="lg"
-            />
+            <UserAvatar displayName="Usuário 3" size="lg" />
             <p className="text-gray-400 text-xs mt-2">Large</p>
           </div>
         </div>
       </div>
-      
+
       <div>
         <h3 className="text-white text-lg mb-4">Loading States</h3>
         <div className="flex items-end gap-8">
           <div className="text-center">
-            <UserAvatar 
-              displayName="Loading 1"
-              isLoading={true}
-              size="sm"
-            />
+            <UserAvatar displayName="Loading 1" isLoading={true} size="sm" />
             <p className="text-gray-400 text-xs mt-2">Small Loading</p>
           </div>
           <div className="text-center">
-            <UserAvatar 
-              displayName="Loading 2"
-              isLoading={true}
-              size="md"
-            />
+            <UserAvatar displayName="Loading 2" isLoading={true} size="md" />
             <p className="text-gray-400 text-xs mt-2">Medium Loading</p>
           </div>
           <div className="text-center">
-            <UserAvatar 
-              displayName="Loading 3"
-              isLoading={true}
-              size="lg"
-            />
+            <UserAvatar displayName="Loading 3" isLoading={true} size="lg" />
             <p className="text-gray-400 text-xs mt-2">Large Loading</p>
           </div>
         </div>
@@ -220,7 +203,7 @@ export const DifferentUsers: Story = {
       <h3 className="text-white text-lg mb-4">Diferentes Usuários</h3>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         <div className="text-center">
-          <UserAvatar 
+          <UserAvatar
             imageUrl="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop"
             displayName="João Silva"
             size="lg"
@@ -228,9 +211,9 @@ export const DifferentUsers: Story = {
           <p className="text-white text-sm mt-2">João Silva</p>
           <p className="text-gray-400 text-xs">Com foto</p>
         </div>
-        
+
         <div className="text-center">
-          <UserAvatar 
+          <UserAvatar
             imageUrl="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=300&h=300&fit=crop"
             displayName="Maria Santos"
             size="lg"
@@ -238,22 +221,15 @@ export const DifferentUsers: Story = {
           <p className="text-white text-sm mt-2">Maria Santos</p>
           <p className="text-gray-400 text-xs">Com foto</p>
         </div>
-        
+
         <div className="text-center">
-          <UserAvatar 
-            displayName="Pedro Costa"
-            size="lg"
-          />
+          <UserAvatar displayName="Pedro Costa" size="lg" />
           <p className="text-white text-sm mt-2">Pedro Costa</p>
           <p className="text-gray-400 text-xs">Sem foto</p>
         </div>
-        
+
         <div className="text-center">
-          <UserAvatar 
-            displayName="Ana Oliveira"
-            isLoading={true}
-            size="lg"
-          />
+          <UserAvatar displayName="Ana Oliveira" isLoading={true} size="lg" />
           <p className="text-white text-sm mt-2">Ana Oliveira</p>
           <p className="text-gray-400 text-xs">Carregando</p>
         </div>

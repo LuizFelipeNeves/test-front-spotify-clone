@@ -56,7 +56,9 @@ describe('MainContent', () => {
       </MainContent>
     );
 
-    expect(screen.getByRole('heading', { name: /heading/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: /heading/i })
+    ).toBeInTheDocument();
     expect(screen.getByText(/paragraph/i)).toBeInTheDocument();
   });
 
@@ -87,9 +89,15 @@ describe('MainContent', () => {
       </MainContent>
     );
 
-    expect(screen.getByRole('heading', { name: /section title/i, level: 2 })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /nested button/i })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /nested link/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: /section title/i, level: 2 })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /nested button/i })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: /nested link/i })
+    ).toBeInTheDocument();
   });
 
   it('can be used with different content types', () => {
@@ -104,8 +112,12 @@ describe('MainContent', () => {
     render(<MainContent>{content}</MainContent>);
 
     expect(screen.getByText('Text content')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /button content/i })).toBeInTheDocument();
-    expect(screen.getByRole('img', { name: /test image/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /button content/i })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('img', { name: /test image/i })
+    ).toBeInTheDocument();
   });
 
   it('focus management works correctly', () => {

@@ -1,20 +1,26 @@
-import { useEffect } from 'react'
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { useAuthStore } from '@/store/authStore'
-import { SpotifyPlayerProvider } from '@/contexts/SpotifyPlayerContext'
-import { Layout } from '@/components'
-import LoginPage from '@/pages/LoginPage'
-import CallbackPage from '@/pages/CallbackPage'
-import HomePage from '@/pages/HomePage'
-import ArtistsPage from '@/pages/ArtistsPage'
-import { ArtistDetailPage } from '@/pages/ArtistDetailPage'
-import PlaylistsPage from '@/pages/PlaylistsPage'
-import ProfilePage from '@/pages/ProfilePage'
-import { PWAUpdateNotification } from '@/components'
-import { ROUTES } from '@/utils/constants'
-import { UI_TEXTS } from '@/constants/ui'
-import './App.css'
+import { useEffect } from 'react';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useAuthStore } from '@/store/authStore';
+import { SpotifyPlayerProvider } from '@/contexts/SpotifyPlayerContext';
+import { Layout } from '@/components';
+import LoginPage from '@/pages/LoginPage';
+import CallbackPage from '@/pages/CallbackPage';
+import HomePage from '@/pages/HomePage';
+import ArtistsPage from '@/pages/ArtistsPage';
+import { ArtistDetailPage } from '@/pages/ArtistDetailPage';
+import PlaylistsPage from '@/pages/PlaylistsPage';
+import ProfilePage from '@/pages/ProfilePage';
+import { PWAUpdateNotification } from '@/components';
+import { ROUTES } from '@/utils/constants';
+import { UI_TEXTS } from '@/constants/ui';
+import './App.css';
 
 // Configuração do React Query
 const queryClient = new QueryClient({
@@ -41,11 +47,11 @@ const queryClient = new QueryClient({
       networkMode: 'online',
     },
   },
-})
+});
 
 // Componente para anunciar mudanças de rota para leitores de tela
 function RouteAnnouncer() {
-  const location = useLocation()
+  const location = useLocation();
 
   useEffect(() => {
     const pageTitles: Record<string, string> = {
@@ -54,66 +60,64 @@ function RouteAnnouncer() {
       [ROUTES.PLAYLISTS]: UI_TEXTS.paginaPlaylists,
       [ROUTES.PROFILE]: UI_TEXTS.paginaPerfil,
       [ROUTES.LOGIN]: UI_TEXTS.paginaLogin,
-      '/callback': UI_TEXTS.paginaCallback
-    }
+      '/callback': UI_TEXTS.paginaCallback,
+    };
 
-    const title = pageTitles[location.pathname] || UI_TEXTS.paginaGenerica
+    const title = pageTitles[location.pathname] || UI_TEXTS.paginaGenerica;
 
-    const announcer = document.createElement('div')
-    announcer.setAttribute('aria-live', 'polite')
-    announcer.setAttribute('aria-atomic', 'true')
-    announcer.className = 'sr-only'
-    announcer.textContent = `Navegou para: ${title}`
+    const announcer = document.createElement('div');
+    announcer.setAttribute('aria-live', 'polite');
+    announcer.setAttribute('aria-atomic', 'true');
+    announcer.className = 'sr-only';
+    announcer.textContent = `Navegou para: ${title}`;
 
-    document.body.appendChild(announcer)
+    document.body.appendChild(announcer);
 
     setTimeout(() => {
-      document.body.removeChild(announcer)
-    }, 1000)
-  }, [location.pathname])
+      document.body.removeChild(announcer);
+    }, 1000);
+  }, [location.pathname]);
 
-  return null
+  return null;
 }
 
 // Componente para proteger rotas autenticadas
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated } = useAuthStore()
+  const { isAuthenticated } = useAuthStore();
 
   if (!isAuthenticated) {
-    return <Navigate to={ROUTES.LOGIN} replace />
+    return <Navigate to={ROUTES.LOGIN} replace />;
   }
 
-  return <Layout>{children}</Layout>
+  return <Layout>{children}</Layout>;
 }
 
-
-
 function App() {
-  const { isAuthenticated, login } = useAuthStore()
+  const { isAuthenticated, login } = useAuthStore();
 
   // Check for existing token on app load
   useEffect(() => {
     const initializeAuth = async () => {
-      const token = localStorage.getItem('spotify_access_token')
-      const refreshToken = localStorage.getItem('spotify_refresh_token')
-      
+      const token = localStorage.getItem('spotify_access_token');
+      const refreshToken = localStorage.getItem('spotify_refresh_token');
+
       if (token && !isAuthenticated) {
         try {
           // Importar o spotifyService dinamicamente para evitar problemas de dependência circular
-          const { spotifyService } = await import('@/services/spotify.service')
-          const userData = await spotifyService.getUserProfile()
-          login(token, refreshToken || '', userData)
+          const { spotifyService } = await import('@/services/spotify.service');
+          const userData = await spotifyService.getUserProfile();
+          login(token, refreshToken || '', userData);
         } catch (error) {
-          console.error('Failed to restore authentication:', error)
+          console.error('Failed to restore authentication:', error);
           // Se falhar, limpar tokens inválidos
-          localStorage.removeItem('spotify_access_token')
-          localStorage.removeItem('spotify_refresh_token')
+          localStorage.removeItem('spotify_access_token');
+          localStorage.removeItem('spotify_refresh_token');
         }
       }
-    }
+    };
 
-    initializeAuth()
-  }, [isAuthenticated, login])
+    initializeAuth();
+  }, [isAuthenticated, login]);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -170,9 +174,11 @@ function App() {
             <Route
               path="*"
               element={
-                isAuthenticated ?
-                  <Navigate to={ROUTES.HOME} replace /> :
+                isAuthenticated ? (
+                  <Navigate to={ROUTES.HOME} replace />
+                ) : (
                   <Navigate to={ROUTES.LOGIN} replace />
+                )
               }
             />
           </Routes>
@@ -185,7 +191,7 @@ function App() {
         </Router>
       </SpotifyPlayerProvider>
     </QueryClientProvider>
-  )
+  );
 }
 
-export default App
+export default App;

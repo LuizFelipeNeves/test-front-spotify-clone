@@ -47,7 +47,7 @@ O componente AlbumCard exibe informações de um álbum do Spotify com:
       control: { type: 'text' },
     },
   },
-  args: { 
+  args: {
     onClick: fn(),
   },
 } satisfies Meta<typeof AlbumCard>;
@@ -342,10 +342,82 @@ Exemplo de como os AlbumCards aparecem em um layout de grid:
       <h2 className="text-2xl font-bold mb-4">Álbuns Populares</h2>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
         <AlbumCard album={sampleAlbum} onClick={fn()} />
-        <AlbumCard album={{ ...sampleAlbum, name: 'Dark Side of the Moon', artists: [{ id: '2', name: 'Pink Floyd', images: [], genres: ['rock'], popularity: 85, followers: { total: 15000000 }, external_urls: { spotify: '' }, uri: 'artist:2' }] }} onClick={fn()} />
-        <AlbumCard album={{ ...sampleAlbum, name: 'Thriller', artists: [{ id: '3', name: 'Michael Jackson', images: [], genres: ['pop'], popularity: 95, followers: { total: 40000000 }, external_urls: { spotify: '' }, uri: 'artist:3' }] }} onClick={fn()} />
-        <AlbumCard album={{ ...sampleAlbum, name: 'Back in Black', artists: [{ id: '4', name: 'AC/DC', images: [], genres: ['rock'], popularity: 90, followers: { total: 25000000 }, external_urls: { spotify: '' }, uri: 'artist:4' }] }} onClick={fn()} />
-        <AlbumCard album={{ ...sampleAlbum, name: 'The Wall', artists: [{ id: '5', name: 'Pink Floyd', images: [], genres: ['rock'], popularity: 85, followers: { total: 15000000 }, external_urls: { spotify: '' }, uri: 'artist:5' }] }} onClick={fn()} />
+        <AlbumCard
+          album={{
+            ...sampleAlbum,
+            name: 'Dark Side of the Moon',
+            artists: [
+              {
+                id: '2',
+                name: 'Pink Floyd',
+                images: [],
+                genres: ['rock'],
+                popularity: 85,
+                followers: { total: 15000000 },
+                external_urls: { spotify: '' },
+                uri: 'artist:2',
+              },
+            ],
+          }}
+          onClick={fn()}
+        />
+        <AlbumCard
+          album={{
+            ...sampleAlbum,
+            name: 'Thriller',
+            artists: [
+              {
+                id: '3',
+                name: 'Michael Jackson',
+                images: [],
+                genres: ['pop'],
+                popularity: 95,
+                followers: { total: 40000000 },
+                external_urls: { spotify: '' },
+                uri: 'artist:3',
+              },
+            ],
+          }}
+          onClick={fn()}
+        />
+        <AlbumCard
+          album={{
+            ...sampleAlbum,
+            name: 'Back in Black',
+            artists: [
+              {
+                id: '4',
+                name: 'AC/DC',
+                images: [],
+                genres: ['rock'],
+                popularity: 90,
+                followers: { total: 25000000 },
+                external_urls: { spotify: '' },
+                uri: 'artist:4',
+              },
+            ],
+          }}
+          onClick={fn()}
+        />
+        <AlbumCard
+          album={{
+            ...sampleAlbum,
+            name: 'The Wall',
+            artists: [
+              {
+                id: '5',
+                name: 'Pink Floyd',
+                images: [],
+                genres: ['rock'],
+                popularity: 85,
+                followers: { total: 15000000 },
+                external_urls: { spotify: '' },
+                uri: 'artist:5',
+              },
+            ],
+          }}
+          onClick={fn()}
+        />
       </div>
     </div>
   ),

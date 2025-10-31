@@ -25,9 +25,9 @@ class ImageCacheService {
         resolve();
       };
 
-      request.onupgradeneeded = (event) => {
+      request.onupgradeneeded = event => {
         const db = (event.target as IDBOpenDBRequest).result;
-        
+
         if (!db.objectStoreNames.contains(this.storeName)) {
           const store = db.createObjectStore(this.storeName, { keyPath: 'id' });
           store.createIndex('type', 'type', { unique: false });
@@ -42,11 +42,14 @@ class ImageCacheService {
     return `${type}_${btoa(url).replace(/[^a-zA-Z0-9]/g, '')}`;
   }
 
-  async cacheImage(url: string, type: 'artist' | 'playlist' | 'user'): Promise<string> {
+  async cacheImage(
+    url: string,
+    type: 'artist' | 'playlist' | 'user'
+  ): Promise<string> {
     if (!this.db) await this.init();
 
     const cacheKey = this.generateCacheKey(url, type);
-    
+
     // Verificar se já está em cache e não expirou
     const cached = await this.getCachedImage(cacheKey);
     if (cached && cached.expiresAt > Date.now()) {
@@ -57,7 +60,7 @@ class ImageCacheService {
       // Fazer download da imagem
       const response = await fetch(url, {
         mode: 'cors',
-        cache: 'force-cache'
+        cache: 'force-cache',
       });
 
       if (!response.ok) {
@@ -65,7 +68,7 @@ class ImageCacheService {
       }
 
       const blob = await response.blob();
-      
+
       // Verificar se é uma imagem válida
       if (!blob.type.startsWith('image/')) {
         throw new Error('Invalid image type');
@@ -78,12 +81,12 @@ class ImageCacheService {
         blob,
         timestamp: now,
         type,
-        expiresAt: now + this.cacheExpiry
+        expiresAt: now + this.cacheExpiry,
       };
 
       // Salvar no cache
       await this.saveCachedImage(cachedImage);
-      
+
       // Limpar cache se necessário
       await this.cleanupCache();
 
@@ -120,7 +123,10 @@ class ImageCacheService {
     });
   }
 
-  async getCachedImageUrl(url: string, type: 'artist' | 'playlist' | 'user'): Promise<string | null> {
+  async getCachedImageUrl(
+    url: string,
+    type: 'artist' | 'playlist' | 'user'
+  ): Promise<string | null> {
     if (!this.db) await this.init();
 
     const cacheKey = this.generateCacheKey(url, type);
@@ -133,9 +139,11 @@ class ImageCacheService {
     return null;
   }
 
-  async preloadImages(urls: Array<{ url: string; type: 'artist' | 'playlist' | 'user' }>): Promise<void> {
-    const promises = urls.map(({ url, type }) => 
-      this.cacheImage(url, type).catch(error => 
+  async preloadImages(
+    urls: Array<{ url: string; type: 'artist' | 'playlist' | 'user' }>
+  ): Promise<void> {
+    const promises = urls.map(({ url, type }) =>
+      this.cacheImage(url, type).catch(error =>
         console.warn('Failed to preload image:', url, error)
       )
     );
@@ -147,13 +155,13 @@ class ImageCacheService {
     if (!this.db) return;
 
     const now = Date.now();
-    
+
     // Remover imagens expiradas
     await this.removeExpiredImages(now);
-    
+
     // Verificar tamanho do cache
     const cacheSize = await this.getCacheSize();
-    
+
     if (cacheSize > this.maxCacheSize) {
       await this.removeOldestImages();
     }
@@ -170,7 +178,7 @@ class ImageCacheService {
       const request = index.openCursor(range);
 
       request.onerror = () => reject(request.error);
-      request.onsuccess = (event) => {
+      request.onsuccess = event => {
         const cursor = (event.target as IDBRequest).result;
         if (cursor) {
           cursor.delete();
@@ -212,7 +220,7 @@ class ImageCacheService {
       const targetRemoval = this.maxCacheSize * 0.2; // Remove 20% do cache
 
       request.onerror = () => reject(request.error);
-      request.onsuccess = (event) => {
+      request.onsuccess = event => {
         const cursor = (event.target as IDBRequest).result;
         if (cursor && removedSize < targetRemoval) {
           const image = cursor.value as CachedImage;
@@ -257,12 +265,13 @@ class ImageCacheService {
         const stats = {
           totalImages: images.length,
           totalSize: 0,
-          sizeByType: {} as Record<string, number>
+          sizeByType: {} as Record<string, number>,
         };
 
         images.forEach(img => {
           stats.totalSize += img.blob.size;
-          stats.sizeByType[img.type] = (stats.sizeByType[img.type] || 0) + img.blob.size;
+          stats.sizeByType[img.type] =
+            (stats.sizeByType[img.type] || 0) + img.blob.size;
         });
 
         resolve(stats);

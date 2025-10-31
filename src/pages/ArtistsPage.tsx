@@ -55,7 +55,7 @@ export default function ArtistsPage() {
           fetchNextPage={fetchNextPage}
           loadingText={UI_TEXTS.carregandoMaisArtistas}
           gridClassName="grid grid-cols-2 gap-4 md:gap-6"
-          renderItem={(artist) => (
+          renderItem={artist => (
             <ArtistCard
               key={artist.id}
               artist={artist}

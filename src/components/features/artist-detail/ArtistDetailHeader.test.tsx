@@ -60,8 +60,10 @@ describe('ArtistDetailHeader', () => {
         <ArtistDetailHeader artist={mockArtist} />
       </RouterWrapper>
     );
-    
-    expect(screen.getByRole('heading', { name: 'Test Artist' })).toBeInTheDocument();
+
+    expect(
+      screen.getByRole('heading', { name: 'Test Artist' })
+    ).toBeInTheDocument();
     expect(screen.getByText('1,234,567 seguidores')).toBeInTheDocument();
     expect(screen.getByText('rock, alternative, indie')).toBeInTheDocument();
   });
@@ -72,11 +74,20 @@ describe('ArtistDetailHeader', () => {
         <ArtistDetailHeader artist={mockArtist} />
       </RouterWrapper>
     );
-    
+
     const image = screen.getByAltText('Test Artist');
     expect(image).toBeInTheDocument();
-    expect(image).toHaveAttribute('src', 'https://example.com/artist-image.jpg');
-    expect(image).toHaveClass('w-24', 'h-24', 'rounded-full', 'object-cover', 'mr-6');
+    expect(image).toHaveAttribute(
+      'src',
+      'https://example.com/artist-image.jpg'
+    );
+    expect(image).toHaveClass(
+      'w-24',
+      'h-24',
+      'rounded-full',
+      'object-cover',
+      'mr-6'
+    );
   });
 
   it('does not display image when not available', () => {
@@ -84,13 +95,13 @@ describe('ArtistDetailHeader', () => {
       ...mockArtist,
       images: [],
     };
-    
+
     render(
       <RouterWrapper>
         <ArtistDetailHeader artist={artistWithoutImage} />
       </RouterWrapper>
     );
-    
+
     expect(screen.queryByAltText('Test Artist')).not.toBeInTheDocument();
   });
 
@@ -100,10 +111,10 @@ describe('ArtistDetailHeader', () => {
         <ArtistDetailHeader artist={mockArtist} />
       </RouterWrapper>
     );
-    
+
     const backButton = screen.getByRole('button');
     fireEvent.click(backButton);
-    
+
     expect(mockNavigate).toHaveBeenCalledWith('/artists');
   });
 
@@ -113,7 +124,7 @@ describe('ArtistDetailHeader', () => {
         <ArtistDetailHeader artist={mockArtist} />
       </RouterWrapper>
     );
-    
+
     const arrowIcon = screen.getByTestId('arrow-left-icon');
     expect(arrowIcon).toBeInTheDocument();
     expect(arrowIcon).toHaveClass('w-6', 'h-6', 'mr-2');
@@ -125,7 +136,7 @@ describe('ArtistDetailHeader', () => {
         <ArtistDetailHeader artist={mockArtist} />
       </RouterWrapper>
     );
-    
+
     const backButton = screen.getByRole('button');
     expect(backButton).toHaveTextContent('Test Artist');
   });
@@ -136,7 +147,7 @@ describe('ArtistDetailHeader', () => {
         <ArtistDetailHeader artist={mockArtist} />
       </RouterWrapper>
     );
-    
+
     const heading = screen.getByRole('heading', { level: 1 });
     expect(heading).toHaveTextContent('Test Artist');
     expect(heading).toHaveClass('text-2xl', 'font-bold', 'mb-2');
@@ -148,7 +159,7 @@ describe('ArtistDetailHeader', () => {
         <ArtistDetailHeader artist={mockArtist} />
       </RouterWrapper>
     );
-    
+
     expect(screen.getByText('1,234,567 seguidores')).toBeInTheDocument();
   });
 
@@ -159,13 +170,13 @@ describe('ArtistDetailHeader', () => {
         total: 0,
       },
     };
-    
+
     render(
       <RouterWrapper>
         <ArtistDetailHeader artist={artistWithZeroFollowers} />
       </RouterWrapper>
     );
-    
+
     expect(screen.getByText('0 seguidores')).toBeInTheDocument();
   });
 
@@ -174,15 +185,17 @@ describe('ArtistDetailHeader', () => {
       ...mockArtist,
     };
     delete (artistWithoutFollowers as any).followers;
-    
+
     render(
       <RouterWrapper>
         <ArtistDetailHeader artist={artistWithoutFollowers as Artist} />
       </RouterWrapper>
     );
-    
+
     // Deve renderizar sem erro, mas não mostrar seguidores
-    expect(screen.getByRole('heading', { name: 'Test Artist' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Test Artist' })
+    ).toBeInTheDocument();
     expect(screen.queryByText(/seguidores/)).not.toBeInTheDocument();
   });
 
@@ -192,7 +205,7 @@ describe('ArtistDetailHeader', () => {
         <ArtistDetailHeader artist={mockArtist} />
       </RouterWrapper>
     );
-    
+
     expect(screen.getByText('rock, alternative, indie')).toBeInTheDocument();
   });
 
@@ -201,13 +214,13 @@ describe('ArtistDetailHeader', () => {
       ...mockArtist,
       genres: ['rock', 'alternative', 'indie', 'pop', 'electronic', 'metal'],
     };
-    
+
     render(
       <RouterWrapper>
         <ArtistDetailHeader artist={artistWithManyGenres} />
       </RouterWrapper>
     );
-    
+
     expect(screen.getByText('rock, alternative, indie')).toBeInTheDocument();
     expect(screen.queryByText(/pop/)).not.toBeInTheDocument();
     expect(screen.queryByText(/electronic/)).not.toBeInTheDocument();
@@ -218,14 +231,16 @@ describe('ArtistDetailHeader', () => {
       ...mockArtist,
       genres: [],
     };
-    
+
     render(
       <RouterWrapper>
         <ArtistDetailHeader artist={artistWithoutGenres} />
       </RouterWrapper>
     );
-    
-    expect(screen.queryByText('rock, alternative, indie')).not.toBeInTheDocument();
+
+    expect(
+      screen.queryByText('rock, alternative, indie')
+    ).not.toBeInTheDocument();
   });
 
   it('does not display genres when undefined', () => {
@@ -233,14 +248,16 @@ describe('ArtistDetailHeader', () => {
       ...mockArtist,
     };
     delete (artistWithoutGenres as any).genres;
-    
+
     render(
       <RouterWrapper>
         <ArtistDetailHeader artist={artistWithoutGenres as Artist} />
       </RouterWrapper>
     );
-    
-    expect(screen.queryByText('rock, alternative, indie')).not.toBeInTheDocument();
+
+    expect(
+      screen.queryByText('rock, alternative, indie')
+    ).not.toBeInTheDocument();
   });
 
   it('has correct styling classes for back button', () => {
@@ -249,7 +266,7 @@ describe('ArtistDetailHeader', () => {
         <ArtistDetailHeader artist={mockArtist} />
       </RouterWrapper>
     );
-    
+
     const backButton = screen.getByRole('button');
     expect(backButton).toHaveClass(
       'flex',
@@ -267,7 +284,7 @@ describe('ArtistDetailHeader', () => {
         <ArtistDetailHeader artist={mockArtist} />
       </RouterWrapper>
     );
-    
+
     const followersText = screen.getByText('1,234,567 seguidores');
     expect(followersText).toHaveClass('text-gray-400', 'text-sm');
   });
@@ -278,7 +295,7 @@ describe('ArtistDetailHeader', () => {
         <ArtistDetailHeader artist={mockArtist} />
       </RouterWrapper>
     );
-    
+
     const genresText = screen.getByText('rock, alternative, indie');
     expect(genresText).toHaveClass('text-gray-400', 'text-sm', 'mt-1');
   });
@@ -288,13 +305,13 @@ describe('ArtistDetailHeader', () => {
       ...mockArtist,
       genres: ['rock'],
     };
-    
+
     render(
       <RouterWrapper>
         <ArtistDetailHeader artist={artistWithSingleGenre} />
       </RouterWrapper>
     );
-    
+
     expect(screen.getByText('rock')).toBeInTheDocument();
   });
 
@@ -303,13 +320,13 @@ describe('ArtistDetailHeader', () => {
       ...mockArtist,
       genres: ['rock', 'alternative'],
     };
-    
+
     render(
       <RouterWrapper>
         <ArtistDetailHeader artist={artistWithTwoGenres} />
       </RouterWrapper>
     );
-    
+
     expect(screen.getByText('rock, alternative')).toBeInTheDocument();
   });
 
@@ -320,13 +337,13 @@ describe('ArtistDetailHeader', () => {
         total: 50000000,
       },
     };
-    
+
     render(
       <RouterWrapper>
         <ArtistDetailHeader artist={artistWithManyFollowers} />
       </RouterWrapper>
     );
-    
+
     expect(screen.getByText('50,000,000 seguidores')).toBeInTheDocument();
   });
 
@@ -336,17 +353,21 @@ describe('ArtistDetailHeader', () => {
         <ArtistDetailHeader artist={mockArtist} />
       </RouterWrapper>
     );
-    
+
     // Verifica se existe um container principal
-    const mainContainer = screen.getByRole('button').closest('div')?.parentElement;
+    const mainContainer = screen
+      .getByRole('button')
+      .closest('div')?.parentElement;
     expect(mainContainer).toBeInTheDocument();
-    
+
     // Verifica se existe um container para o botão de voltar
     const buttonContainer = screen.getByRole('button').closest('div');
     expect(buttonContainer).toHaveClass('flex', 'items-center', 'p-6', 'pb-0');
-    
+
     // Verifica se existe um container para as informações do artista
-    const infoContainer = screen.getByRole('heading').closest('div')?.parentElement;
+    const infoContainer = screen
+      .getByRole('heading')
+      .closest('div')?.parentElement;
     expect(infoContainer).toHaveClass('flex', 'items-center', 'p-6', 'pt-4');
   });
 
@@ -356,11 +377,11 @@ describe('ArtistDetailHeader', () => {
         <ArtistDetailHeader artist={mockArtist} />
       </RouterWrapper>
     );
-    
+
     // Verifica se o nome aparece no botão
     const backButton = screen.getByRole('button');
     expect(backButton).toHaveTextContent('Test Artist');
-    
+
     // Verifica se o nome aparece no heading
     const heading = screen.getByRole('heading', { level: 1 });
     expect(heading).toHaveTextContent('Test Artist');

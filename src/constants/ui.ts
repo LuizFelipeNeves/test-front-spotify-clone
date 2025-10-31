@@ -19,14 +19,16 @@ export const UI_TEXTS = {
 
   // Página Home
   bemVindoAoSpotify: 'Bem-vindo ao Spotify',
-  selecioneOpcaoMenu: 'Selecione uma opção no menu lateral para começar a explorar sua música',
+  selecioneOpcaoMenu:
+    'Selecione uma opção no menu lateral para começar a explorar sua música',
 
   // Artistas
   artistas: 'Artistas',
   descubraArtistas: 'Descubra e explore seus artistas favoritos',
   carregandoMaisArtistas: 'Carregando mais artistas...',
   nenhumAlbumEncontrado: 'Nenhum álbum, single ou compilação encontrado',
-  nenhumAlbumDescricao: 'Parece que este artista ainda não tem lançamentos disponíveis.',
+  nenhumAlbumDescricao:
+    'Parece que este artista ainda não tem lançamentos disponíveis.',
 
   // Playlists
   minhasPlaylists: 'Minhas Playlists',
@@ -51,7 +53,8 @@ export const UI_TEXTS = {
 
   // PWA Update
   novaVersaoDisponivel: 'Nova versão disponível',
-  novaVersaoDescricao: 'Uma nova versão do app está disponível. Atualize para obter as últimas funcionalidades.',
+  novaVersaoDescricao:
+    'Uma nova versão do app está disponível. Atualize para obter as últimas funcionalidades.',
   atualizando: 'Atualizando...',
   atualizar: 'Atualizar',
   depois: 'Depois',
@@ -96,19 +99,28 @@ export const UI_TEXTS = {
 export const UI_CONFIG = {
   // Formatos de imagem fallback
   imagens: {
-    artistaFallback: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=300&h=300&fit=crop',
-    albumFallback: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=300&h=300&fit=crop',
-    playlistFallback: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=300&h=300&fit=crop',
-    perfilFallback: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop',
-    spotifyFallback: 'https://images.unsplash.com/photo-1593699582626-c3b75b3d9aee?w=640&h=640&fit=crop',
+    artistaFallback:
+      'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=300&h=300&fit=crop',
+    albumFallback:
+      'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=300&h=300&fit=crop',
+    playlistFallback:
+      'https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=300&h=300&fit=crop',
+    perfilFallback:
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop',
+    spotifyFallback:
+      'https://images.unsplash.com/photo-1593699582626-c3b75b3d9aee?w=640&h=640&fit=crop',
   },
 
   // Grids responsivos
   grids: {
-    albums: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4',
-    albuns: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4',
-    artistas: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4',
-    playlists: 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4',
+    albums:
+      'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4',
+    albuns:
+      'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4',
+    artistas:
+      'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4',
+    playlists:
+      'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-4',
   },
 
   // Cores e estilos
@@ -118,7 +130,7 @@ export const UI_CONFIG = {
     superficie: '#181818',
     texto: '#FFFFFF',
     textoSecundario: '#B3B3B3',
-  }
+  },
 };
 
 // Tipos para componentes genéricos

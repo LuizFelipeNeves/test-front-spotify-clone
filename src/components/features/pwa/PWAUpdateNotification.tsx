@@ -7,7 +7,9 @@ interface PWAUpdateNotificationProps {
   onUpdate?: () => void;
 }
 
-export function PWAUpdateNotification({ onUpdate }: PWAUpdateNotificationProps) {
+export function PWAUpdateNotification({
+  onUpdate,
+}: PWAUpdateNotificationProps) {
   const [showUpdate, setShowUpdate] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
@@ -21,20 +23,31 @@ export function PWAUpdateNotification({ onUpdate }: PWAUpdateNotificationProps) 
       if (!newWorker) return;
 
       newWorker.addEventListener('statechange', () => {
-        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+        if (
+          newWorker.state === 'installed' &&
+          navigator.serviceWorker.controller
+        ) {
           setShowUpdate(true);
         }
       });
     };
 
-    navigator.serviceWorker.addEventListener('controllerchange', handleControllerChange);
+    navigator.serviceWorker.addEventListener(
+      'controllerchange',
+      handleControllerChange
+    );
 
-    navigator.serviceWorker.ready.then((registration) => {
-      registration.addEventListener('updatefound', () => handleUpdateFound(registration));
+    navigator.serviceWorker.ready.then(registration => {
+      registration.addEventListener('updatefound', () =>
+        handleUpdateFound(registration)
+      );
     });
 
     return () => {
-      navigator.serviceWorker.removeEventListener('controllerchange', handleControllerChange);
+      navigator.serviceWorker.removeEventListener(
+        'controllerchange',
+        handleControllerChange
+      );
     };
   }, []);
 
@@ -63,7 +76,9 @@ export function PWAUpdateNotification({ onUpdate }: PWAUpdateNotificationProps) 
           <RefreshCw className="w-5 h-5 text-green-400 flex-shrink-0" />
 
           <div className="flex-1 min-w-0">
-            <h3 className="text-sm font-medium text-white">{UI_TEXTS.novaVersaoDisponivel}</h3>
+            <h3 className="text-sm font-medium text-white">
+              {UI_TEXTS.novaVersaoDisponivel}
+            </h3>
             <p className="text-sm text-gray-300 mt-1">
               {UI_TEXTS.novaVersaoDescricao}
             </p>

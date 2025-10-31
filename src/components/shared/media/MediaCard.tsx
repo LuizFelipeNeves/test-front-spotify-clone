@@ -67,7 +67,9 @@ export function MediaCard<T extends MediaItemBase>({
         <div className="p-3 space-y-2">
           <div className="h-4 bg-gray-700 rounded animate-pulse" />
           <div className="h-3 bg-gray-700 rounded w-3/4 animate-pulse" />
-          {metadata && <div className="h-3 bg-gray-700 rounded w-1/2 animate-pulse" />}
+          {metadata && (
+            <div className="h-3 bg-gray-700 rounded w-1/2 animate-pulse" />
+          )}
         </div>
       </div>
     );
@@ -86,7 +88,7 @@ export function MediaCard<T extends MediaItemBase>({
           src={imageUrl}
           alt={item.name}
           className="w-full h-full object-cover"
-          onError={(e) => {
+          onError={e => {
             const target = e.target as HTMLImageElement;
             target.src = getFallbackImage();
           }}
@@ -107,7 +109,10 @@ export function MediaCard<T extends MediaItemBase>({
       </div>
 
       <div className="p-3 space-y-1">
-        <h3 className="text-white text-sm font-medium truncate" title={item.name}>
+        <h3
+          className="text-white text-sm font-medium truncate"
+          title={item.name}
+        >
           {item.name}
         </h3>
         {subtitle && (
@@ -125,8 +130,9 @@ export function MediaCard<T extends MediaItemBase>({
   );
 }
 
-
-export const AlbumCard = (props: Omit<MediaCardProps<Album>, 'type' | 'subtitle' | 'metadata'>) => (
+export const AlbumCard = (
+  props: Omit<MediaCardProps<Album>, 'type' | 'subtitle' | 'metadata'>
+) => (
   <MediaCard
     {...props}
     type="album"
@@ -135,7 +141,9 @@ export const AlbumCard = (props: Omit<MediaCardProps<Album>, 'type' | 'subtitle'
   />
 );
 
-export const PlaylistCard = (props: Omit<MediaCardProps<Playlist>, 'type' | 'subtitle' | 'metadata'>) => (
+export const PlaylistCard = (
+  props: Omit<MediaCardProps<Playlist>, 'type' | 'subtitle' | 'metadata'>
+) => (
   <MediaCard
     {...props}
     type="playlist"

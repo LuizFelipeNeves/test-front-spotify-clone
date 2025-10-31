@@ -1,4 +1,3 @@
-
 import type { StoryFn, Meta } from '@storybook/react';
 import { ArtistDetailErrorState } from './ArtistDetailErrorState';
 
@@ -7,7 +6,11 @@ export default {
   component: ArtistDetailErrorState,
 } as Meta;
 
-const Template: StoryFn<{ isOnline: boolean; errorMessage: string; onBackClick: () => void }> = (args) => (
+const Template: StoryFn<{
+  isOnline: boolean;
+  errorMessage: string;
+  onBackClick: () => void;
+}> = args => (
   <div className="bg-black p-4">
     <ArtistDetailErrorState {...args} />
   </div>

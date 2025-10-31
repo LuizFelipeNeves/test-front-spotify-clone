@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
@@ -8,7 +7,9 @@ interface ArtistDetailHeaderProps {
   artist: Artist;
 }
 
-export const ArtistDetailHeader: React.FC<ArtistDetailHeaderProps> = ({ artist }) => {
+export const ArtistDetailHeader: React.FC<ArtistDetailHeaderProps> = ({
+  artist,
+}) => {
   const navigate = useNavigate();
 
   return (

@@ -4,7 +4,13 @@ import userEvent from '@testing-library/user-event';
 import { CreatePlaylistModal } from './CreatePlaylistModal';
 
 vi.mock('@/components/ui', () => ({
-  Button: ({ children, onClick, disabled, type, ...props }: {
+  Button: ({
+    children,
+    onClick,
+    disabled,
+    type,
+    ...props
+  }: {
     children: React.ReactNode;
     onClick?: () => void;
     disabled?: boolean;
@@ -42,7 +48,9 @@ describe('CreatePlaylistModal', () => {
 
   it('does not render modal when isOpen is false', () => {
     render(<CreatePlaylistModal {...defaultProps} isOpen={false} />);
-    expect(screen.queryByTestId('create-playlist-modal')).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId('create-playlist-modal')
+    ).not.toBeInTheDocument();
   });
 
   it('calls onClose on overlay click', () => {
@@ -78,7 +86,9 @@ describe('CreatePlaylistModal', () => {
     await user.click(screen.getByTestId('create-button'));
 
     await waitFor(() =>
-      expect(defaultProps.onCreatePlaylist).toHaveBeenCalledWith('Minha Playlist')
+      expect(defaultProps.onCreatePlaylist).toHaveBeenCalledWith(
+        'Minha Playlist'
+      )
     );
     expect(input.value).toBe('');
   });

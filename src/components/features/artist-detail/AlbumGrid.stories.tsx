@@ -9,7 +9,9 @@ const mockAlbum: Album = {
     {
       id: 'a1',
       name: 'Artist Name',
-      images: [{ url: 'https://via.placeholder.com/50', height: 50, width: 50 }],
+      images: [
+        { url: 'https://via.placeholder.com/50', height: 50, width: 50 },
+      ],
       followers: { total: 1000, href: null },
       genres: ['pop'],
       external_urls: { spotify: '' },
@@ -38,7 +40,7 @@ describe('AlbumGrid Component', () => {
     render(<AlbumGrid title="Albums" albums={albums} onPlay={jest.fn()} />);
 
     expect(screen.getByText('Albums')).toBeInTheDocument();
-    albums.forEach((a) => {
+    albums.forEach(a => {
       expect(screen.getByText(a.name)).toBeInTheDocument();
     });
   });

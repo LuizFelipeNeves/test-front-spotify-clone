@@ -85,7 +85,8 @@ export const CustomMessage: Story = {
 export const LongMessage: Story = {
   args: {
     size: 'md',
-    message: 'Conectando com o Spotify e sincronizando sua biblioteca musical. Isso pode levar alguns segundos...',
+    message:
+      'Conectando com o Spotify e sincronizando sua biblioteca musical. Isso pode levar alguns segundos...',
   },
 };
 
@@ -138,7 +139,10 @@ Exemplo de como o LoadingSpinner aparece como estado de carregamento de uma pág
   },
   render: () => (
     <div className="min-h-screen bg-gray-950 flex items-center justify-center">
-      <LoadingSpinner size="lg" message="Carregando sua biblioteca musical..." />
+      <LoadingSpinner
+        size="lg"
+        message="Carregando sua biblioteca musical..."
+      />
     </div>
   ),
 };
@@ -161,12 +165,12 @@ Comparação visual dos diferentes tamanhos disponíveis:
         <h3 className="text-lg font-semibold text-white mb-4">Pequeno (sm)</h3>
         <LoadingSpinner size="sm" message="Carregando..." />
       </div>
-      
+
       <div className="text-center">
         <h3 className="text-lg font-semibold text-white mb-4">Médio (md)</h3>
         <LoadingSpinner size="md" message="Carregando dados..." />
       </div>
-      
+
       <div className="text-center">
         <h3 className="text-lg font-semibold text-white mb-4">Grande (lg)</h3>
         <LoadingSpinner size="lg" message="Carregando conteúdo..." />
@@ -225,19 +229,22 @@ Exemplos de diferentes contextos onde o LoadingSpinner é usado:
         <h4 className="text-white font-semibold mb-4">Lista de Músicas</h4>
         <LoadingSpinner size="sm" message="Carregando músicas..." />
       </div>
-      
+
       {/* Carregamento de Perfil */}
       <div className="bg-gray-900 rounded-lg p-4 border border-gray-700">
         <h4 className="text-white font-semibold mb-4">Perfil do Artista</h4>
-        <LoadingSpinner size="md" message="Carregando informações do artista..." />
+        <LoadingSpinner
+          size="md"
+          message="Carregando informações do artista..."
+        />
       </div>
-      
+
       {/* Carregamento de Player */}
       <div className="bg-gray-900 rounded-lg p-4 border border-gray-700">
         <h4 className="text-white font-semibold mb-4">Player de Música</h4>
         <LoadingSpinner size="sm" message="Preparando reprodução..." />
       </div>
-      
+
       {/* Carregamento de Busca */}
       <div className="bg-gray-900 rounded-lg p-4 border border-gray-700">
         <h4 className="text-white font-semibold mb-4">Resultados da Busca</h4>

@@ -5,7 +5,7 @@ import * as Sentry from '@sentry/react';
  */
 export const initSentry = () => {
   const dsn = import.meta.env.VITE_SENTRY_DSN;
-  
+
   // Only initialize Sentry if DSN is provided and valid
   if (!dsn || dsn === 'your_sentry_dsn' || dsn.trim() === '') {
     console.log('Sentry DSN not configured, skipping initialization');

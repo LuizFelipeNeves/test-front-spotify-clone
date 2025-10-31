@@ -8,9 +8,11 @@ interface InfinitePageProps<T> {
   title: string;
   description: string;
   loadingText: string;
-  data: {
-    pages?: Array<{ items: T[] }>;
-  } | undefined;
+  data:
+    | {
+        pages?: Array<{ items: T[] }>;
+      }
+    | undefined;
   isLoading: boolean;
   isError: boolean;
   error: Error | null;
@@ -39,7 +41,11 @@ export function InfinitePage<T>({
 }: InfinitePageProps<T>) {
   const navigate = useNavigate();
   const { getEmptyState, handleRetry } = useContentPage({
-    contentType: title.toLowerCase() as 'artists' | 'playlists' | 'albums' | 'tracks',
+    contentType: title.toLowerCase() as
+      | 'artists'
+      | 'playlists'
+      | 'albums'
+      | 'tracks',
   });
 
   // Flatten all pages into a single array
@@ -55,7 +61,11 @@ export function InfinitePage<T>({
       <InfiniteScrollList
         items={items}
         loading={isLoading}
-        error={isError ? error?.message || `Erro ao carregar ${title.toLowerCase()}` : null}
+        error={
+          isError
+            ? error?.message || `Erro ao carregar ${title.toLowerCase()}`
+            : null
+        }
         emptyMessage={getEmptyState().message}
         emptyDescription={getEmptyState().description}
         onRetry={handleRetry}
@@ -64,7 +74,7 @@ export function InfinitePage<T>({
         isFetchingNextPage={isFetchingNextPage}
         fetchNextPage={fetchNextPage}
         loadingText={loadingText}
-        renderItem={(item) => (
+        renderItem={item => (
           <div onClick={() => handleItemClick(item)}>
             {renderCard(item, () => handleItemClick(item))}
           </div>

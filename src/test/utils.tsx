@@ -108,7 +108,6 @@ export const waitForLoadingToFinish = () =>
   new Promise(resolve => setTimeout(resolve, 0));
 
 export const mockFetch = (data: unknown, ok = true) => {
-  // @ts-expect-error - Mocking fetch for testing
   globalThis.fetch = vi.fn().mockResolvedValue({    ok,
     json: () => Promise.resolve(data),
     text: () => Promise.resolve(JSON.stringify(data)),
@@ -120,7 +119,6 @@ export const mockFetch = (data: unknown, ok = true) => {
 export const mockLocalStorage = () => {
   const store: Record<string, string> = {};
 
-  // @ts-expect-error - Mocking localStorage for testing
   globalThis.localStorage = {
     getItem: vi.fn((key: string) => store[key] || null),
     setItem: vi.fn((key: string, value: string) => {
@@ -132,6 +130,8 @@ export const mockLocalStorage = () => {
     clear: vi.fn(() => {
       Object.keys(store).forEach(key => delete store[key]);
     }),
+    length: 0,
+    key: vi.fn(),
   };
 
   return store;

@@ -1,66 +1,45 @@
-# 🎵 Magalu Spotify 2
+# 🎵 Spotify Clone
 
-Um clone avançado do Spotify desenvolvido com **React + TypeScript + Vite + Tailwind CSS + PWA**, com foco em **escalabilidade**, **componentização**, e **estrutura limpa** para futuras expansões.
+Um clone do Spotify desenvolvido com **React + TypeScript + Vite + Tailwind CSS + PWA**.
 
----
-
-## 🚀 Tecnologias Principais
+## 🚀 Stack
 
 - **React 18 + TypeScript**
-- **Vite** – build rápido e moderno
-- **Tailwind CSS** – estilização ágil e responsiva
-- **ShadCN UI** – biblioteca de componentes acessíveis e consistentes
-- **Framer Motion** – animações suaves e performáticas
-- **PWA (Progressive Web App)** – suporte offline e instalação em dispositivos
-- **ESLint + Prettier** – linting e formatação padronizados
-- **Vitest + React Testing Library** – testes unitários
-- **Cypress** – testes end-to-end
-- **Docker** – ambiente de execução padronizado
-- **Storybook** – documentação e desenvolvimento de componentes
-- **Sentry** – monitoramento e rastreamento de erros
+- **Vite** – build tool
+- **Tailwind CSS** – estilização
+- **PWA** – Progressive Web App
+- **Vitest** – testes unitários
+- **Cypress** – testes E2E
+- **Storybook** – documentação
+- **GitHub Actions** – CI/CD
 
----
-
-## 🏃‍♂️ Como Rodar o Projeto
+## 🏃‍♂️ Setup
 
 ### Pré-requisitos
+- **Node.js 18+**
+- **npm**
 
-- **Node.js 20+** (recomendado: 20.19+ ou 22.12+)
-- **npm** ou **yarn**
-- **Docker** (opcional, para execução em containers)
+### Instalação
 
-### 📦 Instalação Local
-
-1. **Clone o repositório:**
 ```bash
+# Clone
 git clone <url-do-repositorio>
 cd magalu-spotify2
-```
 
-2. **Instale as dependências:**
-```bash
-npm install --legacy-peer-deps
-```
+# Instala dependências
+npm install
 
-3. **Configure as variáveis de ambiente:**
-```bash
+# Configure ambiente
 cp .env.example .env
-```
-Edite o arquivo `.env` com suas credenciais do Spotify:
-```env
-VITE_SPOTIFY_CLIENT_ID=seu_client_id_aqui
-VITE_SPOTIFY_REDIRECT_URI=http://localhost:5173/callback
-```
+# Edite .env com suas credenciais do Spotify
 
-4. **Execute o projeto em desenvolvimento:**
-```bash
+# Inicie desenvolvimento
 npm run dev
 ```
+
 Acesse: http://localhost:5173
 
 ### 📚 Storybook
-
-Para visualizar e desenvolver componentes:
 
 ```bash
 npm run storybook
@@ -86,10 +65,10 @@ docker-compose down
 
 ```bash
 # Build da imagem de produção
-docker build --target production -t magalu-spotify2:prod .
+docker build --target production -t magalu-spotify:prod .
 
 # Executar container de produção
-docker run -d -p 8080:80 --name magalu-spotify2-prod magalu-spotify2:prod
+docker run -d -p 8080:80 --name magalu-spotify-prod magalu-spotify:prod
 ```
 
 ### 🧪 Testes
@@ -211,9 +190,6 @@ plugins: [],
 
 * Usar **componentes desacoplados e tipados**
 * Centralizar regras de negócio nos **services**
-* Gerenciar estado global com **Context API ou Zustand**
-* Garantir consistência visual com **ShadCN UI**
-* Usar **Framer Motion** apenas para microinterações
 * Adicionar **testes unitários** para todos os componentes reutilizáveis
 * Manter o **lint e prettier** rodando em pre-commit (Husky recomendado)
 
@@ -311,11 +287,6 @@ nvm install 20
 nvm use 20
 ```
 
-#### ❌ Erro "tailwindcss-animate" no build
-- **Causa:** Import incorreto no CSS
-- **Solução:** Verificar se `src/index.css` não tem `@import 'tailwindcss-animate'`
-- O plugin deve estar apenas no `tailwind.config.js`
-
 #### ❌ Docker build falha
 ```bash
 # Limpar cache do Docker
@@ -348,7 +319,7 @@ npm ls @storybook/core
 
 Se você encontrar problemas não listados aqui:
 
-1. Verifique se está usando Node.js 20+
+1. Verifique se está usando Node.js 18+
 2. Certifique-se de usar `--legacy-peer-deps` na instalação
 3. Verifique se as variáveis de ambiente estão configuradas
 4. Consulte os logs do Docker/terminal para mais detalhes

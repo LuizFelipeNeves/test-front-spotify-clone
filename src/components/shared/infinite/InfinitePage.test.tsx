@@ -47,7 +47,7 @@ vi.mock('@/components', () => ({
       {loading && <div data-testid="loading">Loading...</div>}
       {error && (
         <div data-testid="error">
-          {error}
+          {error instanceof Error ? error.message : error}
           {onRetry && (
             <button onClick={onRetry} data-testid="retry-button">
               Retry
@@ -208,10 +208,9 @@ describe('InfinitePage', () => {
   });
 
   it('shows error state with retry functionality', () => {
-    const mockError = new Error('Test error');
     render(
       <TestWrapper>
-        <InfinitePage {...defaultProps} isError={true} error={mockError} />
+        <InfinitePage {...defaultProps} isError={true} error="Test error" />
       </TestWrapper>
     );
 

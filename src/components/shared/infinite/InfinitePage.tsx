@@ -15,7 +15,7 @@ interface InfinitePageProps<T> {
     | undefined;
   isLoading: boolean;
   isError: boolean;
-  error: Error | null;
+  error: Error | string | null;
   fetchNextPage: () => void;
   hasNextPage: boolean | undefined;
   isFetchingNextPage: boolean;
@@ -63,7 +63,9 @@ export function InfinitePage<T>({
         loading={isLoading}
         error={
           isError
-            ? error?.message || `Erro ao carregar ${title.toLowerCase()}`
+            ? typeof error === 'string'
+              ? error
+              : error?.message || `Erro ao carregar ${title.toLowerCase()}`
             : null
         }
         emptyMessage={getEmptyState().message}

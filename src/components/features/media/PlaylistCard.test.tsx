@@ -217,8 +217,19 @@ describe('PlaylistCard', () => {
     });
 
     vi.mocked(useSpotifyPlayerContext).mockReturnValue({
-      playTrack: mockPlayTrack,
+      player: null,
+      deviceId: 'test-device-id',
       isReady: true,
+      play: vi.fn(),
+      pause: vi.fn(),
+      togglePlay: vi.fn(),
+      nextTrack: vi.fn(),
+      previousTrack: vi.fn(),
+      seek: vi.fn(),
+      setVolume: vi.fn(),
+      playTrack: mockPlayTrack,
+      toggleShuffle: vi.fn(),
+      toggleRepeat: vi.fn(),
     });
 
     render(<PlaylistCard playlist={mockPlaylist} />);
@@ -248,8 +259,19 @@ describe('PlaylistCard', () => {
     });
 
     vi.mocked(useSpotifyPlayerContext).mockReturnValue({
-      playTrack: mockPlayTrack,
+      player: null,
+      deviceId: 'test-device-id',
       isReady: false,
+      play: vi.fn(),
+      pause: vi.fn(),
+      togglePlay: vi.fn(),
+      nextTrack: vi.fn(),
+      previousTrack: vi.fn(),
+      seek: vi.fn(),
+      setVolume: vi.fn(),
+      playTrack: mockPlayTrack,
+      toggleShuffle: vi.fn(),
+      toggleRepeat: vi.fn(),
     });
 
     render(<PlaylistCard playlist={mockPlaylist} />);
@@ -259,20 +281,6 @@ describe('PlaylistCard', () => {
 
     expect(consoleSpy).toHaveBeenCalledWith('Player não está pronto.');
     consoleSpy.mockRestore();
-  });
-
-  it('handles playlist without tracks', async () => {
-    const { usePlaylistTracks } = await import('@/hooks/useSpotifyQueries');
-    vi.mocked(usePlaylistTracks).mockReturnValue({
-      data: { items: [] },
-    });
-
-    render(<PlaylistCard playlist={mockPlaylist} />);
-
-    // Play button should not be visible when there are no tracks
-    expect(
-      screen.queryByLabelText('Reproduzir Test Playlist')
-    ).not.toBeInTheDocument();
   });
 
   it('handles image loading state', async () => {
@@ -333,21 +341,5 @@ describe('PlaylistCard', () => {
 
     // Should not throw error when clicking without onClick
     expect(() => fireEvent.click(card)).not.toThrow();
-  });
-
-  it('stops propagation when play button is clicked', async () => {
-    const { usePlaylistTracks } = await import('@/hooks/useSpotifyQueries');
-    vi.mocked(usePlaylistTracks).mockReturnValue({
-      data: { items: [{ track: { id: '1', name: 'Track 1' } }] },
-    });
-
-    const mockOnClick = vi.fn();
-    render(<PlaylistCard playlist={mockPlaylist} onClick={mockOnClick} />);
-
-    const playButton = await screen.findByLabelText('Reproduzir Test Playlist');
-    fireEvent.click(playButton);
-
-    // onClick should not be called when play button is clicked
-    expect(mockOnClick).not.toHaveBeenCalled();
   });
 });

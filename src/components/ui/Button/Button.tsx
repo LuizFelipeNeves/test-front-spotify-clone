@@ -6,12 +6,11 @@ import { buttonVariants } from './buttonVariants';
 export interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
-  asChild?: boolean;
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    { className, variant, size, asChild = false, type = 'button', ...props },
+    { className, variant, size, type = 'button', ...props },
     ref
   ) => {
     return (
@@ -21,7 +20,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         {...props}
       >
-        {asChild ?? props.children}
+        {props.children}
       </button>
     );
   }

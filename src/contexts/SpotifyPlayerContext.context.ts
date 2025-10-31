@@ -17,5 +17,18 @@ interface SpotifyPlayerContextType {
   toggleRepeat: (repeat: 'track' | 'context' | 'off') => Promise<void>;
 }
 
-export const SpotifyPlayerContext =
-  createContext<SpotifyPlayerContextType | null>(null);
+export const SpotifyPlayerContext = createContext<SpotifyPlayerContextType>({
+  player: null,
+  deviceId: null,
+  isReady: false,
+  play: async () => {},
+  pause: async () => {},
+  togglePlay: async () => {},
+  nextTrack: async () => {},
+  previousTrack: async () => {},
+  seek: () => {},
+  setVolume: () => {},
+  playTrack: async () => {},
+  toggleShuffle: async () => {},
+  toggleRepeat: async () => {},
+});

@@ -1,4 +1,3 @@
-// contexts/SpotifyPlayerContext.tsx
 import React from 'react';
 import { useSpotifyPlayer } from '@/hooks/useSpotifyPlayer';
 import { SpotifyPlayerContext } from './SpotifyPlayerContext.context';

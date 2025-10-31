@@ -93,7 +93,9 @@ class ApiClient {
     };
   }
 
-  private async parseJsonResponse<T>(response: Response): Promise<ApiResponse<T>> {
+  private async parseJsonResponse<T>(
+    response: Response
+  ): Promise<ApiResponse<T>> {
     try {
       const data = await response.json();
       return this.createSuccessResponse(data, response.status);

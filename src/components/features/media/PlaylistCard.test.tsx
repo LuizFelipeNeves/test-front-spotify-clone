@@ -46,13 +46,6 @@ vi.mock('@/store/playerStore', () => ({
   })),
 }));
 
-vi.mock('@/contexts/SpotifyPlayerContext', () => ({
-  useSpotifyPlayerContext: vi.fn(() => ({
-    playTrack: vi.fn(),
-    isReady: true,
-  })),
-}));
-
 const mocks = vi.hoisted(() => {
   return {
     useImageCache: vi.fn(),

@@ -1,6 +1,6 @@
 import React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { SpotifyPlayerContext } from '@/contexts/SpotifyPlayerContext';
+import { SpotifyPlayerContext } from '@/contexts';
 
 const queryClient: QueryClient = new QueryClient({
   defaultOptions: {

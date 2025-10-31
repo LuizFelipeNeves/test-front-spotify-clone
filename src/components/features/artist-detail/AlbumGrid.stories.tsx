@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { AlbumGrid } from './AlbumGrid';
 import type { Album } from '@/types';
 
@@ -29,59 +29,49 @@ const mockAlbum: Album = {
   uri: 'spotify:album:1',
 };
 
-describe('AlbumGrid Component', () => {
-  it('renders title and albums correctly', () => {
-    const albums = Array.from({ length: 4 }, (_, i) => ({
+// Mock de múltiplos álbuns
+const albums = Array.from({ length: 4 }, (_, i) => ({
+  ...mockAlbum,
+  id: String(i),
+  name: `Album ${i + 1}`,
+}));
+
+// Default export necessário para o Storybook
+const meta: Meta<typeof AlbumGrid> = {
+  title: 'Features/ArtistDetail/AlbumGrid',
+  component: AlbumGrid,
+};
+
+export default meta;
+type Story = StoryObj<typeof AlbumGrid>;
+
+// Story padrão
+export const Default: Story = {
+  args: {
+    title: 'Albums',
+    albums,
+    onPlay: () => {},
+  },
+};
+
+// Story com álbumes vazios
+export const Empty: Story = {
+  args: {
+    title: 'Albums',
+    albums: [],
+    onPlay: () => {},
+  },
+};
+
+// Story com mais álbuns
+export const ManyAlbums: Story = {
+  args: {
+    title: 'Albums',
+    albums: Array.from({ length: 8 }, (_, i) => ({
       ...mockAlbum,
       id: String(i),
       name: `Album ${i + 1}`,
-    }));
-
-    render(<AlbumGrid title="Albums" albums={albums} onPlay={jest.fn()} />);
-
-    expect(screen.getByText('Albums')).toBeInTheDocument();
-    for (const a of albums) {
-      expect(screen.getByText(a.name)).toBeInTheDocument();
-    }
-  });
-
-  it('renders album images with alt text', () => {
-    const albums = [mockAlbum];
-    render(<AlbumGrid title="Albums" albums={albums} onPlay={jest.fn()} />);
-
-    const image = screen.getByRole('img');
-    expect(image).toHaveAttribute('src', mockAlbum.images[0].url);
-    expect(image).toHaveAttribute('alt', mockAlbum.name);
-  });
-
-  it('calls onPlay when an album is clicked', () => {
-    const onPlay = jest.fn();
-    render(<AlbumGrid title="Albums" albums={[mockAlbum]} onPlay={onPlay} />);
-
-    const albumCard = screen.getByText(mockAlbum.name);
-    fireEvent.click(albumCard);
-
-    expect(onPlay).toHaveBeenCalledTimes(1);
-    expect(onPlay).toHaveBeenCalledWith(mockAlbum);
-  });
-
-  it('renders empty state when no albums are provided', () => {
-    render(<AlbumGrid title="Albums" albums={[]} onPlay={jest.fn()} />);
-
-    expect(screen.getByText('Albums')).toBeInTheDocument();
-    expect(screen.getByText(/nenhum álbum/i)).toBeInTheDocument();
-  });
-
-  it('renders correct number of album cards', () => {
-    const albums = Array.from({ length: 8 }, (_, i) => ({
-      ...mockAlbum,
-      id: String(i),
-      name: `Album ${i + 1}`,
-    }));
-
-    render(<AlbumGrid title="Albums" albums={albums} onPlay={jest.fn()} />);
-
-    const cards = screen.getAllByRole('img');
-    expect(cards.length).toBe(8);
-  });
-});
+    })),
+    onPlay: () => {},
+  },
+};

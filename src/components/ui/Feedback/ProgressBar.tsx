@@ -6,6 +6,7 @@ interface ProgressBarProps {
   onSeek: (newProgress: number) => void;
   className?: string;
   'aria-label'?: string;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLDivElement>) => void;
 }
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({
@@ -14,6 +15,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   onSeek,
   className = '',
   'aria-label': ariaLabel = 'Progresso da música',
+  onKeyDown,
 }) => {
   const progressBarRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -143,7 +145,12 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
       tabIndex={0}
       onMouseDown={handleProgressMouseDown}
       onClick={handleProgressClick}
-      onKeyDown={handleKeyDown}
+      onKeyDown={(e) => {
+        handleKeyDown(e);
+        if (onKeyDown) {
+          onKeyDown(e);
+        }
+      }}
       onFocus={handleFocus}
       onBlur={handleBlur}
     >

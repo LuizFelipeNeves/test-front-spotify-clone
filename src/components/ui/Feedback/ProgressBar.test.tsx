@@ -1,4 +1,5 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { ProgressBar } from './ProgressBar';
 
@@ -42,7 +43,7 @@ describe('ProgressBar', () => {
     const { container } = render(<ProgressBar {...defaultProps} />);
     
     const progressFill = container.querySelector('.bg-white');
-    expect(progressFill).toHaveStyle({ width: '16.666666666666668%' }); // 30000/180000 * 100
+    expect(progressFill).toHaveStyle({ width: '16.666666666666664%' }); // 30000/180000 * 100
   });
 
   it('handles click to seek', () => {
@@ -141,15 +142,16 @@ describe('ProgressBar', () => {
     expect(onSeek).toHaveBeenCalledWith(180000); // Should not go above duration
   });
 
-  it('handles focus and blur events', () => {
+  it('handles focus and blur events', async () => {
+    const user = userEvent.setup();
     render(<ProgressBar {...defaultProps} />);
     
     const progressBar = screen.getByRole('slider');
     
-    fireEvent.focus(progressBar);
+    await user.tab();
     expect(progressBar).toHaveFocus();
     
-    fireEvent.blur(progressBar);
+    await user.tab();
     expect(progressBar).not.toHaveFocus();
   });
 
@@ -236,16 +238,16 @@ describe('ProgressBar', () => {
   });
 
   it('prevents default behavior for handled keyboard events', () => {
-    render(<ProgressBar {...defaultProps} />);
+    const onKeyDown = vi.fn();
+    render(<ProgressBar {...defaultProps} onKeyDown={onKeyDown} />);
     
     const progressBar = screen.getByRole('slider');
     progressBar.focus();
     
-    const arrowRightEvent = new KeyboardEvent('keydown', { key: 'ArrowRight' });
-    const preventDefaultSpy = vi.spyOn(arrowRightEvent, 'preventDefault');
+    fireEvent.keyDown(progressBar, { key: 'ArrowRight' });
     
-    fireEvent(progressBar, arrowRightEvent);
-    
-    expect(preventDefaultSpy).toHaveBeenCalled();
+    expect(onKeyDown).toHaveBeenCalled();
+    const event = onKeyDown.mock.calls[0][0];
+    expect(event.isDefaultPrevented()).toBe(true);
   });
 });

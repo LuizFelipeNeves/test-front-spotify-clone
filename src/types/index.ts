@@ -26,6 +26,7 @@ export interface Artist {
   external_urls: {
     spotify: string;
   };
+  uri: string;
 }
 
 export interface Playlist {
@@ -72,6 +73,7 @@ export interface Album {
   external_urls: {
     spotify: string;
   };
+  uri: string;
 }
 
 export interface PlaylistTrack {

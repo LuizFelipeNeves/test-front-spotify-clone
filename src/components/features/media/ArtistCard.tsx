@@ -35,6 +35,7 @@ export function ArtistCard({ artist, onClick, className = '' }: ArtistCardProps)
   );
 
   const formatFollowers = (count?: number) => {
+    if (count === 0) return '0 seguidores';
     if (!count) return '';
     
     if (count >= 1000000) {
@@ -54,7 +55,7 @@ export function ArtistCard({ artist, onClick, className = '' }: ArtistCardProps)
         {/* Imagem do Artista */}
         <div className="relative flex-shrink-0 self-center sm:self-auto">
           {isLoading ? (
-            <div className="w-20 h-20 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full bg-gray-700 animate-pulse flex items-center justify-center">
+            <div className="w-20 h-20 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full bg-gray-700 animate-pulse flex items-center justify-center" role="status" aria-label="loading">
               <svg className="w-8 h-8 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
               </svg>
@@ -64,6 +65,7 @@ export function ArtistCard({ artist, onClick, className = '' }: ArtistCardProps)
               src={imageUrl || fallBackImage}
               alt={artist.name}
               className="w-20 h-20 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full object-cover ring-2 ring-transparent group-hover:ring-green-500/30 transition-all duration-300"
+              data-testid={`artist-image-${artist.id}`}
               onError={(e) => {
                 // Fallback para imagem padrão se a imagem falhar
                 const target = e.target as HTMLImageElement;
@@ -143,6 +145,7 @@ export function ArtistCard({ artist, onClick, className = '' }: ArtistCardProps)
       <div 
         onClick={handleClick}
         className="absolute inset-0 cursor-pointer"
+        data-testid="artist-card-clickable-area"
       />
     </div>
   );

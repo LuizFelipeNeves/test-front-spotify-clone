@@ -76,7 +76,7 @@ export function PlaylistCard({ playlist, onClick, className }: PlaylistCardProps
       <div className="flex items-center gap-4">
         <div className="relative flex-shrink-0">
           {isLoading ? (
-            <div className="w-16 h-16 rounded-lg bg-gray-700 animate-pulse flex items-center justify-center">
+            <div className="w-16 h-16 rounded-lg bg-gray-700 animate-pulse flex items-center justify-center" role="status" aria-label="loading">
               <svg className="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
               </svg>
@@ -86,6 +86,7 @@ export function PlaylistCard({ playlist, onClick, className }: PlaylistCardProps
               src={imageUrl ?? fallbackImage}
               alt={playlist.name}
               className="w-16 h-16 rounded-lg object-cover"
+              data-testid={`playlist-image-${playlist.id}`}
               onError={(e) => ((e.target as HTMLImageElement).src = fallbackImage)}
             />
           )}

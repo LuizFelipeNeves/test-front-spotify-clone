@@ -47,6 +47,9 @@ export function AlbumCard({ album, onClick, onPlay, className = '' }: AlbumCardP
   );
 
   const formatReleaseDate = (dateString: string) => {
+    if (dateString.length === 4) {
+      return dateString;
+    }
     try {
       const date = new Date(dateString);
       return date.getFullYear().toString();
@@ -64,6 +67,8 @@ export function AlbumCard({ album, onClick, onPlay, className = '' }: AlbumCardP
     <div
       className={`group relative bg-gray-900/50 hover:bg-gray-800/70 p-4 rounded-lg cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-xl ${className}`}
       onClick={handleClick}
+      role="article"
+      aria-label={`Álbum ${album.name} por ${formatArtists(album.artists)}`}
     >
       {/* Imagem do Álbum */}
       <div className="relative mb-4">
@@ -76,7 +81,7 @@ export function AlbumCard({ album, onClick, onPlay, className = '' }: AlbumCardP
         ) : (
           <img
             src={imageUrl || fallbackImage}
-            alt={album.name}
+            alt={`Capa do álbum ${album.name}`}
             className="w-full aspect-square object-cover rounded-lg shadow-lg group-hover:shadow-2xl transition-shadow duration-300"
             onError={(e) => {
               const target = e.target as HTMLImageElement;
@@ -117,7 +122,7 @@ export function AlbumCard({ album, onClick, onPlay, className = '' }: AlbumCardP
           
           <div className="flex items-center justify-between text-xs text-gray-500">
             {album.release_date && (
-              <span>{formatReleaseDate(album.release_date)}</span>
+              <span data-testid="release-date">{formatReleaseDate(album.release_date)}</span>
             )}
             {album.total_tracks && (
               <span>{album.total_tracks} faixas</span>

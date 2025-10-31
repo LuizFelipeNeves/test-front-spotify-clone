@@ -31,7 +31,7 @@ export function EmptyState({
         {title}
       </h2>
       
-      {description && (
+      {description !== undefined && (
         <p className="text-sm sm:text-base text-gray-400 mb-6 max-w-md leading-relaxed">
           {description}
         </p>

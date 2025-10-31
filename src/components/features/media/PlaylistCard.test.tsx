@@ -1,10 +1,18 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { PlaylistCard } from './PlaylistCard';
 import type { Playlist } from '@/types';
 
 // Mock dos hooks e contextos
+vi.mock('@/contexts', () => ({
+  useSpotifyPlayerContext: vi.fn(() => ({
+    playTrack: vi.fn(),
+    isReady: true,
+    deviceId: 'test-device-id',
+  })),
+  SpotifyPlayerProvider: ({ children }: { children: React.ReactNode }) => children,
+}));
 
+import { PlaylistCard } from './PlaylistCard';
 
 vi.mock('@/hooks/useSpotifyQueries', () => ({
   usePlaylistTracks: vi.fn(() => ({
@@ -202,15 +210,15 @@ describe('PlaylistCard', () => {
     const mockPlayTrack = vi.fn();
 
     const { usePlayerStore } = await import('@/store/playerStore');
-    const { useSpotifyPlayerContext } = await import('@/contexts/SpotifyPlayerContext');
+    const { useSpotifyPlayerContext } = await import('@/contexts');
 
-    (usePlayerStore as any).mockReturnValue({
+    (usePlayerStore as unknown as { mockReturnValue: (value: unknown) => void }).mockReturnValue({
       setCurrentTrack: mockSetCurrentTrack,
       setQueue: mockSetQueue,
       setIsPlaying: mockSetIsPlaying,
     });
 
-    (useSpotifyPlayerContext as any).mockReturnValue({
+    (useSpotifyPlayerContext as unknown as { mockReturnValue: (value: unknown) => void }).mockReturnValue({
       playTrack: mockPlayTrack,
       isReady: true,
     });
@@ -233,15 +241,15 @@ describe('PlaylistCard', () => {
     const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     const { usePlayerStore } = await import('@/store/playerStore');
-    const { useSpotifyPlayerContext } = await import('@/contexts/SpotifyPlayerContext');
+    const { useSpotifyPlayerContext } = await import('@/contexts');
 
-    (usePlayerStore as any).mockReturnValue({
+    (usePlayerStore as unknown as { mockReturnValue: (value: unknown) => void }).mockReturnValue({
       setCurrentTrack: mockSetCurrentTrack,
       setQueue: mockSetQueue,
       setIsPlaying: mockSetIsPlaying,
     });
 
-    (useSpotifyPlayerContext as any).mockReturnValue({
+    (useSpotifyPlayerContext as unknown as { mockReturnValue: (value: unknown) => void }).mockReturnValue({
       playTrack: mockPlayTrack,
       isReady: false,
     });

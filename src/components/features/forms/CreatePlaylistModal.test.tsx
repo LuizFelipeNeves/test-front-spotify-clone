@@ -4,7 +4,13 @@ import userEvent from '@testing-library/user-event';
 import { CreatePlaylistModal } from './CreatePlaylistModal';
 
 vi.mock('@/components/ui', () => ({
-  Button: ({ children, onClick, disabled, type, ...props }: any) => (
+  Button: ({ children, onClick, disabled, type, ...props }: {
+    children: React.ReactNode;
+    onClick?: () => void;
+    disabled?: boolean;
+    type?: 'button' | 'submit' | 'reset';
+    [key: string]: unknown;
+  }) => (
     <button
       onClick={onClick}
       disabled={disabled}

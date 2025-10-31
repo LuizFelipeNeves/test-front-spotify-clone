@@ -4,13 +4,13 @@ import { StatusState, EmptyState, ErrorState, LoadingState } from './StatusState
 
 // Mock dos ícones do lucide-react
 vi.mock('lucide-react', () => ({
-  AlertCircle: ({ className, ...props }: any) => (
+  AlertCircle: ({ className, ...props }: { className?: string; [key: string]: unknown }) => (
     <div data-testid="alert-circle-icon" className={className} {...props} />
   ),
-  RefreshCw: ({ className, ...props }: any) => (
+  RefreshCw: ({ className, ...props }: { className?: string; [key: string]: unknown }) => (
     <div data-testid="refresh-icon" className={className} {...props} />
   ),
-  Loader2: ({ className, ...props }: any) => (
+  Loader2: ({ className, ...props }: { className?: string; [key: string]: unknown }) => (
     <div data-testid="loader-icon" className={className} {...props} />
   ),
 }));

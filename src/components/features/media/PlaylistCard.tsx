@@ -4,7 +4,7 @@ import type { Playlist } from '@/types';
 import { useImageCache } from '@/hooks/useImageCache';
 import { usePlaylistTracks } from '@/hooks/useSpotifyQueries';
 import { usePlayerStore } from '@/store/playerStore';
-import { useSpotifyPlayerContext } from '@/contexts/SpotifyPlayerContext';
+import { useSpotifyPlayerContext } from '@/contexts';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui';
 import { Indicator } from '@/components/ui';

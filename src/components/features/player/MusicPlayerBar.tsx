@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { usePlayerStore } from '@/store/playerStore';
-import { useSpotifyPlayerContext } from '@/contexts/SpotifyPlayerContext';
+import { useSpotifyPlayerContext } from '@/contexts';
 import { formatDuration } from '@/utils/format';
 import { useFavorites } from '@/hooks/useFavorites';
 import { ProgressBar } from '@/components/ui';

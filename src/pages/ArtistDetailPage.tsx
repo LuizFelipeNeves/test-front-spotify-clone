@@ -4,7 +4,7 @@ import { useInView } from 'react-intersection-observer';
 import { useArtist, useInfiniteArtistAlbums } from '@/hooks/useSpotifyQueries';
 import { useFilteredArtistAlbums } from '@/hooks/useFilteredArtistAlbums';
 import { useOnlineStatus } from '@/hooks/useOnlineStatus';
-import { useSpotifyPlayerContext } from '@/contexts/SpotifyPlayerContext';
+import { useSpotifyPlayerContext } from '@/contexts';
 import type { Album } from '@/types';
 
 import { ArtistDetailHeader } from '@/components';

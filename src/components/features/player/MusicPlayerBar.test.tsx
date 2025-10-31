@@ -1,8 +1,32 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import MusicPlayerBar from './MusicPlayerBar';
 import { vi } from 'vitest';
 
+// 🔧 Mock do contexto do Spotify Player
+const mockTogglePlay = vi.fn();
+const mockNextTrack = vi.fn();
+const mockPreviousTrack = vi.fn();
+const mockSeek = vi.fn();
+const mockSetVolume = vi.fn();
+const mockToggleShuffle = vi.fn();
+const mockToggleRepeat = vi.fn();
+
+vi.mock('@/contexts', () => ({
+  useSpotifyPlayerContext: vi.fn(() => ({
+    togglePlay: mockTogglePlay,
+    nextTrack: mockNextTrack,
+    previousTrack: mockPreviousTrack,
+    seek: mockSeek,
+    setVolume: mockSetVolume,
+    toggleShuffle: mockToggleShuffle,
+    toggleRepeat: mockToggleRepeat,
+    isReady: true,
+    deviceId: 'test-device-id',
+  })),
+}));
+
 // 🔧 Mock da store do player
+import MusicPlayerBar from './MusicPlayerBar';
+
 vi.mock('@/store/playerStore', () => ({
   usePlayerStore: vi.fn(() => ({
     isPlaying: false,
@@ -21,27 +45,6 @@ vi.mock('@/store/playerStore', () => ({
   })),
 }));
 
-// 🔧 Mock do contexto do Spotify Player
-const mockTogglePlay = vi.fn();
-const mockNextTrack = vi.fn();
-const mockPreviousTrack = vi.fn();
-const mockSeek = vi.fn();
-const mockSetVolume = vi.fn();
-const mockToggleShuffle = vi.fn();
-const mockToggleRepeat = vi.fn();
-
-vi.mock('@/contexts/SpotifyPlayerContext', () => ({
-  useSpotifyPlayerContext: vi.fn(() => ({
-    isReady: true,
-    togglePlay: mockTogglePlay,
-    nextTrack: mockNextTrack,
-    previousTrack: mockPreviousTrack,
-    seek: mockSeek,
-    setVolume: mockSetVolume,
-    toggleShuffle: mockToggleShuffle,
-    toggleRepeat: mockToggleRepeat,
-  })),
-}));
 
 // 🔧 Mock do hook de favoritos
 const mockToggleFavorite = vi.fn();
@@ -101,7 +104,7 @@ describe('MusicPlayerBar', () => {
 
   it('displays shuffle and repeat active states when enabled', async () => {
     const { usePlayerStore } = await import('@/store/playerStore');
-    (usePlayerStore as any).mockReturnValueOnce({
+    (usePlayerStore as unknown as { mockReturnValueOnce: (value: unknown) => void }).mockReturnValueOnce({
       isPlaying: true,
       currentTrack: {
         id: 'track123',
@@ -128,7 +131,7 @@ describe('MusicPlayerBar', () => {
 
   it('renders repeat-one icon when repeat mode is "track"', async () => {
     const { usePlayerStore } = await import('@/store/playerStore');
-    (usePlayerStore as any).mockReturnValueOnce({
+    (usePlayerStore as unknown as { mockReturnValueOnce: (value: unknown) => void }).mockReturnValueOnce({
       isPlaying: true,
       currentTrack: {
         id: 'track123',

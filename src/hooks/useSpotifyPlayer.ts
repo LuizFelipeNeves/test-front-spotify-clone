@@ -120,9 +120,31 @@ export const useSpotifyPlayer = () => {
           paused?: boolean;
           position?: number;
           track_window?: {
-            current_track: any;
-            previous_tracks: any[];
-            next_tracks: any[];
+            current_track: {
+              id: string;
+              name: string;
+              duration_ms: number;
+              uri: string;
+              album: {
+                id: string;
+                name: string;
+                uri: string;
+                images: Array<{ url: string; height: number | null; width: number | null }>;
+                release_date?: string;
+                total_tracks?: number;
+                external_urls?: { spotify?: string };
+              };
+              artists: Array<{
+                id: string;
+                name: string;
+                uri: string;
+              }>;
+              preview_url?: string | null;
+              external_urls?: { spotify?: string };
+              popularity?: number;
+            };
+            previous_tracks: unknown[];
+            next_tracks: unknown[];
           };
           context?: {
             uri?: string;

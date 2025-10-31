@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import type { Artist } from '@/types';
+import type { MediaItemBase } from '@/constants/ui';
 import { MediaCard, AlbumCard, PlaylistCard } from './MediaCard';
 import { ArtistCard } from './ArtistCard';
 import type { Album as AlbumType } from '@/types';
@@ -174,8 +175,8 @@ export const Loading: Story = {
   render: () => (
     <div className="flex gap-6">
       <MediaCard item={mockAlbum} type="album" isLoading />
-      <MediaCard item={mockArtist as any} type="artist" isLoading />
-      <MediaCard item={mockPlaylist as any} type="playlist" isLoading />
+      <MediaCard item={mockArtist as unknown as MediaItemBase} type="artist" isLoading />
+      <MediaCard item={mockPlaylist as unknown as MediaItemBase} type="playlist" isLoading />
     </div>
   ),
   parameters: {

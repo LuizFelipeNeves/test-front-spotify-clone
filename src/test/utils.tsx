@@ -1,17 +1,12 @@
 import type { ReactElement } from 'react';
 import { render, type RenderOptions } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
 import { vi } from 'vitest';
-
-// Mock providers for testing
-const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
-  return <BrowserRouter>{children}</BrowserRouter>;
-};
+import { TestProviders } from './TestProviders';
 
 const customRender = (
   ui: ReactElement,
   options?: Omit<RenderOptions, 'wrapper'>
-) => render(ui, { wrapper: AllTheProviders, ...options });
+) => render(ui, { wrapper: TestProviders, ...options });
 
 export * from '@testing-library/react';
 export { customRender as render };
@@ -114,7 +109,7 @@ export const waitForLoadingToFinish = () =>
   new Promise(resolve => setTimeout(resolve, 0));
 
 export const mockFetch = (data: unknown, ok = true) => {
-  (globalThis as unknown as any).fetch = vi.fn().mockResolvedValue({
+  (globalThis as any).fetch = vi.fn().mockResolvedValue({
     ok,
     json: () => Promise.resolve(data),
     text: () => Promise.resolve(JSON.stringify(data)),
@@ -126,7 +121,7 @@ export const mockFetch = (data: unknown, ok = true) => {
 export const mockLocalStorage = () => {
   const store: Record<string, string> = {};
 
-  (globalThis as unknown as any).localStorage = {
+  (globalThis as any).localStorage = {
     getItem: vi.fn((key: string) => store[key] || null),
     setItem: vi.fn((key: string, value: string) => {
       store[key] = value;

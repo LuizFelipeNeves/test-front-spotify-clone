@@ -13,7 +13,11 @@ vi.mock('@/hooks/useImageCache', () => ({
 
 // Mock do componente Button
 vi.mock('@/components/ui', () => ({
-  Button: ({ children, onClick, ...props }: any) => (
+  Button: ({ children, onClick, ...props }: {
+    children: React.ReactNode;
+    onClick?: () => void;
+    [key: string]: unknown;
+  }) => (
     <button onClick={onClick} {...props}>
       {children}
     </button>

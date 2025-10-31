@@ -13,5 +13,3 @@ export const SpotifyPlayerProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-export { useSpotifyPlayerContext } from './SpotifyPlayerContext.hook';
-export { SpotifyPlayerContext } from './SpotifyPlayerContext.context';

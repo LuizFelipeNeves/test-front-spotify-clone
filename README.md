@@ -86,104 +86,28 @@ npm run cypress:run
 
 ---
 
-## 🧱 Estrutura do Projeto
-
-```
-
-spotify-clone/
-├── src/
-│   ├── assets/              # Ícones, imagens e vetores
-│   ├── components/          # Componentes reutilizáveis
-│   │   ├── ui/              # Componentes base do ShadCN (botões, inputs etc)
-│   │   ├── artist/          # Componentes relacionados aos artistas
-│   │   ├── playlist/        # Componentes e modais de playlists
-│   │   └── profile/         # Componentes da tela de perfil
-│   ├── pages/               # Telas principais
-│   │   ├── Login/
-│   │   ├── Artists/
-│   │   ├── Playlist/
-│   │   └── Profile/
-│   ├── services/            # Serviços para comunicação com a API do Spotify
-│   │   ├── api.ts           # Wrapper para fetch e tratamento de erros
-│   │   └── spotify.service.ts
-│   ├── hooks/               # Hooks customizados
-│   ├── store/               # Gerenciamento de estado global (Zustand ou Context API)
-│   ├── types/               # Tipagens globais (Artist, Playlist, etc)
-│   ├── utils/               # Funções utilitárias
-│   ├── App.tsx
-│   ├── main.tsx
-│   └── index.css
-│
-├── public/                  # Manifest e ícones do PWA
-├── .eslintrc.cjs
-├── .prettierrc
-├── cypress/
-├── docker/
-│   └── Dockerfile
-├── tsconfig.json
-├── vite.config.ts
-└── README.md
-
-````
-
----
-
 ## 🧩 Funcionalidades (v1)
 
-- [ ] Tela de **Login**
-- [ ] Tela de **Artistas**
-- [ ] Componente de **Playlists**
-- [ ] Tela de **Perfil do Usuário**
-- [ ] Componente de **Artista (detalhes)**
-- [ ] **Modal de Playlist**
-- [ ] Integração com a **API do Spotify**
-- [ ] Responsividade (mobile e tablet)
+- [x] Tela de **Login**
+- [x] Tela de **Artistas**
+- [x] Componente de **Playlists**
+- [x] Tela de **Perfil do Usuário**
+- [x] Componente de **Artista (detalhes)**
+- [x] **Modal de Playlist**
+- [x] Integração com a **API do Spotify**
+- [x] Responsividade (mobile e tablet)
 - [x] Suporte **PWA**
-- [ ] Configuração de **Sentry**, 
-- [ ] Configurar **Lint**
-- [ ] Configurar **Storybook**
-
+- [x] Configuração de **Sentry**, 
+- [x] Configurar **Lint**
+- [x] Configurar **Storybook**
+- [x] Módulo de **Player de Música**
+- [x] Controles de **Play/Pause, Skip, Shuffle, Volume**x
 ---
 
 ## 🧭 Planejamento Futuro (v2)
-
-- [ ] Módulo de **Player de Música**
-- [ ] Tela de **Reprodução Atual**
-- [ ] Controles de **Play/Pause, Skip, Shuffle, Volume**
 - [ ] Sincronização de estado com API em tempo real
+- [ ] Tela de **Reprodução Atual**
 - [ ] Histórico de reprodução e recomendações personalizadas
----
-
-## ⚙️ Configuração do Projeto
-
-### 1️⃣ Criar o projeto base
-
-```bash
-npm create vite@latest spotify-clone -- --template react-ts
-cd spotify-clone
-````
-
-### 2️⃣ Instalar dependências
-
-```bash
-npm install tailwindcss postcss autoprefixer
-npx tailwindcss init -p
-npm install framer-motion
-npm install @tanstack/react-query
-npm install @sentry/react @sentry/vite-plugin
-npm install -D eslint prettier vite-plugin-pwa cypress vitest @testing-library/react
-```
-
-### 3️⃣ Configurar Tailwind
-
-Adicionar em `tailwind.config.js`:
-
-```js
-content: ["./index.html", "./src/**/*.{ts,tsx}"],
-theme: { extend: {} },
-plugins: [],
-```
-
 ---
 
 ## 🧠 Boas Práticas

@@ -108,15 +108,13 @@ export const waitForLoadingToFinish = () =>
   new Promise(resolve => setTimeout(resolve, 0));
 
 export const mockFetch = (data: unknown, ok = true) => {
-  globalThis.fetch = vi
-    .fn()
-    .mockResolvedValue({
-      ok,
-      json: () => Promise.resolve(data),
-      text: () => Promise.resolve(JSON.stringify(data)),
-      status: ok ? 200 : 400,
-      statusText: ok ? 'OK' : 'Bad Request',
-    });
+  globalThis.fetch = vi.fn().mockResolvedValue({
+    ok,
+    json: () => Promise.resolve(data),
+    text: () => Promise.resolve(JSON.stringify(data)),
+    status: ok ? 200 : 400,
+    statusText: ok ? 'OK' : 'Bad Request',
+  });
 };
 
 export const mockLocalStorage = () => {

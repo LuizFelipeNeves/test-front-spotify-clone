@@ -210,9 +210,8 @@ describe('ResponsiveGrid Component', () => {
   });
 
   it('should fallback to artistas grid for unknown type', () => {
-    // @ts-expect-error - Testing fallback for unknown type
     const { container } = render(
-      <ResponsiveGrid type={'unknown'}>
+      <ResponsiveGrid type={'custom'}>
         <TestChild text="Item 1" />
       </ResponsiveGrid>
     );

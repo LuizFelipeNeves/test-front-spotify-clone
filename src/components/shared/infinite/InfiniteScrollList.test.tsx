@@ -252,7 +252,10 @@ describe('InfiniteScrollList', () => {
   });
 
   it('renders items with correct keys and structure', () => {
-    const customRenderItem = (item: { id: string; name: string }, index: number) => (
+    const customRenderItem = (
+      item: { id: string; name: string },
+      index: number
+    ) => (
       <div data-testid={`custom-item-${index}`} data-id={item.id}>
         Custom: {item.name}
       </div>
@@ -340,7 +343,14 @@ describe('InfiniteScrollList', () => {
       { id: '2', name: 'Item 2', metadata: { type: 'album', tracks: 12 } },
     ];
 
-    const complexRenderItem = (item: { id: string; name: string; metadata: { type: string; duration?: number; tracks?: number } }, index: number) => (
+    const complexRenderItem = (
+      item: {
+        id: string;
+        name: string;
+        metadata: { type: string; duration?: number; tracks?: number };
+      },
+      index: number
+    ) => (
       <div data-testid={`complex-item-${index}`}>
         <h3>{item.name}</h3>
         <span>{item.metadata.type}</span>

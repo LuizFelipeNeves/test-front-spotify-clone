@@ -5,7 +5,15 @@ import { InfinitePage } from './InfinitePage';
 
 // Mock dependencies
 vi.mock('@/components/ui', () => ({
-  PageContent: ({ title, description, children }: { title: string, description: string, children: React.ReactNode }) => (
+  PageContent: ({
+    title,
+    description,
+    children,
+  }: {
+    title: string;
+    description: string;
+    children: React.ReactNode;
+  }) => (
     <div data-testid="page-content">
       <h1>{title}</h1>
       <p>{description}</p>
@@ -349,7 +357,10 @@ describe('InfinitePage', () => {
   });
 
   it('renders custom card components correctly', () => {
-    const customRenderCard = (item: { id: string; name: string }, onClick: () => void) => (
+    const customRenderCard = (
+      item: { id: string; name: string },
+      onClick: () => void
+    ) => (
       <button onClick={onClick} data-testid={`custom-card-${item.id}`}>
         Custom: {item.name}
       </button>

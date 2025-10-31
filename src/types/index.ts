@@ -19,9 +19,9 @@ export interface Artist {
   id: string;
   name: string;
   images: Image[];
-  genres: string[];
+  genres?: string[];
   popularity: number;
-  followers: {
+  followers?: {
     total: number;
     href?: string | null;
   };

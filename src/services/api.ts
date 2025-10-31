@@ -100,6 +100,7 @@ class ApiClient {
       const data = await response.json();
       return this.createSuccessResponse(data, response.status);
     } catch (error) {
+      console.error('Failed to parse JSON response:', error);
       return this.createSuccessResponse(null as T, response.status);
     }
   }

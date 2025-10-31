@@ -5,7 +5,7 @@ import { InfinitePage } from './InfinitePage';
 
 // Mock dependencies
 vi.mock('@/components/ui', () => ({
-  PageContent: ({ title, description, children }: any) => (
+  PageContent: ({ title, description, children }: { title: string, description: string, children: React.ReactNode }) => (
     <div data-testid="page-content">
       <h1>{title}</h1>
       <p>{description}</p>
@@ -28,7 +28,20 @@ vi.mock('@/components', () => ({
     fetchNextPage,
     loadingText,
     renderItem,
-  }: any) => (
+  }: {
+    items: { id: string; name: string }[];
+    loading: boolean;
+    error: Error | null;
+    emptyMessage: string;
+    emptyDescription: string;
+    onRetry: () => void;
+    gridClassName: string;
+    hasNextPage: boolean;
+    isFetchingNextPage: boolean;
+    fetchNextPage: () => void;
+    loadingText: string;
+    renderItem: (item: { id: string; name: string }) => React.ReactNode;
+  }) => (
     <div data-testid="infinite-scroll-list">
       <div data-testid="grid-class">{gridClassName}</div>
       {loading && <div data-testid="loading">Loading...</div>}
@@ -48,7 +61,7 @@ vi.mock('@/components', () => ({
           <div data-testid="empty-description">{emptyDescription}</div>
         </div>
       )}
-      {items.map((item: any, index: number) => (
+      {items.map((item: { id: string; name: string }, index: number) => (
         <div key={index} data-testid={`item-${index}`}>
           {renderItem(item)}
         </div>
@@ -120,8 +133,8 @@ const defaultProps = {
   fetchNextPage: vi.fn(),
   hasNextPage: false,
   isFetchingNextPage: false,
-  getNavigationPath: (item: any) => `/test/${item.id}`,
-  renderCard: (item: any, onClick: () => void) => (
+  getNavigationPath: (item: { id: string; name: string }) => `/test/${item.id}`,
+  renderCard: (item: { id: string; name: string }, onClick: () => void) => (
     <div onClick={onClick} data-testid={`card-${item.id}`}>
       {item.name}
     </div>
@@ -318,7 +331,7 @@ describe('InfinitePage', () => {
   });
 
   it('handles complex navigation paths', () => {
-    const complexGetNavigationPath = (item: any) =>
+    const complexGetNavigationPath = (item: { id: string; name: string }) =>
       `/complex/path/${item.id}/details`;
 
     render(
@@ -337,7 +350,7 @@ describe('InfinitePage', () => {
   });
 
   it('renders custom card components correctly', () => {
-    const customRenderCard = (item: any, onClick: () => void) => (
+    const customRenderCard = (item: { id: string; name: string }, onClick: () => void) => (
       <button onClick={onClick} data-testid={`custom-card-${item.id}`}>
         Custom: {item.name}
       </button>

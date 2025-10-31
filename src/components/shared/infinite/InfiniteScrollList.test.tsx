@@ -22,7 +22,7 @@ const mockItems = [
 
 const defaultProps = {
   items: mockItems,
-  renderItem: (item: any, index: number) => (
+  renderItem: (item: { id: string; name: string }, index: number) => (
     <div data-testid={`item-${index}`} key={item.id}>
       {item.name}
     </div>
@@ -252,7 +252,7 @@ describe('InfiniteScrollList', () => {
   });
 
   it('renders items with correct keys and structure', () => {
-    const customRenderItem = (item: any, index: number) => (
+    const customRenderItem = (item: { id: string; name: string }, index: number) => (
       <div data-testid={`custom-item-${index}`} data-id={item.id}>
         Custom: {item.name}
       </div>
@@ -269,7 +269,7 @@ describe('InfiniteScrollList', () => {
   });
 
   it('handles null and undefined items gracefully', () => {
-    render(<InfiniteScrollList {...defaultProps} items={null as any} />);
+    render(<InfiniteScrollList {...defaultProps} items={null} />);
 
     expect(screen.getByText('Nenhum item encontrado')).toBeInTheDocument();
   });
@@ -340,7 +340,7 @@ describe('InfiniteScrollList', () => {
       { id: '2', name: 'Item 2', metadata: { type: 'album', tracks: 12 } },
     ];
 
-    const complexRenderItem = (item: any, index: number) => (
+    const complexRenderItem = (item: { id: string; name: string; metadata: { type: string; duration?: number; tracks?: number } }, index: number) => (
       <div data-testid={`complex-item-${index}`}>
         <h3>{item.name}</h3>
         <span>{item.metadata.type}</span>

@@ -38,7 +38,7 @@ export const ArtistDetailHeader: React.FC<ArtistDetailHeaderProps> = ({
               {artist.followers.total.toLocaleString()} seguidores
             </p>
           )}
-          {artist.genres?.length > 0 && (
+          {artist.genres && artist.genres.length > 0 && (
             <p className="text-gray-400 text-sm mt-1">
               {artist.genres.slice(0, 3).join(', ')}
             </p>

@@ -181,14 +181,12 @@ describe('ArtistDetailHeader', () => {
   });
 
   it('handles undefined followers', () => {
-    const artistWithoutFollowers = {
-      ...mockArtist,
-    };
-    delete (artistWithoutFollowers as any).followers;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { followers, ...artistWithoutFollowers } = mockArtist;
 
     render(
       <RouterWrapper>
-        <ArtistDetailHeader artist={artistWithoutFollowers as Artist} />
+        <ArtistDetailHeader artist={artistWithoutFollowers} />
       </RouterWrapper>
     );
 
@@ -244,14 +242,12 @@ describe('ArtistDetailHeader', () => {
   });
 
   it('does not display genres when undefined', () => {
-    const artistWithoutGenres = {
-      ...mockArtist,
-    };
-    delete (artistWithoutGenres as any).genres;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { genres, ...artistWithoutGenres } = mockArtist;
 
     render(
       <RouterWrapper>
-        <ArtistDetailHeader artist={artistWithoutGenres as Artist} />
+        <ArtistDetailHeader artist={artistWithoutGenres} />
       </RouterWrapper>
     );
 

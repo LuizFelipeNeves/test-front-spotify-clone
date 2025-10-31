@@ -2,12 +2,14 @@ import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 
 // Mock IntersectionObserver
-(globalThis as any).IntersectionObserver = class IntersectionObserver {
+// @ts-expect-error - Mocking IntersectionObserver for testing
+globalThis.IntersectionObserver = class IntersectionObserver {
   constructor() {}
 };
 
 // Mock ResizeObserver
-(globalThis as any).ResizeObserver = class ResizeObserver {
+// @ts-expect-error - Mocking ResizeObserver for testing
+globalThis.ResizeObserver = class ResizeObserver {
   constructor() {}
 };
 
@@ -33,7 +35,8 @@ const localStorageMock = {
   removeItem: vi.fn(),
   clear: vi.fn(),
 };
-(globalThis as any).localStorage = localStorageMock;
+// @ts-expect-error - Mocking localStorage for testing
+globalThis.localStorage = localStorageMock;
 
 // Mock sessionStorage
 const sessionStorageMock = {
@@ -42,17 +45,22 @@ const sessionStorageMock = {
   removeItem: vi.fn(),
   clear: vi.fn(),
 };
-(globalThis as any).sessionStorage = sessionStorageMock;
+// @ts-expect-error - Mocking sessionStorage for testing
+globalThis.sessionStorage = sessionStorageMock;
 
 // Mock URL.createObjectURL
-(globalThis as any).URL.createObjectURL = vi.fn();
-(globalThis as any).URL.revokeObjectURL = vi.fn();
+// @ts-expect-error - Mocking URL.createObjectURL for testing
+globalThis.URL.createObjectURL = vi.fn();
+// @ts-expect-error - Mocking URL.revokeObjectURL for testing
+globalThis.URL.revokeObjectURL = vi.fn();
 
 // Mock fetch
-(globalThis as any).fetch = vi.fn();
+// @ts-expect-error - Mocking fetch for testing
+globalThis.fetch = vi.fn();
 
 // Mock console methods to reduce noise in tests
-(globalThis as any).console = {
+// @ts-expect-error - Mocking console for testing
+globalThis.console = {
   ...console,
   log: vi.fn(),
   debug: vi.fn(),

@@ -210,19 +210,13 @@ describe('PlaylistCard', () => {
     const { usePlayerStore } = await import('@/store/playerStore');
     const { useSpotifyPlayerContext } = await import('@/contexts');
 
-    (
-      usePlayerStore as unknown as { mockReturnValue: (value: unknown) => void }
-    ).mockReturnValue({
+    vi.mocked(usePlayerStore).mockReturnValue({
       setCurrentTrack: mockSetCurrentTrack,
       setQueue: mockSetQueue,
       setIsPlaying: mockSetIsPlaying,
     });
 
-    (
-      useSpotifyPlayerContext as unknown as {
-        mockReturnValue: (value: unknown) => void;
-      }
-    ).mockReturnValue({
+    vi.mocked(useSpotifyPlayerContext).mockReturnValue({
       playTrack: mockPlayTrack,
       isReady: true,
     });
@@ -247,19 +241,13 @@ describe('PlaylistCard', () => {
     const { usePlayerStore } = await import('@/store/playerStore');
     const { useSpotifyPlayerContext } = await import('@/contexts');
 
-    (
-      usePlayerStore as unknown as { mockReturnValue: (value: unknown) => void }
-    ).mockReturnValue({
+    vi.mocked(usePlayerStore).mockReturnValue({
       setCurrentTrack: mockSetCurrentTrack,
       setQueue: mockSetQueue,
       setIsPlaying: mockSetIsPlaying,
     });
 
-    (
-      useSpotifyPlayerContext as unknown as {
-        mockReturnValue: (value: unknown) => void;
-      }
-    ).mockReturnValue({
+    vi.mocked(useSpotifyPlayerContext).mockReturnValue({
       playTrack: mockPlayTrack,
       isReady: false,
     });
@@ -275,7 +263,7 @@ describe('PlaylistCard', () => {
 
   it('handles playlist without tracks', async () => {
     const { usePlaylistTracks } = await import('@/hooks/useSpotifyQueries');
-    (usePlaylistTracks as any).mockReturnValue({
+    vi.mocked(usePlaylistTracks).mockReturnValue({
       data: { items: [] },
     });
 
@@ -349,7 +337,7 @@ describe('PlaylistCard', () => {
 
   it('stops propagation when play button is clicked', async () => {
     const { usePlaylistTracks } = await import('@/hooks/useSpotifyQueries');
-    (usePlaylistTracks as any).mockReturnValue({
+    vi.mocked(usePlaylistTracks).mockReturnValue({
       data: { items: [{ track: { id: '1', name: 'Track 1' } }] },
     });
 

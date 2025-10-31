@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 export interface InfiniteScrollListProps<T> {
-  items: T[];
+  items: T[] | null;
   loading?: boolean;
   error?: string | React.ReactNode | null;
   emptyMessage?: string;

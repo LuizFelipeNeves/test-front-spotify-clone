@@ -1,6 +1,39 @@
 import { apiClient } from './api';
 import type { Artist, Playlist, User, Album, Track } from '@/types';
 
+interface PlaybackState {
+  device: {
+    id: string;
+    is_active: boolean;
+    is_private_session: boolean;
+    is_restricted: boolean;
+    name: string;
+    type: string;
+    volume_percent: number;
+  };
+  shuffle_state: boolean;
+  repeat_state: 'off' | 'track' | 'context';
+  timestamp: number;
+  progress_ms: number;
+  is_playing: boolean;
+  item: Track | null;
+  currently_playing_type: 'track' | 'episode' | 'ad' | 'unknown';
+  actions: {
+    disallows: {
+      interrupting_playback: boolean;
+      pausing: boolean;
+      resuming: boolean;
+      seeking: boolean;
+      skipping_next: boolean;
+      skipping_prev: boolean;
+      toggling_repeat_context: boolean;
+      toggling_repeat_track: boolean;
+      toggling_shuffle: boolean;
+      transferring_playback: boolean;
+    };
+  };
+}
+
 /**
  * Spotify API service
  */
@@ -12,10 +45,10 @@ class SpotifyService {
    */
   private isTestEnvironment(): boolean {
     return (
-      typeof window !== 'undefined' && 
-      (window as any).Cypress !== undefined
-    ) || 
-    (typeof navigator !== 'undefined' && 
+      typeof window !== 'undefined' &&
+      (window as unknown as { Cypress?: unknown }).Cypress !== undefined
+    ) ||
+    (typeof navigator !== 'undefined' &&
      navigator.userAgent.includes('Cypress'));
   }
 
@@ -157,7 +190,7 @@ class SpotifyService {
   async play(deviceId?: string, trackUri?: string, contextUri?: string): Promise<void> {
     const url = deviceId ? `${this.baseURL}/me/player/play?device_id=${deviceId}` : `${this.baseURL}/me/player/play`;
 
-    const body: any = {};
+    const body: Record<string, unknown> = {};
     if (contextUri) {
       body.context_uri = contextUri;
     } else if (trackUri) {
@@ -244,9 +277,9 @@ class SpotifyService {
   /**
    * Get current playback state
    */
-  async getCurrentPlayback(): Promise<any> {
+  async getCurrentPlayback(): Promise<PlaybackState | null> {
     const response = await apiClient.get(`${this.baseURL}/me/player`);
-    return response.data;
+    return response.data as PlaybackState | null;
   }
 
   /**

@@ -68,7 +68,7 @@ export const addSentryBreadcrumb = (
   message: string,
   category: string = 'custom',
   level: Sentry.SeverityLevel = 'info',
-  data?: Record<string, any>
+  data?: Record<string, unknown>
 ) => {
   Sentry.addBreadcrumb({
     message,
@@ -84,7 +84,7 @@ export const addSentryBreadcrumb = (
  */
 export const captureException = (
   error: Error,
-  context?: Record<string, any>
+  context?: Record<string, unknown>
 ) => {
   Sentry.withScope(scope => {
     if (context) {
@@ -100,7 +100,7 @@ export const captureException = (
 export const captureMessage = (
   message: string,
   level: Sentry.SeverityLevel = 'info',
-  context?: Record<string, any>
+  context?: Record<string, unknown>
 ) => {
   Sentry.withScope(scope => {
     if (context) {

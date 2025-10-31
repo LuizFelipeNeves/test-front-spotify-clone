@@ -3,7 +3,7 @@ import { Play } from 'lucide-react';
 import type { MediaItemBase, MediaType } from '@/constants/ui';
 import { UI_CONFIG, UI_TEXTS } from '@/constants/ui';
 import { formatReleaseDate, formatArtists } from '@/utils/format';
-import type { Album } from '@/types';
+import type { Album, Playlist } from '@/types';
 
 interface MediaCardProps<T extends MediaItemBase> {
   item: T;
@@ -135,7 +135,7 @@ export const AlbumCard = (props: Omit<MediaCardProps<Album>, 'type' | 'subtitle'
   />
 );
 
-export const PlaylistCard = (props: Omit<MediaCardProps<any>, 'type' | 'subtitle' | 'metadata'>) => (
+export const PlaylistCard = (props: Omit<MediaCardProps<Playlist>, 'type' | 'subtitle' | 'metadata'>) => (
   <MediaCard
     {...props}
     type="playlist"

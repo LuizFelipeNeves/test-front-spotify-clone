@@ -84,7 +84,7 @@ const mockAlbum: AlbumType = {
   external_urls: { spotify: 'https://open.spotify.com/album/1' },
 };
 
-const mockPlaylist = {
+const mockPlaylist: import('@/types').Playlist = {
   id: '1',
   name: 'My Favorite Songs',
   images: [
@@ -96,7 +96,11 @@ const mockPlaylist = {
   ],
   uri: 'spotify:playlist:1',
   description: 'All my favorite tracks in one place',
-  tracks: { total: 42 },
+  tracks: { total: 42, items: [] },
+  owner: { id: 'user1', display_name: 'Test User' },
+  public: true,
+  collaborative: false,
+  external_urls: { spotify: 'https://open.spotify.com/playlist/1' },
 };
 
 export const Default: Story = {

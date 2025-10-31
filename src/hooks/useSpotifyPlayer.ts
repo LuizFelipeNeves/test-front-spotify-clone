@@ -93,43 +93,64 @@ export const useSpotifyPlayer = () => {
       });
 
       // Error handling
-      spotifyPlayer.addListener('initialization_error', ({ message }) => {
-        console.error('🚨 Spotify Player initialization error:', message);
+      spotifyPlayer.addListener('initialization_error', (...args: unknown[]) => {
+        const error = args[0] as { message?: string };
+        console.error('🚨 Spotify Player initialization error:', error?.message || 'Unknown error');
       });
 
-      spotifyPlayer.addListener('authentication_error', ({ message }) => {
-        console.error('🚨 Spotify Player authentication error:', message);
+      spotifyPlayer.addListener('authentication_error', (...args: unknown[]) => {
+        const error = args[0] as { message?: string };
+        console.error('🚨 Spotify Player authentication error:', error?.message || 'Unknown error');
         console.error('🔑 Current access token:', accessToken ? 'Present' : 'Missing');
       });
 
-      spotifyPlayer.addListener('account_error', ({ message }) => {
-        console.error('Spotify Player account error:', message);
+      spotifyPlayer.addListener('account_error', (...args: unknown[]) => {
+        const error = args[0] as { message?: string };
+        console.error('Spotify Player account error:', error?.message || 'Unknown error');
       });
 
-      spotifyPlayer.addListener('playback_error', ({ message }) => {
-        console.error('Spotify Player playback error:', message);
+      spotifyPlayer.addListener('playback_error', (...args: unknown[]) => {
+        const error = args[0] as { message?: string };
+        console.error('Spotify Player playback error:', error?.message || 'Unknown error');
       });
 
       // Playback status updates
-      spotifyPlayer.addListener('player_state_changed', (state) => {
+      spotifyPlayer.addListener('player_state_changed', (...args: unknown[]) => {
+        const state = args[0] as {
+          paused?: boolean;
+          position?: number;
+          track_window?: {
+            current_track: any;
+            previous_tracks: any[];
+            next_tracks: any[];
+          };
+          context?: {
+            uri?: string;
+          };
+          shuffle?: boolean;
+          repeat_mode?: number;
+        } | null;
+
         console.log('🎵 Player state changed:', {
           paused: state?.paused,
           position: state?.position,
           track: state?.track_window?.current_track?.name,
           context: state?.context?.uri
         });
-        
+
         if (!state) return;
 
-        const track = state.track_window.current_track;
-        
+        const track = state.track_window?.current_track;
+
+        if (!track) return;
+
         // Only update the current track if it's actually different to avoid showing old tracks during transitions
         const currentTrackInStore = usePlayerStore.getState().currentTrack;
         const isNewTrack = !currentTrackInStore || currentTrackInStore.id !== track.id;
-        
+
         if (isNewTrack) {
           console.log('🔄 Track changed from', currentTrackInStore?.name, 'to', track.name);
-          
+
           const convertedTrack = {
             id: track.id,
             name: track.name,
@@ -142,6 +163,7 @@ export const useSpotifyPlayer = () => {
               popularity: 0,
               followers: { total: 0 },
               external_urls: { spotify: '' },
+              uri: artist.uri,
             })),
             album: {
               id: track.album.uri.split(':')[2],
@@ -166,26 +188,30 @@ export const useSpotifyPlayer = () => {
 
         // Update player store state to sync with Spotify
         setIsPlaying(!state.paused);
-        setProgress(state.position);
+        setProgress(state.position || 0);
         setDuration(track.duration_ms);
-        setShuffle(state.shuffle);
-        
+        setShuffle(state.shuffle || false);
+
         // Convert Spotify repeat mode to our format
         const repeatMode = state.repeat_mode === 0 ? 'off' : state.repeat_mode === 1 ? 'context' : 'track';
         setRepeat(repeatMode);
       });
 
       // Ready
-      spotifyPlayer.addListener('ready', ({ device_id }) => {
-        console.log('🎵 Spotify Player Ready with Device ID:', device_id);
-        setDeviceId(device_id);
-        setIsReady(true);
-        console.log('✅ isReady set to true');
+      spotifyPlayer.addListener('ready', (...args: unknown[]) => {
+        const data = args[0] as { device_id?: string };
+        console.log('🎵 Spotify Player Ready with Device ID:', data?.device_id);
+        if (data?.device_id) {
+          setDeviceId(data.device_id);
+          setIsReady(true);
+          console.log('✅ isReady set to true');
+        }
       });
 
       // Not Ready
-      spotifyPlayer.addListener('not_ready', ({ device_id }) => {
-        console.log('❌ Spotify Player Device ID has gone offline:', device_id);
+      spotifyPlayer.addListener('not_ready', (...args: unknown[]) => {
+        const data = args[0] as { device_id?: string };
+        console.log('❌ Spotify Player Device ID has gone offline:', data?.device_id);
         setIsReady(false);
         console.log('❌ isReady set to false');
       });
@@ -253,7 +279,7 @@ export const useSpotifyPlayer = () => {
               popularity: data.item.popularity || 0,
               preview_url: data.item.preview_url,
               external_urls: { spotify: data.item.external_urls?.spotify || '' },
-              artists: data.item.artists.map((artist: any) => ({
+              artists: data.item.artists.map((artist: { id: string; name: string; external_urls?: { spotify?: string }, uri?: string }) => ({
                 id: artist.id,
                 name: artist.name,
                 images: [],
@@ -261,6 +287,7 @@ export const useSpotifyPlayer = () => {
                 popularity: 0,
                 followers: { total: 0 },
                 external_urls: { spotify: artist.external_urls?.spotify || '' },
+                uri: artist.uri || `spotify:artist:${artist.id}`,
               })),
               album: {
                 id: data.item.album.id,

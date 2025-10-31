@@ -113,8 +113,8 @@ export const mockPlaylist = {
 export const waitForLoadingToFinish = () =>
   new Promise(resolve => setTimeout(resolve, 0));
 
-export const mockFetch = (data: any, ok = true) => {
-  (globalThis as any).fetch = vi.fn().mockResolvedValue({
+export const mockFetch = (data: unknown, ok = true) => {
+  (globalThis as unknown as any).fetch = vi.fn().mockResolvedValue({
     ok,
     json: () => Promise.resolve(data),
     text: () => Promise.resolve(JSON.stringify(data)),
@@ -126,7 +126,7 @@ export const mockFetch = (data: any, ok = true) => {
 export const mockLocalStorage = () => {
   const store: Record<string, string> = {};
 
-  (globalThis as any).localStorage = {
+  (globalThis as unknown as any).localStorage = {
     getItem: vi.fn((key: string) => store[key] || null),
     setItem: vi.fn((key: string, value: string) => {
       store[key] = value;

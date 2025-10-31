@@ -3,8 +3,8 @@
  */
 
 export interface SpotifyPlayer {
-  addListener: (event: string, callback: (...args: any[]) => void) => void;
-  removeListener: (event: string, callback?: (...args: any[]) => void) => void;
+  addListener: (event: string, callback: (...args: unknown[]) => void) => void;
+  removeListener: (event: string, callback?: (...args: unknown[]) => void) => void;
   connect: () => Promise<boolean>;
   disconnect: () => void;
   getCurrentState: () => Promise<SpotifyPlayerState | null>;
@@ -22,7 +22,7 @@ export interface SpotifyPlayer {
 export interface SpotifyPlayerState {
   context: {
     uri: string;
-    metadata: any;
+    metadata: Record<string, unknown>;
   };
   disallows: {
     pausing: boolean;

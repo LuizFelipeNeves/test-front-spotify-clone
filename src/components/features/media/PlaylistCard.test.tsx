@@ -86,6 +86,7 @@ const mockPlaylist: Playlist = {
   external_urls: {
     spotify: 'https://open.spotify.com/playlist/1',
   },
+  uri: 'spotify:playlist:1',
 };
 
 const mockPrivatePlaylist: Playlist = {

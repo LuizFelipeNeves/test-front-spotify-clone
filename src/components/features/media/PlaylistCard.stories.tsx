@@ -86,6 +86,7 @@ const samplePlaylist: Playlist = {
   external_urls: {
     spotify: 'https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M',
   },
+  uri: 'spotify:playlist:37i9dQZF1DXcBWIGoYBM5M',
 };
 
 export const Default: Story = {

@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 
 // Mock IntersectionObserver
-(globalThis as any).IntersectionObserver = class IntersectionObserver {
+(globalThis as unknown as any).IntersectionObserver = class IntersectionObserver {
   constructor() {}
   disconnect() {}
   observe() {}
@@ -10,7 +10,7 @@ import { vi } from 'vitest';
 };
 
 // Mock ResizeObserver
-(globalThis as any).ResizeObserver = class ResizeObserver {
+(globalThis as unknown as any).ResizeObserver = class ResizeObserver {
   constructor() {}
   disconnect() {}
   observe() {}
@@ -39,7 +39,7 @@ const localStorageMock = {
   removeItem: vi.fn(),
   clear: vi.fn(),
 };
-(globalThis as any).localStorage = localStorageMock;
+(globalThis as unknown as any).localStorage = localStorageMock;
 
 // Mock sessionStorage
 const sessionStorageMock = {
@@ -48,17 +48,17 @@ const sessionStorageMock = {
   removeItem: vi.fn(),
   clear: vi.fn(),
 };
-(globalThis as any).sessionStorage = sessionStorageMock;
+(globalThis as unknown as any).sessionStorage = sessionStorageMock;
 
 // Mock URL.createObjectURL
-(globalThis as any).URL.createObjectURL = vi.fn();
-(globalThis as any).URL.revokeObjectURL = vi.fn();
+(globalThis as unknown as any).URL.createObjectURL = vi.fn();
+(globalThis as unknown as any).URL.revokeObjectURL = vi.fn();
 
 // Mock fetch
-(globalThis as any).fetch = vi.fn();
+(globalThis as unknown as any).fetch = vi.fn();
 
 // Mock console methods to reduce noise in tests
-(globalThis as any).console = {
+(globalThis as unknown as any).console = {
   ...console,
   log: vi.fn(),
   debug: vi.fn(),

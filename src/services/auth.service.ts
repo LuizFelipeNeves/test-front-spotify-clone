@@ -16,7 +16,11 @@ export interface SpotifyUserData {
   email: string;
   country: string;
   product: string;
-  images: Array<{ url: string }>;
+  images: Array<{ url: string; height: number | null; width: number | null }>;
+  followers: {
+    total: number;
+    href?: string | null;
+  };
 }
 
 export class AuthService {

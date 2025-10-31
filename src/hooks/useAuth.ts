@@ -53,12 +53,14 @@ export const useAuth = () => {
       const newTokens = await AuthService.refreshAccessToken(authState.refreshToken);
       const newExpiresAt = AuthService.calculateTokenExpiration(newTokens.expires_in);
 
-      AuthService.setAuthData(
-        newTokens.access_token,
-        newTokens.refresh_token || authState.refreshToken,
-        authState.user,
-        newTokens.expires_in
-      );
+      if (authState.user) {
+        AuthService.setAuthData(
+          newTokens.access_token,
+          newTokens.refresh_token || authState.refreshToken,
+          authState.user,
+          newTokens.expires_in
+        );
+      }
 
       setAuthState((prev) => ({
         ...prev,

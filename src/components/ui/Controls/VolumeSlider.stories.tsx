@@ -1,6 +1,9 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { VolumeSlider } from './VolumeSlider';
+import {
+  AccessibilityDemoComponent,
+  KeyboardNavigationComponent
+} from './VolumeSlider.stories.components';
 
 const meta: Meta<typeof VolumeSlider> = {
   title: 'UI/Controls/VolumeSlider',
@@ -137,60 +140,7 @@ export const ZeroVolume: Story = {
 
 // Story de acessibilidade
 export const AccessibilityDemo: Story = {
-  render: () => {
-    const [volume, setVolume] = React.useState(0.3);
-    const [isMuted, setIsMuted] = React.useState(false);
-
-    return (
-      <div className="space-y-6 p-6 bg-gray-900 rounded-lg max-w-md">
-        <div>
-          <h2 className="text-lg font-semibold text-white mb-2">
-            Demonstração de Acessibilidade
-          </h2>
-          <p className="text-sm text-gray-400 mb-4">
-            Experimente navegar usando apenas o teclado:
-          </p>
-
-          <div className="space-y-3 text-sm text-gray-300">
-            <div className="flex items-center gap-2">
-              <kbd className="px-2 py-1 bg-gray-800 rounded text-xs">Tab</kbd>
-              <span>Navega até o controle</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <kbd className="px-2 py-1 bg-gray-800 rounded text-xs">Enter</kbd>
-              <span>Abre o slider de volume</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <kbd className="px-2 py-1 bg-gray-800 rounded text-xs">←/→</kbd>
-              <span>Ajusta o volume</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <kbd className="px-2 py-1 bg-gray-800 rounded text-xs">ESC</kbd>
-              <span>Fecha o slider</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex justify-center p-4 bg-gray-800 rounded">
-          <VolumeSlider
-            volume={volume}
-            isMuted={isMuted}
-            onVolumeChange={setVolume}
-            onToggleMute={() => setIsMuted(!isMuted)}
-          />
-        </div>
-
-        <div className="text-center">
-          <div className="text-white font-medium">
-            Volume: {Math.round(volume * 100)}%
-          </div>
-          <div className="text-sm text-gray-400">
-            Estado: {isMuted ? 'Mudo' : 'Ativo'}
-          </div>
-        </div>
-      </div>
-    );
-  },
+  render: () => <AccessibilityDemoComponent />,
   parameters: {
     docs: {
       description: {
@@ -247,55 +197,7 @@ export const ScreenReaderDemo: Story = {
 
 // Testes de teclado
 export const KeyboardNavigation: Story = {
-  render: () => {
-    const [volume, setVolume] = React.useState(0.4);
-    const [isMuted, setIsMuted] = React.useState(false);
-
-    return (
-      <div className="space-y-6 p-6 bg-gray-900 rounded-lg max-w-lg">
-        <div>
-          <h2 className="text-lg font-semibold text-white mb-2">
-            Navegação por Teclado
-          </h2>
-          <div className="grid grid-cols-2 gap-3 text-xs text-gray-300">
-            <div>
-              <strong>Controles básicos:</strong>
-              <ul className="mt-1 space-y-1">
-                <li>• Tab: Navegar</li>
-                <li>• Enter: Abrir/Ativar</li>
-                <li>• Space: Ativar</li>
-                <li>• ESC: Fechar</li>
-              </ul>
-            </div>
-            <div>
-              <strong>Ajuste fino:</strong>
-              <ul className="mt-1 space-y-1">
-                <li>• ←/↓: -5%</li>
-                <li>• →/↑: +5%</li>
-                <li>• PageUp: +10%</li>
-                <li>• PageDown: -10%</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex justify-center p-6 bg-gray-800 rounded border-2 border-dashed border-gray-600">
-          <VolumeSlider
-            volume={volume}
-            isMuted={isMuted}
-            onVolumeChange={setVolume}
-            onToggleMute={() => setIsMuted(!isMuted)}
-          />
-        </div>
-
-        <div className="text-center">
-          <div className="text-white font-mono text-sm">
-            Estado atual: {Math.round(volume * 100)}% {isMuted ? '(Mudo)' : '(Ativo)'}
-          </div>
-        </div>
-      </div>
-    );
-  },
+  render: () => <KeyboardNavigationComponent />,
   parameters: {
     docs: {
       description: {

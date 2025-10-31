@@ -51,6 +51,7 @@ export interface Playlist {
   external_urls: {
     spotify: string;
   };
+  uri: string;
 }
 
 export interface Track {

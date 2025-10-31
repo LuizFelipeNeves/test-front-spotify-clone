@@ -24,6 +24,13 @@ export function ArtistCard({
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleClick();
+    }
+  };
+
   const handlePlayClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (onPlay) {
@@ -63,6 +70,10 @@ export function ArtistCard({
   return (
     <div
       className={`relative hover:bg-gray-900 p-3 sm:p-4 lg:p-5 rounded-lg cursor-pointer transition-all duration-300 group ${className}`}
+      role="button"
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
+      aria-label={`Ver detalhes de ${artist.name}`}
     >
       {/* Layout responsivo: vertical em mobile, horizontal em desktop */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 lg:gap-5">
@@ -189,9 +200,6 @@ export function ArtistCard({
           )}
         </div>
       </div>
-
-      {/* Área clicável para o card */}
-      <div onClick={handleClick} className="absolute inset-0 cursor-pointer" />
     </div>
   );
 }

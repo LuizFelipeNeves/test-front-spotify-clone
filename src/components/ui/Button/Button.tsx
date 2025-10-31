@@ -21,7 +21,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         {...props}
       >
-        {asChild ? props.children : props.children}
+        {asChild ?? props.children}
       </button>
     );
   }

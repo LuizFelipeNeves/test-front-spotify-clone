@@ -140,7 +140,7 @@ export function AlbumCard({
                 {formatReleaseDate(album.release_date)}
               </span>
             )}
-            {album.total_tracks && <span>{album.total_tracks} faixas</span>}
+            {!!album.total_tracks && <span>{album.total_tracks} faixas</span>}
           </div>
         </div>
       </div>
